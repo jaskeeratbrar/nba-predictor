@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+data/boxscore_*.json
+data/schedule_*.json
+data/results_*.json
+data/recent_form.json
+data/player_form.json
+data/standings_current.json
+data/injuries_current.json
+reports/
+history/
+performance/
