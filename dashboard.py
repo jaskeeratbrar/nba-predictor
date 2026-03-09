@@ -32,16 +32,16 @@ def _recommendation_badge(rec):
     return f'<span style="background:{bg};color:{text};padding:3px 10px;border-radius:12px;font-weight:700;font-size:0.8em;letter-spacing:0.5px">{rec}</span>'
 
 
-def _factor_bar(home_val, away_val, label):
+def _factor_bar(home_val, away_val, label, home_abbr="HOME", away_abbr="AWAY"):
     """Create a horizontal comparison bar for a factor."""
     h_pct = round(home_val * 100, 1)
     a_pct = round(away_val * 100, 1)
     return f"""
     <div style="margin:4px 0">
         <div style="display:flex;justify-content:space-between;font-size:0.75em;color:#94a3b8;margin-bottom:2px">
-            <span>{h_pct}%</span>
-            <span style="font-weight:600">{label}</span>
-            <span>{a_pct}%</span>
+            <span style="color:#60a5fa;font-weight:600">{home_abbr} {h_pct}%</span>
+            <span style="font-weight:600;color:#64748b">{label}</span>
+            <span style="color:#fb923c;font-weight:600">{a_pct}% {away_abbr}</span>
         </div>
         <div style="display:flex;height:6px;border-radius:3px;overflow:hidden;background:#1e293b">
             <div style="width:{h_pct}%;background:linear-gradient(90deg,#3b82f6,#60a5fa)"></div>
@@ -79,7 +79,7 @@ def generate_game_card(pred):
     factor_bars = ""
     for key, label in factor_labels.items():
         if key in factors:
-            factor_bars += _factor_bar(factors[key]["home"], factors[key]["away"], label)
+            factor_bars += _factor_bar(factors[key]["home"], factors[key]["away"], label, h_abbr, a_abbr)
 
     conf_color = _confidence_color(conf)
     badge = _recommendation_badge(rec)
