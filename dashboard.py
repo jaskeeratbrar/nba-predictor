@@ -225,12 +225,6 @@ def generate_dashboard(predictions, date_str, history_stats=None):
         <!-- Game Predictions -->
         {game_cards}
 
-        <!-- Footer -->
-        <div style="text-align:center;margin-top:32px;padding:16px;color:#334155;font-size:0.7em">
-            <p>Model uses: Win %, Recent Form, Home/Away, Injuries, Streaks, Rest Days</p>
-            <p style="margin-top:4px">Confidence threshold: 60%+ for picks, below = SKIP recommendation</p>
-            <p style="margin-top:8px;color:#475569">For entertainment purposes only. Not financial advice.</p>
-        </div>
     </div>
 </body>
 </html>"""
