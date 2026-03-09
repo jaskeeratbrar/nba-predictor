@@ -270,9 +270,9 @@ def fetch_boxscore_players(game_id):
             if minutes < 5:
                 continue  # skip garbage time
 
-            fg_made, fg_att, fg_pct = _parse_fg(_stat("FG", "0-0"))
-            _, _, fg3_pct          = _parse_fg(_stat("3PT", "0-0"))
-            _, _, ft_pct           = _parse_fg(_stat("FT", "0-0"))
+            fg_made, fg_att, fg_pct     = _parse_fg(_stat("FG", "0-0"))
+            _, _, fg3_pct               = _parse_fg(_stat("3PT", "0-0"))
+            ft_made, ft_att, ft_pct     = _parse_fg(_stat("FT", "0-0"))
 
             players.append({
                 "name":       ath.get("displayName", "Unknown"),
@@ -284,6 +284,8 @@ def fetch_boxscore_players(game_id):
                 "fg_att":     fg_att,
                 "fg_pct":     round(fg_pct, 4),
                 "fg3_pct":    round(fg3_pct, 4),
+                "ft_made":    ft_made,
+                "ft_att":     ft_att,
                 "ft_pct":     round(ft_pct, 4),
                 "reb":        _safe_float(_stat("REB", 0)),
                 "ast":        _safe_float(_stat("AST", 0)),
@@ -327,6 +329,7 @@ def fetch_player_form(team_abbr, recent_games, count=5):
                     "pts":          0.0,
                     "fg_made":      0,
                     "fg_att":       0,
+                    "ft_att":       0,
                     "plus_minus":   0.0,
                     "minutes":      0.0,
                     "fg3_pct_sum":  0.0,
@@ -336,6 +339,7 @@ def fetch_player_form(team_abbr, recent_games, count=5):
             t["pts"]         += p["pts"]
             t["fg_made"]     += p["fg_made"]
             t["fg_att"]      += p["fg_att"]
+            t["ft_att"]      += p.get("ft_att", 0)
             t["plus_minus"]  += p["plus_minus"]
             t["minutes"]     += p["minutes"]
             t["fg3_pct_sum"] += p["fg3_pct"]
@@ -354,22 +358,25 @@ def fetch_player_form(team_abbr, recent_games, count=5):
         min_avg      = t["minutes"] / g
         fg3_pct_avg  = t["fg3_pct_sum"] / g
 
-        # Form score: pts × efficiency, scaled by impact
-        # Floor FG% at 0.1 to avoid zeroing out players on rare 0-att games
-        eff      = max(fg_pct_avg, 0.1)
-        pm_boost = max(0.5, min(1.5, 1.0 + pm_avg / 30.0))
-        form_score = pts_avg * eff * pm_boost
+        # True Shooting %: more position-neutral than raw FG%
+        # TS% = pts / (2 * (fg_att + 0.44 * ft_att))
+        ts_denom   = 2.0 * (t["fg_att"] + 0.44 * t["ft_att"])
+        ts_pct     = t["pts"] / ts_denom if ts_denom > 0 else fg_pct_avg
+
+        pm_boost   = max(0.5, min(1.5, 1.0 + pm_avg / 30.0))
+        form_score = pts_avg * max(ts_pct, 0.1) * pm_boost
 
         result[pid] = {
-            "name":         t["name"],
-            "starter":      t["starter"],
-            "games_played": g,
-            "pts_avg":      round(pts_avg, 2),
-            "fg_pct_avg":   round(fg_pct_avg, 4),
-            "fg3_pct_avg":  round(fg3_pct_avg, 4),
+            "name":           t["name"],
+            "starter":        t["starter"],
+            "games_played":   g,
+            "pts_avg":        round(pts_avg, 2),
+            "fg_pct_avg":     round(fg_pct_avg, 4),
+            "ts_pct":         round(ts_pct, 4),
+            "fg3_pct_avg":    round(fg3_pct_avg, 4),
             "plus_minus_avg": round(pm_avg, 2),
-            "minutes_avg":  round(min_avg, 1),
-            "form_score":   round(form_score, 4),
+            "minutes_avg":    round(min_avg, 1),
+            "form_score":     round(form_score, 4),
         }
 
     return result
@@ -380,10 +387,12 @@ def fetch_player_form(team_abbr, recent_games, count=5):
 # ---------------------------------------------------------------------------
 
 def save_data(filename, data):
-    """Save data to a JSON file in the data directory."""
+    """Save data to a JSON file in the data directory (atomic write)."""
     filepath = os.path.join(DATA_DIR, filename)
-    with open(filepath, "w") as f:
+    tmp = filepath + ".tmp"
+    with open(tmp, "w") as f:
         json.dump(data, f, indent=2, default=str)
+    os.replace(tmp, filepath)
     return filepath
 
 
@@ -391,16 +400,21 @@ def load_data(filename):
     """Load data from a JSON file in the data directory."""
     filepath = os.path.join(DATA_DIR, filename)
     if os.path.exists(filepath):
-        with open(filepath) as f:
-            return json.load(f)
+        try:
+            with open(filepath) as f:
+                return json.load(f)
+        except json.JSONDecodeError:
+            os.remove(filepath)  # purge corrupted file
     return None
 
 
-def save_history(date_str, predictions):
-    """Save daily predictions to history."""
+def save_history(date_str, data):
+    """Save daily predictions or analysis to history (atomic write)."""
     filepath = os.path.join(HISTORY_DIR, f"{date_str}.json")
-    with open(filepath, "w") as f:
-        json.dump(predictions, f, indent=2, default=str)
+    tmp = filepath + ".tmp"
+    with open(tmp, "w") as f:
+        json.dump(data, f, indent=2, default=str)
+    os.replace(tmp, filepath)
     return filepath
 
 
@@ -408,8 +422,11 @@ def load_history(date_str):
     """Load historical predictions for a given date."""
     filepath = os.path.join(HISTORY_DIR, f"{date_str}.json")
     if os.path.exists(filepath):
-        with open(filepath) as f:
-            return json.load(f)
+        try:
+            with open(filepath) as f:
+                return json.load(f)
+        except json.JSONDecodeError:
+            os.remove(filepath)
     return None
 
 
@@ -515,6 +532,24 @@ def refresh_all_data(target_date):
             save_data("player_form.json", player_form)
     else:
         player_form = load_data("player_form.json") or {}
+
+    # Persist to SQLite (non-critical — errors never crash predictions)
+    try:
+        import db as _db
+        _db.init_schema()
+        _conn = _db.get_connection()
+        if standings:
+            _db.upsert_standings_snapshot(_conn, target_date, standings)
+        if injuries:
+            _db.upsert_injuries_snapshot(_conn, target_date, injuries)
+        for _abbr, _games in recent_form.items():
+            _db.upsert_team_recent_form(_conn, _abbr, _games)
+        for _abbr, _form in player_form.items():
+            _db.upsert_player_form_snapshot(_conn, target_date, _abbr, _form)
+        _conn.commit()
+        _conn.close()
+    except Exception as _db_err:
+        print(f"  [DB] Data write skipped: {_db_err}")
 
     return {
         "schedule": schedule or [],

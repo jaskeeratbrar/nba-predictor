@@ -271,8 +271,10 @@ def load_factor_ledger():
 
 def save_factor_ledger(ledger):
     os.makedirs(PERFORMANCE_DIR, exist_ok=True)
-    with open(LEDGER_PATH, "w") as f:
+    tmp = LEDGER_PATH + ".tmp"
+    with open(tmp, "w") as f:
         json.dump(ledger, f, indent=2)
+    os.replace(tmp, LEDGER_PATH)
 
 
 def merge_into_ledger(ledger, date_str, date_factor_acc, date_summary):
@@ -572,6 +574,18 @@ def analyze_date(date_str):
     ledger = load_factor_ledger()
     ledger = merge_into_ledger(ledger, date_str, date_factor_acc, date_summary)
     save_factor_ledger(ledger)
+
+    # Persist to DB
+    try:
+        import db as _db
+        _conn = _db.get_connection()
+        for _ga in game_analyses:
+            _db.upsert_game_result(_conn, date_str, _ga)
+        _db.upsert_daily_summary(_conn, date_str, date_summary, date_factor_acc)
+        _conn.commit()
+        _conn.close()
+    except Exception as _db_err:
+        print(f"  [DB] Analysis write skipped: {_db_err}")
 
     print_report(date_str, game_analyses, date_summary, ledger)
     print(f"  Analysis saved to history/{date_str}_analysis.json")

@@ -19,15 +19,18 @@ CONFIDENCE_HIGH = 0.70      # Strong pick
 CONFIDENCE_MODERATE = 0.60  # Lean pick
 CONFIDENCE_LOW = 0.55       # Skip / too close to call
 
+# Minimum weight floor for any factor (prevents zeroing out)
+MIN_WEIGHT = 0.03
+
 # Weighting factors for the prediction model
 WEIGHTS = {
     "win_pct":          0.25,   # Overall season win percentage
     "recent_form":      0.20,   # Last 10 games performance
     "player_form":      0.20,   # Individual player performance last 5 games
-    "home_away":        0.12,   # Home court advantage / road record
-    "injuries":         0.12,   # Key player availability
+    "home_away":        0.11,   # Home court advantage / road record (61.5% accuracy → trimmed)
+    "injuries":         0.11,   # Key player availability
     "rest_days":        0.08,   # Back-to-back or rested
-    "streak":           0.03,   # Current win/loss streak momentum
+    "streak":           0.05,   # Current win/loss streak (80.8% accuracy → bumped from 3%)
 }
 
 # Home court advantage baseline (historically ~60% home win rate in NBA)

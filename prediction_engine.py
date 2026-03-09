@@ -3,7 +3,18 @@ NBA Prediction Engine
 Computes win probabilities using multiple weighted factors.
 """
 
-from config import WEIGHTS, HOME_COURT_BOOST, CONFIDENCE_HIGH, CONFIDENCE_MODERATE, CONFIDENCE_LOW
+from config import WEIGHTS, HOME_COURT_BOOST, CONFIDENCE_HIGH, CONFIDENCE_MODERATE, CONFIDENCE_LOW, MIN_WEIGHT
+
+# Module-level weight override — set via set_weights() when learned weights are available
+_WEIGHT_OVERRIDE = None
+
+
+def set_weights(weights_dict):
+    """Apply a learned/suggested weight dict for this process's predictions."""
+    global _WEIGHT_OVERRIDE
+    _WEIGHT_OVERRIDE = dict(weights_dict)
+    print("  [Weights] Using learned weights: " +
+          ", ".join(f"{k}={v:.3f}" for k, v in sorted(weights_dict.items())))
 
 
 def _safe_div(a, b, default=0.5):
@@ -20,8 +31,9 @@ def compute_win_pct_factor(home_standings, away_standings):
     a_pct = away_standings.get("win_pct", 0.5)
 
     # Power scaling: amplify gaps between good and bad teams
-    # A .750 team vs .400 team should show a much bigger edge than raw ratio
-    POWER = 2.5
+    # Reduced from 2.5 → 1.8: 2.5 was producing 83% confidence on .750 vs .400
+    # matchups when real NBA historical edge is ~68-72%
+    POWER = 1.8
     h_score = h_pct ** POWER
     a_score = a_pct ** POWER
 
@@ -31,23 +43,53 @@ def compute_win_pct_factor(home_standings, away_standings):
     return h_score / total, a_score / total
 
 
+def _dynamic_weights(home_standings, away_standings):
+    """
+    Adjust win_pct vs recent_form weight based on season progress.
+    Early season (games 1-20): win_pct unreliable — shift weight to recent_form.
+    Late season (games 60+): win_pct is highly reliable — restore its weight.
+    """
+    h_games = home_standings.get("wins", 0) + home_standings.get("losses", 0)
+    a_games = away_standings.get("wins", 0) + away_standings.get("losses", 0)
+    avg_games = (h_games + a_games) / 2.0
+
+    # progress: 0.0 at game 1 → 1.0 at game 82
+    progress = min(avg_games / 82.0, 1.0)
+
+    # win_pct adjustment: -0.08 (early season) → +0.05 (late season)
+    wp_adj = -0.08 + progress * 0.13
+
+    base = dict(_WEIGHT_OVERRIDE) if _WEIGHT_OVERRIDE is not None else dict(WEIGHTS)
+    base["win_pct"]     = max(base.get("win_pct", 0.25) + wp_adj, MIN_WEIGHT)
+    base["recent_form"] = max(base.get("recent_form", 0.20) - wp_adj, MIN_WEIGHT)
+
+    total = sum(base.values())
+    return {k: v / total for k, v in base.items()}
+
+
 def compute_recent_form_factor(home_recent, away_recent, home_standings=None, away_standings=None):
     """
     Analyze last 10 games for each team.
     Falls back to last_10 from standings if game-by-game data unavailable.
-    More recent games weighted slightly higher.
+    More recent games weighted higher; larger margins of victory count more.
     """
     def _form_score(games):
         if not games:
             return None
-        weights = []
-        results = []
+        weighted_sum = 0.0
+        total_w = 0.0
         for i, g in enumerate(games):
-            w = 1.0 + (i * 0.15)
-            weights.append(w)
-            results.append(1.0 if g.get("win") else 0.0)
-        total_w = sum(weights)
-        return sum(r * w for r, w in zip(results, weights)) / total_w if total_w > 0 else 0.5
+            # Recency weight: index 0 = oldest, index 9 = most recent
+            recency_w = 1.0 + (i * 0.15)
+            # Margin factor: clamp point diff to [-30, +30], scale to [0.5, 1.5]
+            team_score = g.get("team_score") or 0
+            opp_score  = g.get("opp_score") or 0
+            point_diff = team_score - opp_score
+            margin_factor = 1.0 + max(min(point_diff, 30), -30) / 60.0
+            w = max(recency_w * margin_factor, 0.1)
+            total_w += w
+            weighted_sum += (1.0 if g.get("win") else 0.0) * w
+        return weighted_sum / total_w if total_w > 0 else 0.5
 
     def _parse_last10(standings):
         """Parse '7-3' last 10 format."""
@@ -79,7 +121,9 @@ def compute_recent_form_factor(home_recent, away_recent, home_standings=None, aw
         a_score = 0.5
 
     # Power scale to amplify form differences
-    POWER = 1.8
+    # Reduced from 1.8 → 1.3: margin weighting already differentiates blowouts
+    # vs squeakers, so double power scaling was over-amplifying streaks
+    POWER = 1.3
     h_score = h_score ** POWER
     a_score = a_score ** POWER
 
@@ -122,32 +166,61 @@ def compute_home_away_factor(home_standings, away_standings):
     return h_adj / total, a_adj / total
 
 
-def compute_injury_factor(home_abbr, away_abbr, injuries):
+def compute_injury_factor(home_abbr, away_abbr, injuries, player_form=None):
     """
-    Assess injury impact. Key players (starters) missing hurts more.
-    Returns adjusted factors favoring the healthier team.
+    Assess injury impact scaled by the missing player's actual value.
+    A star averaging 34 min / 28 pts sitting out hits 3× harder than a bench player.
+    Cross-references injury list against player_form data by name matching.
     """
-    def _injury_penalty(team_injuries):
-        """Calculate penalty based on number and severity of injuries."""
+    if player_form is None:
+        player_form = {}
+
+    def _injury_penalty(team_injuries, team_form):
         if not team_injuries:
             return 0.0
+
+        # Build name → form data lookup (lowercase for fuzzy matching)
+        form_by_name = {
+            pdata.get("name", "").lower(): pdata
+            for pdata in team_form.values()
+        }
+
         penalty = 0.0
         for inj in team_injuries:
-            status = inj.get("status", "").lower()
+            status      = inj.get("status", "").lower()
+            player_name = inj.get("name", "").lower()
+
+            # Base penalty by designation
             if "out" in status:
-                penalty += 0.06
+                base = 0.08
             elif "doubtful" in status:
-                penalty += 0.04
+                base = 0.05
             elif "questionable" in status:
-                penalty += 0.02
+                base = 0.025
             elif "probable" in status or "day-to-day" in status:
-                penalty += 0.01
-        return min(penalty, 0.25)  # Cap the penalty
+                base = 0.01
+            else:
+                continue
 
-    h_penalty = _injury_penalty(injuries.get(home_abbr, []))
-    a_penalty = _injury_penalty(injuries.get(away_abbr, []))
+            # Scale by player impact using minutes as proxy
+            # <15 min/g (deep bench) → 0.5×
+            # 15-25 min/g (role player) → 1.0×
+            # 25-32 min/g (starter)    → 1.5×
+            # 32+ min/g  (star)        → 2.0×
+            pform = form_by_name.get(player_name)
+            if pform:
+                mins = pform.get("minutes_avg", 20)
+                impact = min(2.0, max(0.5, mins / 20.0))
+            else:
+                impact = 1.0  # unknown player → neutral multiplier
 
-    # More injuries = lower score
+            penalty += base * impact
+
+        return min(penalty, 0.40)  # raised cap to allow star absences to fully register
+
+    h_penalty = _injury_penalty(injuries.get(home_abbr, []), player_form.get(home_abbr, {}))
+    a_penalty = _injury_penalty(injuries.get(away_abbr, []), player_form.get(away_abbr, {}))
+
     h_health = 1.0 - h_penalty
     a_health = 1.0 - a_penalty
     total = h_health + a_health
@@ -273,6 +346,25 @@ def compute_player_form_factor(home_player_form, away_player_form):
     return h_scaled / total_scaled, a_scaled / total_scaled
 
 
+def _injury_detail(team_injuries, team_form):
+    """Return a list of {name, status, impact} for display/storage."""
+    form_by_name = {
+        pdata.get("name", "").lower(): pdata
+        for pdata in team_form.values()
+    }
+    detail = []
+    for inj in team_injuries:
+        name   = inj.get("name", "Unknown")
+        status = inj.get("status", "")
+        pform  = form_by_name.get(name.lower())
+        mins   = pform.get("minutes_avg", 0) if pform else 0
+        pts    = pform.get("pts_avg", 0) if pform else 0
+        impact = "star" if mins >= 32 else "starter" if mins >= 25 else "role" if mins >= 15 else "bench"
+        detail.append({"name": name, "status": status, "impact": impact,
+                        "mins_avg": round(mins, 1), "pts_avg": round(pts, 1)})
+    return detail
+
+
 def predict_game(game, standings, injuries, recent_form, player_form=None):
     """
     Generate a prediction for a single game.
@@ -328,7 +420,7 @@ def predict_game(game, standings, injuries, recent_form, player_form=None):
     h_ha, a_ha = compute_home_away_factor(home_standings, away_standings)
     factors["home_away"] = {"home": h_ha, "away": a_ha}
 
-    h_inj, a_inj = compute_injury_factor(home_abbr, away_abbr, injuries)
+    h_inj, a_inj = compute_injury_factor(home_abbr, away_abbr, injuries, player_form)
     factors["injuries"] = {"home": h_inj, "away": a_inj}
 
     h_st, a_st = compute_streak_factor(home_standings, away_standings)
@@ -343,10 +435,11 @@ def predict_game(game, standings, injuries, recent_form, player_form=None):
     )
     factors["player_form"] = {"home": h_pf, "away": a_pf}
 
-    # Weighted combination
+    # Weighted combination — uses dynamic (season-progress-adjusted) weights
+    dynamic_weights = _dynamic_weights(home_standings, away_standings)
     home_score = 0.0
     away_score = 0.0
-    for factor_name, weight in WEIGHTS.items():
+    for factor_name, weight in dynamic_weights.items():
         f = factors.get(factor_name, {"home": 0.5, "away": 0.5})
         home_score += f["home"] * weight
         away_score += f["away"] * weight
@@ -388,6 +481,8 @@ def predict_game(game, standings, injuries, recent_form, player_form=None):
         "factors": {k: {kk: round(vv, 4) for kk, vv in v.items()} for k, v in factors.items()},
         "home_injuries": len(injuries.get(home_abbr, [])),
         "away_injuries": len(injuries.get(away_abbr, [])),
+        "home_injury_detail": _injury_detail(injuries.get(home_abbr, []), player_form.get(home_abbr, {})),
+        "away_injury_detail": _injury_detail(injuries.get(away_abbr, []), player_form.get(away_abbr, {})),
     }
 
 

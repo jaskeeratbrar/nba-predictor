@@ -10,3 +10,4 @@ data/injuries_current.json
 reports/
 history/
 performance/
+*.db

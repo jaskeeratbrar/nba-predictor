@@ -19,10 +19,30 @@ from datetime import datetime, timedelta
 # Ensure we're running from the script's directory
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-from config import HISTORY_DIR, REPORTS_DIR
+from config import HISTORY_DIR, REPORTS_DIR, WEIGHTS
 from data_manager import refresh_all_data, save_history, load_history, fetch_schedule_espn, save_data, load_data
-from prediction_engine import predict_all_games
+from prediction_engine import predict_all_games, set_weights
 from dashboard import generate_dashboard
+import db as _db
+
+_db.init_schema()
+
+# Apply learned weights if enough games have been analyzed
+_weights_source  = "config"
+_active_weights  = dict(WEIGHTS)
+_games_analyzed  = 0
+try:
+    from analyzer import load_factor_ledger
+    _ledger = load_factor_ledger()
+    _games_analyzed = _ledger.get("total_games_analyzed", 0)
+    if _games_analyzed >= 50:
+        _suggestions = _ledger.get("weight_suggestions", {})
+        if _suggestions and len(_suggestions) == len(WEIGHTS):
+            set_weights(_suggestions)
+            _active_weights = _suggestions
+            _weights_source = "learned"
+except Exception:
+    pass
 
 
 def print_header():
@@ -75,16 +95,14 @@ def print_prediction(pred, idx):
     print()
     print(f"  {icon} {color}{BOLD}{rec}{RESET}  →  Pick: {BOLD}{winner}{RESET}  ({conf*100:.1f}% confidence)")
 
-    # Injury notes
-    h_inj = pred.get("home_injuries", 0)
-    a_inj = pred.get("away_injuries", 0)
-    if h_inj > 0 or a_inj > 0:
-        notes = []
-        if h_inj > 0:
-            notes.append(f"{pred['home_abbr']}: {h_inj} injured")
-        if a_inj > 0:
-            notes.append(f"{pred['away_abbr']}: {a_inj} injured")
-        print(f"  🏥 {', '.join(notes)}")
+    # Injury notes — show star/starter absences explicitly
+    for side, abbr in [("home_injury_detail", pred["home_abbr"]),
+                       ("away_injury_detail", pred["away_abbr"])]:
+        for inj in pred.get(side, []):
+            if inj["impact"] in ("star", "starter"):
+                tag = "⭐" if inj["impact"] == "star" else "🏥"
+                print(f"  {tag} {abbr} — {inj['name']} ({inj['status']}) "
+                      f"{inj['pts_avg']}pts {inj['mins_avg']}min/g")
 
     print(f"  {'─' * 50}")
 
@@ -284,6 +302,17 @@ def main():
         "predictions": predictions,
     }
     save_history(target_date, history_entry)
+
+    # Persist predictions and weights snapshot to DB
+    try:
+        _conn = _db.get_connection()
+        _db.upsert_predictions(_conn, target_date, predictions)
+        _db.save_weights_snapshot(_conn, target_date, _active_weights,
+                                  source=_weights_source, total_games=_games_analyzed)
+        _conn.commit()
+        _conn.close()
+    except Exception as _e:
+        print(f"  [DB] Prediction write skipped: {_e}")
     print(f"\n  💾 Predictions saved to history/{target_date}.json")
 
     # Step 5: Generate HTML dashboard

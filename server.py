@@ -56,6 +56,15 @@ def _run_predictions(date_str):
     }
     save_history(date_str, history_entry)
 
+    try:
+        import db as _db
+        _conn = _db.get_connection()
+        _db.upsert_predictions(_conn, date_str, predictions)
+        _conn.commit()
+        _conn.close()
+    except Exception as _e:
+        pass  # DB write is non-critical
+
     # Build clean summary
     strong  = [p for p in predictions if p["recommendation"] == "STRONG PICK"]
     leans   = [p for p in predictions if p["recommendation"] in ("LEAN", "SLIGHT LEAN")]
@@ -198,6 +207,19 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
+    # Apply learned weights at startup if enough games analyzed
+    try:
+        from analyzer import load_factor_ledger
+        from prediction_engine import set_weights
+        _ledger = load_factor_ledger()
+        if _ledger.get("total_games_analyzed", 0) >= 50:
+            _suggestions = _ledger.get("weight_suggestions", {})
+            if _suggestions:
+                set_weights(_suggestions)
+                print(f"  Learned weights active ({_ledger['total_games_analyzed']} analyzed games)")
+    except Exception:
+        pass
+
     server = HTTPServer(("0.0.0.0", PORT), Handler)
     print(f"NBA Predictor server running on http://localhost:{PORT}")
     print(f"  GET http://localhost:{PORT}/run")
