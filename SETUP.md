@@ -32,10 +32,19 @@ curl "http://localhost:6789/run?fmt=text"    # today's picks
 
 ## Timezone
 ```bash
-date    # confirm machine is in ET
-        # if UTC: shift cron times +5h (6PM ET = 11PM UTC)
-crontab -e   # edit if needed
+date    # check what timezone your machine is in
+crontab -e   # adjust times after setup.sh runs
 ```
+
+Cron times by timezone — all target 6 PM ET for predictions:
+
+| Job | ET | MT (−2h) | PT (−3h) | UTC (+5h) |
+|-----|-----|----------|----------|-----------|
+| Predictions | 18:00 | 16:00 | 15:00 | 23:00 |
+| Post-game analysis | 09:00 | 07:00 | 06:00 | 14:00 |
+| DB backup | 10:00 | 08:00 | 09:00 | 15:00 |
+
+After `bash setup.sh`, run `crontab -e` and update the hours to match your timezone.
 
 ## Vercel (one-time)
 1. vercel.com → Add New Project → import `nba-predictor`
