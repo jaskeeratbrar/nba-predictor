@@ -1,0 +1,197 @@
+NBA Predictor server running on http://localhost:6789
+  GET http://localhost:6789/run
+  GET http://localhost:6789/run?fmt=text
+  GET http://localhost:6789/analyze?date=2026-03-07
+  GET http://localhost:6789/status
+
+[23:38:38] GET /status HTTP/1.1 200 -
+[23:38:43] GET /status HTTP/1.1 200 -
+  Running predictions for 2026-03-08...
+  Fetching schedule for 2026-03-08...
+    Found 10 games
+  Fetching standings...
+    Got standings for 30 teams
+  Fetching injuries...
+    6 injuries across 1 teams
+  Fetching recent form for 20 teams...
+    WAS: 2-8 last 10
+    SAS: 9-1 last 10
+    NOP: 6-4 last 10
+    BOS: 8-2 last 10
+    HOU: 6-4 last 10
+    CHI: 2-8 last 10
+    LAL: 6-4 last 10
+    PHX: 5-5 last 10
+    DAL: 2-8 last 10
+    MIA: 8-2 last 10
+    TOR: 5-5 last 10
+    MIL: 4-6 last 10
+    POR: 5-5 last 10
+    CHA: 6-4 last 10
+    IND: 1-9 last 10
+    ORL: 7-3 last 10
+    SAC: 3-7 last 10
+    DET: 5-5 last 10
+    NYK: 6-4 last 10
+    CLE: 6-4 last 10
+  Fetching player form (last 5 games per team)...
+    WAS: 15 players tracked, 6 hot  (best: Tristan Vukcevic 13.0pts 67%FG)
+    SAS: 14 players tracked, 6 hot  (best: Victor Wembanyama 25.8pts 54%FG)
+    NOP: 11 players tracked, 5 hot  (best: Zion Williamson 21.5pts 60%FG)
+    BOS: 12 players tracked, 6 hot  (best: Jaylen Brown 23.5pts 46%FG)
+    HOU: 11 players tracked, 4 hot  (best: Kevin Durant 25.6pts 53%FG)
+    CHI: 13 players tracked, 5 hot  (best: Collin Sexton 22.0pts 57%FG)
+    LAL: 13 players tracked, 6 hot  (best: Luka Doncic 32.2pts 50%FG)
+    PHX: 13 players tracked, 6 hot  (best: Devin Booker 26.5pts 41%FG)
+    DAL: 15 players tracked, 1 hot  (best: Klay Thompson 13.75pts 44%FG)
+    MIA: 11 players tracked, 5 hot  (best: Tyler Herro 24.6pts 56%FG)
+    TOR: 12 players tracked, 5 hot  (best: RJ Barrett 21.8pts 57%FG)
+    MIL: 15 players tracked, 3 hot  (best: Giannis Antetokounmpo 23.33pts 55%FG)
+    POR: 13 players tracked, 4 hot  (best: Jrue Holiday 24.8pts 58%FG)
+    CHA: 13 players tracked, 5 hot  (best: Kon Knueppel 17.0pts 47%FG)
+    IND: 13 players tracked, 3 hot  (best: Micah Potter 13.6pts 55%FG)
+    ORL: 14 players tracked, 5 hot  (best: Paolo Banchero 27.0pts 60%FG)
+    SAC: 11 players tracked, 3 hot  (best: Precious Achiuwa 19.4pts 61%FG)
+    DET: 15 players tracked, 4 hot  (best: Ausar Thompson 12.5pts 69%FG)
+    NYK: 14 players tracked, 5 hot  (best: Pacome Dadiet 11.0pts 80%FG)
+    CLE: 14 players tracked, 5 hot  (best: Donovan Mitchell 30.0pts 50%FG)
+[23:39:03] GET /run?fmt=text HTTP/1.1 200 -
+  Running predictions for 2026-03-09...
+  Fetching schedule for 2026-03-09...
+    Found 5 games
+  Fetching standings...
+    Got standings for 30 teams
+  Fetching injuries...
+    6 injuries across 1 teams
+  Fetching recent form for 10 teams...
+    MEM: 3-7 last 10
+    BKN: 1-9 last 10
+    UTA: 2-8 last 10
+    NYK: 6-4 last 10
+    CLE: 6-4 last 10
+    OKC: 8-2 last 10
+    GSW: 4-6 last 10
+    DEN: 5-5 last 10
+    PHI: 4-6 last 10
+    LAC: 6-4 last 10
+  Fetching player form (last 5 games per team)...
+    MEM: 12 players tracked, 7 hot  (best: Taylor Hendricks 14.0pts 63%FG)
+    BKN: 14 players tracked, 2 hot  (best: Michael Porter Jr. 22.0pts 40%FG)
+    UTA: 13 players tracked, 5 hot  (best: Svi Mykhailiuk 15.0pts 50%FG)
+    NYK: 14 players tracked, 5 hot  (best: Pacome Dadiet 11.0pts 80%FG)
+    CLE: 14 players tracked, 5 hot  (best: Donovan Mitchell 30.0pts 50%FG)
+    OKC: 12 players tracked, 4 hot  (best: Shai Gilgeous-Alexander 29.75pts 49%FG)
+    GSW: 14 players tracked, 4 hot  (best: Brandin Podziemski 18.6pts 44%FG)
+    DEN: 15 players tracked, 3 hot  (best: Jamal Murray 29.8pts 50%FG)
+    PHI: 15 players tracked, 4 hot  (best: Joel Embiid 26.0pts 40%FG)
+    LAC: 15 players tracked, 8 hot  (best: Kawhi Leonard 26.6pts 53%FG)
+[01:45:56] GET /run?fmt=text HTTP/1.1 200 -
+  Running predictions for 2026-03-09...
+  Fetching schedule for 2026-03-09...
+    Found 5 games
+  Fetching standings...
+    Got standings for 30 teams
+  Fetching injuries...
+    6 injuries across 1 teams
+  Fetching recent form for 10 teams...
+    MEM: 3-7 last 10
+    BKN: 1-9 last 10
+    UTA: 2-8 last 10
+    NYK: 6-4 last 10
+    CLE: 6-4 last 10
+    OKC: 8-2 last 10
+    GSW: 4-6 last 10
+    DEN: 5-5 last 10
+    PHI: 4-6 last 10
+    LAC: 6-4 last 10
+  Fetching player form (last 5 games per team)...
+    MEM: 12 players tracked, 7 hot  (best: Taylor Hendricks 14.0pts 63%FG)
+    BKN: 14 players tracked, 2 hot  (best: Michael Porter Jr. 22.0pts 40%FG)
+    UTA: 13 players tracked, 5 hot  (best: Svi Mykhailiuk 15.0pts 50%FG)
+    NYK: 14 players tracked, 5 hot  (best: Pacome Dadiet 11.0pts 80%FG)
+    CLE: 14 players tracked, 5 hot  (best: Donovan Mitchell 30.0pts 50%FG)
+    OKC: 12 players tracked, 4 hot  (best: Shai Gilgeous-Alexander 29.75pts 49%FG)
+    GSW: 14 players tracked, 4 hot  (best: Brandin Podziemski 18.6pts 44%FG)
+    DEN: 15 players tracked, 3 hot  (best: Jamal Murray 29.8pts 50%FG)
+    PHI: 15 players tracked, 4 hot  (best: Joel Embiid 26.0pts 40%FG)
+    LAC: 15 players tracked, 8 hot  (best: Kawhi Leonard 26.6pts 53%FG)
+[01:46:29] GET /run?fmt=text HTTP/1.1 200 -
+  Running predictions for 2026-03-09...
+  Fetching schedule for 2026-03-09...
+    Found 5 games
+  Fetching standings...
+    Got standings for 30 teams
+  Fetching injuries...
+    6 injuries across 1 teams
+  Fetching recent form for 10 teams...
+    MEM: 3-7 last 10
+    BKN: 1-9 last 10
+    UTA: 2-8 last 10
+    NYK: 6-4 last 10
+    CLE: 6-4 last 10
+    OKC: 8-2 last 10
+    GSW: 4-6 last 10
+    DEN: 5-5 last 10
+    PHI: 4-6 last 10
+    LAC: 6-4 last 10
+  Fetching player form (last 5 games per team)...
+    MEM: 12 players tracked, 7 hot  (best: Taylor Hendricks 14.0pts 63%FG)
+    BKN: 14 players tracked, 2 hot  (best: Michael Porter Jr. 22.0pts 40%FG)
+    UTA: 13 players tracked, 5 hot  (best: Svi Mykhailiuk 15.0pts 50%FG)
+    NYK: 14 players tracked, 5 hot  (best: Pacome Dadiet 11.0pts 80%FG)
+    CLE: 14 players tracked, 5 hot  (best: Donovan Mitchell 30.0pts 50%FG)
+    OKC: 12 players tracked, 4 hot  (best: Shai Gilgeous-Alexander 29.75pts 49%FG)
+    GSW: 14 players tracked, 4 hot  (best: Brandin Podziemski 18.6pts 44%FG)
+    DEN: 15 players tracked, 3 hot  (best: Jamal Murray 29.8pts 50%FG)
+    PHI: 15 players tracked, 4 hot  (best: Joel Embiid 26.0pts 40%FG)
+    LAC: 15 players tracked, 8 hot  (best: Kawhi Leonard 26.6pts 53%FG)
+[01:51:07] GET /run?fmt=text HTTP/1.1 200 -
+  Running predictions for 2026-03-09...
+  Fetching schedule for 2026-03-09...
+    Found 5 games
+  Fetching standings...
+    Got standings for 30 teams
+  Fetching injuries...
+    6 injuries across 1 teams
+  Fetching recent form for 10 teams...
+    MEM: 3-7 last 10
+    BKN: 1-9 last 10
+    UTA: 2-8 last 10
+    NYK: 6-4 last 10
+    CLE: 6-4 last 10
+    OKC: 8-2 last 10
+    GSW: 4-6 last 10
+    DEN: 5-5 last 10
+    PHI: 4-6 last 10
+    LAC: 6-4 last 10
+  Fetching player form (last 5 games per team)...
+    MEM: 12 players tracked, 7 hot  (best: Taylor Hendricks 14.0pts 63%FG)
+    BKN: 14 players tracked, 2 hot  (best: Michael Porter Jr. 22.0pts 40%FG)
+    UTA: 13 players tracked, 5 hot  (best: Svi Mykhailiuk 15.0pts 50%FG)
+    NYK: 14 players tracked, 5 hot  (best: Pacome Dadiet 11.0pts 80%FG)
+    CLE: 14 players tracked, 5 hot  (best: Donovan Mitchell 30.0pts 50%FG)
+    OKC: 12 players tracked, 4 hot  (best: Shai Gilgeous-Alexander 29.75pts 49%FG)
+    GSW: 14 players tracked, 4 hot  (best: Brandin Podziemski 18.6pts 44%FG)
+    DEN: 15 players tracked, 3 hot  (best: Jamal Murray 29.8pts 50%FG)
+    PHI: 15 players tracked, 4 hot  (best: Joel Embiid 26.0pts 40%FG)
+    LAC: 15 players tracked, 8 hot  (best: Kawhi Leonard 26.6pts 53%FG)
+[01:56:46] GET /run?date=2026-03-09&fmt=text HTTP/1.1 200 -
+  Running predictions for 2026-03-09...
+  Fetching schedule for 2026-03-09...
+    Found 5 games
+  Fetching standings...
+    Got standings for 30 teams
+  Fetching injuries...
+    6 injuries across 1 teams
+  Fetching recent form for 10 teams...
+    MEM: 3-7 last 10
+    BKN: 1-9 last 10
+    UTA: 2-8 last 10
+    NYK: 6-4 last 10
+    CLE: 6-4 last 10
+    OKC: 8-2 last 10
+    GSW: 4-6 last 10
+    DEN: 5-5 last 10
+    PHI: 4-6 last 10
+    LAC: 6-4 last 10
+  Fetching player form (last 5 games per team)...
