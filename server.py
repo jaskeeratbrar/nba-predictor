@@ -67,8 +67,22 @@ def _run_predictions(date_str):
 
     # Generate dashboard and update public/index.html for Vercel
     try:
-        import shutil
-        dashboard_path = generate_dashboard(predictions, date_str, None)
+        import shutil, json, os as _os
+        # Compute season accuracy from verified history files
+        _season_stats = None
+        try:
+            _total_correct, _total = 0, 0
+            for _f in _os.listdir(HISTORY_DIR):
+                if _f.endswith("_verified.json"):
+                    with open(_os.path.join(HISTORY_DIR, _f)) as _fh:
+                        _d = json.load(_fh)
+                        _total_correct += _d.get("correct", 0)
+                        _total += _d.get("total", 0)
+            if _total > 0:
+                _season_stats = {"correct": _total_correct, "total_predictions": _total, "accuracy": (_total_correct / _total) * 100}
+        except Exception:
+            pass
+        dashboard_path = generate_dashboard(predictions, date_str, _season_stats)
         public_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "public")
         os.makedirs(public_dir, exist_ok=True)
         shutil.copy(dashboard_path, os.path.join(public_dir, "index.html"))
