@@ -65,6 +65,16 @@ def _run_predictions(date_str):
     except Exception as _e:
         pass  # DB write is non-critical
 
+    # Generate dashboard and update public/index.html for Vercel
+    try:
+        import shutil
+        dashboard_path = generate_dashboard(predictions, date_str, None)
+        public_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "public")
+        os.makedirs(public_dir, exist_ok=True)
+        shutil.copy(dashboard_path, os.path.join(public_dir, "index.html"))
+    except Exception:
+        pass
+
     # Build clean summary
     strong  = [p for p in predictions if p["recommendation"] == "STRONG PICK"]
     leans   = [p for p in predictions if p["recommendation"] in ("LEAN", "SLIGHT LEAN")]

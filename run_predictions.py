@@ -320,6 +320,12 @@ def main():
     dashboard_path = generate_dashboard(predictions, target_date, season_stats)
     print(f"  📊 Dashboard saved to {os.path.relpath(dashboard_path)}")
 
+    # Copy to public/index.html for Vercel deployment
+    import shutil
+    public_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "public")
+    os.makedirs(public_dir, exist_ok=True)
+    shutil.copy(dashboard_path, os.path.join(public_dir, "index.html"))
+
     # Step 6: Auto-verify yesterday's predictions
     yesterday = (datetime.strptime(target_date, "%Y-%m-%d") - timedelta(days=1)).strftime("%Y-%m-%d")
     yesterday_history = load_history(yesterday)

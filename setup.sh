@@ -122,9 +122,34 @@ else
     echo "     @reboot $PYTHON $SCRIPT_DIR/server.py $PORT >> $LOG 2>&1"
 fi
 
-# --- 5. Install cron jobs ---------------------------------------------------
+# --- 5. Git identity (needed for cron commits) ------------------------------
+echo ""
+echo "--- Configuring git ---"
+if [ -z "$(git config user.email)" ]; then
+    read -p "  Git email for cron commits: " GIT_EMAIL
+    read -p "  Git name: " GIT_NAME
+    git config user.email "$GIT_EMAIL"
+    git config user.name "$GIT_NAME"
+    ok "Git identity set"
+else
+    ok "Git identity already set ($(git config user.email))"
+fi
+
+# Verify we can push (SSH key or token must already be configured)
+echo "  Testing git push access..."
+if git ls-remote origin &>/dev/null; then
+    ok "Git push access confirmed"
+else
+    warn "Cannot reach git remote. Make sure SSH key or token is set up before cron runs."
+    echo "  SSH setup: https://docs.github.com/en/authentication/connecting-to-github-with-ssh"
+fi
+
+# --- 6. Install cron jobs ---------------------------------------------------
 echo ""
 echo "--- Installing cron jobs ---"
+
+# Make scripts executable
+chmod +x "$SCRIPT_DIR/deploy.sh"
 
 # Helper script for post-game analysis (handles macOS/Linux date differences)
 cat > "$SCRIPT_DIR/run_analysis.sh" <<'EOF'
@@ -140,13 +165,13 @@ chmod +x "$SCRIPT_DIR/run_analysis.sh"
 # Install the three jobs
 (crontab -l 2>/dev/null; cat <<EOF
 
-# nba-predictor: daily predictions at 6:00 PM local time
-0 18 * * * curl -s "http://localhost:$PORT/run?fmt=text" >> "$SCRIPT_DIR/cron.log" 2>&1 # nba-predictor
+# nba-predictor: predictions at 6 PM ET → commit → push → Vercel redeploys
+0 18 * * * "$SCRIPT_DIR/deploy.sh" # nba-predictor
 
-# nba-predictor: post-game analysis at 9:00 AM (updates learning ledger)
+# nba-predictor: post-game analysis at 9 AM (updates learning ledger)
 0 9  * * * "$SCRIPT_DIR/run_analysis.sh" >> "$SCRIPT_DIR/cron.log" 2>&1 # nba-predictor
 
-# nba-predictor: daily DB backup at 10:00 AM
+# nba-predictor: daily DB backup at 10 AM
 0 10 * * * cp "$SCRIPT_DIR/nba_predictor.db" "$SCRIPT_DIR/backups/nba_\$(date +\%Y\%m\%d).db" # nba-predictor
 
 EOF
