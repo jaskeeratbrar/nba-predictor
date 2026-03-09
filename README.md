@@ -1,10 +1,88 @@
 # NBA Predictor
 
-Daily NBA game prediction engine. Pulls live data from ESPN, scores each matchup across 7 weighted factors, and outputs picks with confidence levels. Tracks its own accuracy over time and adjusts factor weights accordingly.
+Daily NBA game prediction engine. Pulls live data from ESPN, scores each matchup, and outputs picks with confidence levels. Tracks its own accuracy over time and adjusts automatically.
 
 ---
 
-## Quick Start
+## Setting Up on a New Machine
+
+```bash
+git clone https://github.com/jaskeeratbrar/nba-predictor.git
+cd nba-predictor
+bash setup.sh
+```
+
+That's it. The script will:
+- Initialize the SQLite database and import existing learning history
+- Start the HTTP server as a background service (survives reboots)
+- Install all three cron jobs automatically
+
+**Requires:** Python 3.8+, `curl`
+
+---
+
+## ⏰ When to Run — Optimal Timing
+
+**Run at 6:00–6:30 PM ET on game days.**
+
+| Time (ET) | What's happening |
+|-----------|-----------------|
+| 2:00–4:00 PM | Teams announce load management / rest decisions |
+| **5:00 PM** | **NBA deadline — all teams must file official injury report** |
+| 5:30–6:00 PM | ESPN updates its API with finalized reports |
+| **6:00 PM** | ✅ **Best time to run** — full injury data, games haven't started |
+| 7:00–7:30 PM | First games tip off |
+| 10:00–10:30 PM | West Coast games tip off |
+
+### Weekend afternoon games
+
+Some weekend/holiday games tip at 1:00 or 3:30 PM ET. Their injury reports drop by ~11:00 AM ET. Add a second cron at **11:30 AM ET on weekends** if you want coverage for those, or accept that the 6 PM run won't catch them.
+
+### Late scratches (warmup injuries)
+
+Players hurt 15–30 min before tip-off won't appear in any pre-game data. Nothing you can do — even Vegas doesn't reliably price these in. The 6 PM window captures everything knowable.
+
+---
+
+## Cron Schedule (auto-installed by setup.sh)
+
+```
+6:00 PM  — Run predictions, save picks
+9:00 AM  — Post-game analysis, update learning ledger
+10:00 AM — Database backup
+```
+
+**Timezone note:** The cron times above assume your machine is set to ET. If it's UTC, shift +5 hours (11 PM, 2 PM, 3 PM UTC). Check your machine's timezone with `date`.
+
+To manually adjust after setup:
+
+```bash
+crontab -e
+```
+
+---
+
+## HTTP Server
+
+The server runs on port `6789` and stays alive in the background.
+
+| Endpoint | What it does |
+|----------|-------------|
+| `GET /run` | Today's predictions (JSON) |
+| `GET /run?date=2026-03-15` | Predictions for a specific date |
+| `GET /run?fmt=text` | Plain text — use this for cron output / notifications |
+| `GET /analyze?date=2026-03-07` | Post-game analysis for a past date |
+| `GET /status` | Health check |
+
+**Quick test after setup:**
+```bash
+curl http://localhost:6789/status
+curl http://localhost:6789/run?fmt=text
+```
+
+---
+
+## Manual Commands
 
 ```bash
 # Predict today's games
@@ -13,149 +91,89 @@ python run_predictions.py
 # Predict a specific date
 python run_predictions.py 2026-03-15
 
-# Post-game analysis (how did we do yesterday?)
+# Post-game analysis (how did the model do?)
 python run_predictions.py --analyze 2026-03-07
 
-# Start the HTTP server (for cron / remote access)
-python server.py
+# One-time: import old JSON history into the database
+python migrate.py
 ```
 
 ---
 
-## ⏰ When to Run — Optimal Timing
+## How the Model Improves Over Time
 
-**TL;DR: Run at 6:00–6:30 PM ET on game days.**
+The model tracks how accurate each factor is and adjusts its weights automatically.
 
-### Why that window?
-
-The NBA has mandatory injury disclosure rules that determine when you have complete information:
-
-| Time (ET) | What happens |
-|-----------|-------------|
-| ~2:00–4:00 PM | Load management / rest decisions typically announced |
-| **5:00 PM** | **NBA deadline — all teams must submit official injury report** |
-| 5:30–6:00 PM | ESPN updates its API with the finalized reports (15–30 min lag) |
-| 7:00–7:30 PM | First wave of games tips off |
-| 10:00–10:30 PM | West Coast games tip off |
-
-Running at **6:00–6:30 PM ET** means you have:
-- The finalized injury report (5 PM deadline has passed)
-- Time before tip-off to act on picks
-- Full coverage of both East and West Coast games
-
-### Cron setup
-
-```bash
-# Run at 6:00 PM ET every day
-0 18 * * *   /path/to/python /path/to/run_predictions.py
-
-# Or ping the server endpoint (if server.py is running)
-0 18 * * *   curl -s http://localhost:6789/run?fmt=text
-
-# If your machine is UTC
-0 23 * * *   curl -s http://localhost:6789/run?fmt=text
+```
+Every morning (9 AM cron):
+  → Fetches final scores from ESPN
+  → Compares predictions vs actual results
+  → Updates the accuracy ledger (performance/factor_accuracy.json)
+  → After 50+ analyzed games, switches to learned weights automatically
 ```
 
-### Weekend afternoon games
-
-Some weekend/holiday games tip at 1:00 PM or 3:30 PM ET. Their injury reports drop by ~11:00 AM ET. If you care about those games, add a second cron at **11:30 AM ET on weekends**. Otherwise, the 6 PM run will still get the picks right — just without injury data for those early games.
-
-### Late scratches
-
-Players hurt in warmups (15–30 min before tip-off) won't appear in any pre-game run. Nothing you can do about those — even professional lines don't reliably price them in. The model's player form data partially compensates by knowing the team's depth.
-
----
-
-## How the Model Works
-
-Each game is scored across multiple weighted factors covering team performance, player availability, momentum, and rest. The team with the higher weighted score wins the prediction.
-
-### Confidence tiers
-
-| Label | Meaning |
-|-------|---------|
-| STRONG PICK | Clear edge — model is confident |
-| LEAN | Meaningful edge, reasonable pick |
-| SLIGHT LEAN | Small edge detected |
-| SKIP | Too close to call |
-
-### Injury handling
-
-The model doesn't treat all absences equally — a star sitting out for load management hits the model significantly harder than a bench player. Star and starter absences are flagged in the output with their stats so you always know when a key absence is influencing a pick.
-
----
-
-## Self-Improving Weights
-
-The model tracks how accurate each factor is over time. After 50+ analyzed games, it automatically switches from config weights to **learned weights** derived from real performance data.
-
-```bash
-# Run post-game analysis to update the accuracy ledger
-python run_predictions.py --analyze 2026-03-08
-
-# View current factor accuracy
-cat performance/factor_accuracy.json
-```
-
-The `performance/factor_accuracy.json` ledger shows each factor's accuracy, current weight, and suggested weight. The model will auto-apply suggestions once the sample is large enough to be statistically meaningful.
-
----
-
-## HTTP Server (for cron/remote access)
-
-```bash
-python server.py          # starts on port 6789
-python server.py 8080     # custom port
-```
-
-| Endpoint | Description |
-|----------|-------------|
-| `GET /run` | Today's predictions (JSON) |
-| `GET /run?date=2026-03-08` | Specific date |
-| `GET /run?fmt=text` | Plain text — good for notifications/cron output |
-| `GET /analyze?date=2026-03-07` | Post-game analysis |
-| `GET /status` | Health check |
-
-The text format (`?fmt=text`) is designed for cron output emails or Slack/webhook notifications.
+The `performance/factor_accuracy.json` file is committed to this repo so a new machine starts with accumulated learning rather than from scratch.
 
 ---
 
 ## Project Structure
 
 ```
-nba_predictor/
-├── run_predictions.py     # Main CLI entry point
-├── server.py              # HTTP API server
-├── config.py              # Weights, thresholds, team metadata
-├── data_manager.py        # ESPN data fetching and caching
-├── prediction_engine.py   # Prediction model and factor calculations
-├── analyzer.py            # Post-game analysis and weight suggestions
-├── dashboard.py           # HTML report generator
-├── db.py                  # SQLite database layer
-├── migrate.py             # One-time import of JSON history into DB
-├── nba_predictor.db       # SQLite database (long-term storage)
-├── data/                  # Cached ESPN API responses (JSON)
-├── history/               # Daily prediction + analysis records (JSON)
-├── performance/           # Factor accuracy ledger
-└── reports/               # HTML dashboards
+nba-predictor/
+├── setup.sh               # Run once on a new machine
+├── run_analysis.sh         # Created by setup.sh, used by cron
+├── run_predictions.py      # Main CLI
+├── server.py               # HTTP server
+├── config.py               # Configuration
+├── data_manager.py         # ESPN data fetching + caching
+├── prediction_engine.py    # Prediction model
+├── analyzer.py             # Post-game analysis + learning
+├── dashboard.py            # HTML report generator
+├── db.py                   # SQLite database layer
+├── migrate.py              # Import JSON history into DB
+├── performance/
+│   └── factor_accuracy.json  # Accumulated learning (committed)
+├── data/                   # Cached ESPN responses (gitignored)
+├── history/                # Daily prediction records (gitignored)
+├── reports/                # HTML dashboards (gitignored)
+└── backups/                # DB backups (gitignored)
 ```
 
 ---
 
-## Data Sources
+## Logs
 
-All data is pulled from ESPN's public APIs (no API key required):
+```bash
+# Server logs
+tail -f server.log
 
-- Scoreboard / schedule
-- Standings (wins, losses, streak, home/road splits, last 10)
-- Injury reports (official NBA injury designations)
-- Team game logs (recent form, scores)
-- Player boxscores (last 5 games per player for form scoring)
+# Cron output
+tail -f cron.log
 
-Data is cached locally. If an API call fails, the model falls back to the last cached version so predictions still run.
+# On Linux — service status
+sudo systemctl status nba-predictor
+sudo journalctl -u nba-predictor -f
+```
 
 ---
 
-## Self-Tuning
+## Troubleshooting
 
-Once enough games have been analyzed, the model automatically adjusts its internal weights based on which factors have been most accurate. No manual tuning needed — it improves itself over the course of the season.
+**Server not running after setup:**
+```bash
+# Linux
+sudo systemctl restart nba-predictor
+
+# macOS
+launchctl unload ~/Library/LaunchAgents/com.nbapredictor.server.plist
+launchctl load ~/Library/LaunchAgents/com.nbapredictor.server.plist
+
+# Manual (any OS)
+python server.py &
+```
+
+**No games found for a date:**
+ESPN's API occasionally has downtime. The model falls back to cached data automatically. Re-run in 10 minutes.
+
+**Cron ran but no output:**
+Check that the server is running first (`curl http://localhost:6789/status`). The cron jobs hit the server endpoint — if the server is down, cron silently fails.

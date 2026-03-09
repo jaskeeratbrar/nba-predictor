@@ -10,4 +10,5 @@ data/injuries_current.json
 reports/
 history/
 performance/
+!performance/factor_accuracy.json
 *.db
