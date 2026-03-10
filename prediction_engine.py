@@ -438,11 +438,53 @@ def predict_game(game, standings, injuries, recent_form, player_form=None):
     h_rest, a_rest = compute_rest_factor(home_recent, away_recent)
     factors["rest_days"] = {"home": h_rest, "away": a_rest}
 
+    # Priority 3: filter tonight's injured players OUT of player_form before scoring.
+    # Form computed from games with Ja Morant is misleading when Morant is out tonight.
+    def _active_form(team_abbr):
+        form = player_form.get(team_abbr, {})
+        out_tonight = {
+            inj["name"].lower()
+            for inj in injuries.get(team_abbr, [])
+            if inj.get("status", "").lower() in ("out", "doubtful")
+        }
+        return {pid: p for pid, p in form.items()
+                if p.get("name", "").lower() not in out_tonight}
+
     h_pf, a_pf = compute_player_form_factor(
-        player_form.get(home_abbr, {}),
-        player_form.get(away_abbr, {})
+        _active_form(home_abbr),
+        _active_form(away_abbr)
     )
     factors["player_form"] = {"home": h_pf, "away": a_pf}
+
+    # Priority 4 & 5: measure total injury load on each team.
+    # weighted_absence = sum of impact scores for Out/Doubtful players.
+    # star(32+min or position fallback C)=2.0, starter(25+)=1.5, role=1.0, bench=0.5
+    def _absence_load(team_abbr):
+        form_by_name = {
+            p.get("name", "").lower(): p
+            for p in player_form.get(team_abbr, {}).values()
+        }
+        load = 0.0
+        for inj in injuries.get(team_abbr, []):
+            if inj.get("status", "").lower() not in ("out", "doubtful"):
+                continue
+            pform = form_by_name.get(inj["name"].lower())
+            if pform:
+                mins = pform.get("minutes_avg", 0)
+                if mins >= 32:   load += 2.0
+                elif mins >= 25: load += 1.5
+                elif mins >= 15: load += 1.0
+                else:            load += 0.5
+            else:
+                pos = inj.get("position", "").upper()
+                if pos == "C":             load += 1.8
+                elif pos in ("PG", "G"):   load += 1.6
+                elif pos == "SG":          load += 1.4
+                else:                      load += 1.0
+        return load
+
+    h_load = _absence_load(home_abbr)
+    a_load = _absence_load(away_abbr)
 
     # Weighted combination — uses dynamic (season-progress-adjusted) weights
     dynamic_weights = _dynamic_weights(home_standings, away_standings)
@@ -461,6 +503,24 @@ def predict_game(game, standings, injuries, recent_form, player_form=None):
     # Determine winner and confidence
     confidence = max(home_prob, away_prob)
     predicted_winner = home_abbr if home_prob >= away_prob else away_abbr
+
+    # Priority 4: both teams genuinely decimated → compress confidence toward 0.5.
+    # Requires BOTH teams individually above threshold — one team missing many players
+    # while the other is healthy is not "both decimated", that's just an advantage.
+    INDIVIDUAL_DECIMATED = 3.0
+    if h_load > INDIVIDUAL_DECIMATED and a_load > INDIVIDUAL_DECIMATED:
+        excess = (h_load + a_load) - (2 * INDIVIDUAL_DECIMATED)
+        compression = min(0.08, excess * 0.015)
+        confidence = max(confidence - compression, 0.50)
+
+    # Priority 5: model picks the MORE injured team → cap confidence.
+    # Backward-looking factors (win%, player_form) describe a roster that no longer
+    # exists tonight. Only apply when model is picking the side with the worse injuries.
+    MORE_INJURED_THRESHOLD = 3.5
+    if h_load - a_load >= MORE_INJURED_THRESHOLD and predicted_winner == home_abbr:
+        confidence = min(confidence, 0.57)
+    elif a_load - h_load >= MORE_INJURED_THRESHOLD and predicted_winner == away_abbr:
+        confidence = min(confidence, 0.57)
 
     # Recommendation
     if confidence >= CONFIDENCE_HIGH:
