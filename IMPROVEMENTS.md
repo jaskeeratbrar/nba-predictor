@@ -78,7 +78,52 @@ level (below 60%) regardless of model output.
 
 ---
 
-## Priority 6 — SQLite is write-only, nothing reads from it (NOT STARTED)
+## Priority 6 — Build calibrate.py from SQLite data (WAITING — ~2026-03-31)
+**Status:** Design complete (see Opus plan below). Do NOT build yet.
+
+**Why waiting:** All 42 games of history have a broken injury factor (fixed 2026-03-09).
+Calibrating weights from that window produces weights for a 6-factor model, not 7.
+Need ~30 games of clean data (injury factor working) before calibration is meaningful.
+Target: around 2026-03-31, check if 30+ post-fix games exist before starting.
+
+**How to check when ready:**
+```bash
+python3 -c "
+import db, json
+conn = db.get_connection()
+cursor = conn.cursor()
+cursor.execute(\"\"\"
+    SELECT COUNT(*) FROM predictions p
+    JOIN game_results gr ON p.game_date = gr.game_date
+        AND p.home_abbr = gr.home_abbr
+    WHERE p.game_date >= '2026-03-09'
+\"\"\")
+print('Clean games available:', cursor.fetchone()[0])
+conn.close()
+"
+```
+If result >= 30, proceed with building calibrate.py using the Opus design below.
+
+**Opus design summary (full detail in conversation history 2026-03-10):**
+- Read from SQLite: join `predictions` + `game_results`, use stored factor scores
+- Method: Bayesian weighted accuracy with shrinkage (not logistic regression — too few samples)
+- Shrinkage formula: `shrinkage = max(0, 1 - effective_n / 20)` per factor
+- Injury factor: exclude all pre-2026-03-09 rows, freeze if < 20 non-neutral votes
+- Rest days: effectively frozen (timing bug means near-zero margins stored in DB)
+- Output: `performance/calibrated_weights.json` — model reads this at startup
+- Guard: only update if any weight changes by > 1%, otherwise skip
+- Correlation damping: if win_pct AND recent_form both want to increase, cap both at half MAX_SHIFT
+- Run: manually (not cron), weekly on Mondays, `python3 calibrate.py [--dry-run]`
+
+**Key files to read before implementing:**
+- `db.py` — schema, `save_weights_snapshot()`
+- `analyzer.py` — existing DB read patterns
+- `config.py` — WEIGHTS, MIN_WEIGHT, PERFORMANCE_DIR
+- `run_predictions.py` lines 31-45 — startup weight loading block to update
+
+---
+
+## Priority 6b — SQLite is write-only, nothing reads from it (NOT STARTED)
 **Status:** Not started. The DB has 43 predictions, 42 game results, 418 player form
 snapshots, 290 team recent form rows — but zero of this is used for analysis or learning.
 Everything reads from JSON files. The DB is an audit trail that nobody consults.
