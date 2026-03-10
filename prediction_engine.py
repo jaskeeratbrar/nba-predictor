@@ -202,17 +202,26 @@ def compute_injury_factor(home_abbr, away_abbr, injuries, player_form=None):
             else:
                 continue
 
-            # Scale by player impact using minutes as proxy
-            # <15 min/g (deep bench) → 0.5×
-            # 15-25 min/g (role player) → 1.0×
-            # 25-32 min/g (starter)    → 1.5×
-            # 32+ min/g  (star)        → 2.0×
+            # Scale by player impact using minutes as primary proxy.
+            # Fallback to position-based estimate for players not in recent form
+            # (e.g. long-term injured like Steph Curry, Ja Morant).
+            # Position fallback: C 1.6× (hardest to replace), PG/G 1.4×, SG 1.3×, F 1.2×
             pform = form_by_name.get(player_name)
             if pform:
                 mins = pform.get("minutes_avg", 20)
                 impact = min(2.0, max(0.5, mins / 20.0))
             else:
-                impact = 1.0  # unknown player → neutral multiplier
+                pos = inj.get("position", "").upper()
+                if pos == "C":
+                    impact = 1.6
+                elif pos in ("PG", "G"):
+                    impact = 1.4
+                elif pos == "SG":
+                    impact = 1.3
+                elif pos in ("SF", "PF", "F", "G-F", "F-G", "F-C", "C-F"):
+                    impact = 1.2
+                else:
+                    impact = 1.0  # truly unknown
 
             penalty += base * impact
 

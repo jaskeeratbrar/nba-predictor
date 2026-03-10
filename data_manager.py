@@ -303,6 +303,8 @@ def fetch_boxscore_players(game_id):
                 "ft_pct":     round(ft_pct, 4),
                 "reb":        _safe_float(_stat("REB", 0)),
                 "ast":        _safe_float(_stat("AST", 0)),
+                "blk":        _safe_float(_stat("BLK", 0)),
+                "stl":        _safe_float(_stat("STL", 0)),
                 "plus_minus": _safe_float(_stat("+/-", 0)),
             })
 
@@ -347,6 +349,10 @@ def fetch_player_form(team_abbr, recent_games, count=5):
                     "plus_minus":   0.0,
                     "minutes":      0.0,
                     "fg3_pct_sum":  0.0,
+                    "reb":          0.0,
+                    "ast":          0.0,
+                    "blk":          0.0,
+                    "stl":          0.0,
                 }
             t = player_totals[pid]
             t["games"]       += 1
@@ -357,6 +363,10 @@ def fetch_player_form(team_abbr, recent_games, count=5):
             t["plus_minus"]  += p["plus_minus"]
             t["minutes"]     += p["minutes"]
             t["fg3_pct_sum"] += p["fg3_pct"]
+            t["reb"]         += p.get("reb", 0)
+            t["ast"]         += p.get("ast", 0)
+            t["blk"]         += p.get("blk", 0)
+            t["stl"]         += p.get("stl", 0)
             if p["starter"]:
                 t["starter"] = True  # mark as starter if started any of these games
 
@@ -371,6 +381,10 @@ def fetch_player_form(team_abbr, recent_games, count=5):
         pm_avg       = t["plus_minus"] / g
         min_avg      = t["minutes"] / g
         fg3_pct_avg  = t["fg3_pct_sum"] / g
+        reb_avg      = t["reb"] / g
+        ast_avg      = t["ast"] / g
+        blk_avg      = t["blk"] / g
+        stl_avg      = t["stl"] / g
 
         # True Shooting %: more position-neutral than raw FG%
         # TS% = pts / (2 * (fg_att + 0.44 * ft_att))
@@ -378,13 +392,21 @@ def fetch_player_form(team_abbr, recent_games, count=5):
         ts_pct     = t["pts"] / ts_denom if ts_denom > 0 else fg_pct_avg
 
         pm_boost   = max(0.5, min(1.5, 1.0 + pm_avg / 30.0))
-        form_score = pts_avg * max(ts_pct, 0.1) * pm_boost
+
+        # Impact score: pts + non-scoring contributions so big men/defenders score fairly
+        # Blocks/steals weighted higher (2-possession swing), reb/ast weighted moderately
+        impact = pts_avg + reb_avg * 1.1 + ast_avg * 1.2 + blk_avg * 2.5 + stl_avg * 2.0
+        form_score = impact * max(ts_pct, 0.1) * pm_boost
 
         result[pid] = {
             "name":           t["name"],
             "starter":        t["starter"],
             "games_played":   g,
             "pts_avg":        round(pts_avg, 2),
+            "reb_avg":        round(reb_avg, 2),
+            "ast_avg":        round(ast_avg, 2),
+            "blk_avg":        round(blk_avg, 2),
+            "stl_avg":        round(stl_avg, 2),
             "fg_pct_avg":     round(fg_pct_avg, 4),
             "ts_pct":         round(ts_pct, 4),
             "fg3_pct_avg":    round(fg3_pct_avg, 4),
@@ -531,7 +553,7 @@ def refresh_all_data(target_date):
         print(f"  Fetching player form (last 5 games per team)...")
         for abbr in teams_playing:
             team_recent = recent_form.get(abbr, [])
-            form = fetch_player_form(abbr, team_recent, count=5)
+            form = fetch_player_form(abbr, team_recent, count=10)
             if form:
                 player_form[abbr] = form
                 hot = sum(1 for p in form.values() if p["form_score"] > 7.0 and p["minutes_avg"] >= 15)
