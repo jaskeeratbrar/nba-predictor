@@ -35,6 +35,12 @@ EOF
     chmod +x run_analysis.sh
 fi
 
+# 0.5. Restart server to pick up any code changes from the pull
+echo "[$TIMESTAMP] Restarting server..." >> "$LOG"
+pkill -f "server.py 6789" 2>/dev/null || true
+sleep 2
+nohup python3 "$(pwd)/server.py" 6789 >> "$LOG" 2>&1 &
+sleep 3  # wait for server to be ready
 # 1. Run predictions (updates public/index.html as a side effect)
 echo "[$TIMESTAMP] Running predictions..." >> "$LOG"
 curl -s "http://localhost:6789/run?fmt=text" >> "$LOG" 2>&1
