@@ -12,3 +12,7 @@ history/
 performance/
 !performance/factor_accuracy.json
 *.db
+*.log
+server.pid
+run_analysis.sh
+backups/
