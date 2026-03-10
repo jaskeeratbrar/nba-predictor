@@ -148,14 +148,28 @@ def fetch_injuries_espn():
     Fetch current NBA injuries. ESPN doesn't have a clean public API for this,
     so we try the team-level endpoint.
     """
+    # ESPN API now uses displayName (full team name) at top level — map to abbreviation
+    _NAME_TO_ABBR = {
+        "Atlanta Hawks": "ATL", "Boston Celtics": "BOS", "Brooklyn Nets": "BKN",
+        "Charlotte Hornets": "CHA", "Chicago Bulls": "CHI", "Cleveland Cavaliers": "CLE",
+        "Dallas Mavericks": "DAL", "Denver Nuggets": "DEN", "Detroit Pistons": "DET",
+        "Golden State Warriors": "GSW", "Houston Rockets": "HOU", "Indiana Pacers": "IND",
+        "LA Clippers": "LAC", "Los Angeles Lakers": "LAL", "Memphis Grizzlies": "MEM",
+        "Miami Heat": "MIA", "Milwaukee Bucks": "MIL", "Minnesota Timberwolves": "MIN",
+        "New Orleans Pelicans": "NOP", "New York Knicks": "NYK", "Oklahoma City Thunder": "OKC",
+        "Orlando Magic": "ORL", "Philadelphia 76ers": "PHI", "Phoenix Suns": "PHX",
+        "Portland Trail Blazers": "POR", "Sacramento Kings": "SAC", "San Antonio Spurs": "SAS",
+        "Toronto Raptors": "TOR", "Utah Jazz": "UTA", "Washington Wizards": "WAS",
+    }
     injuries = {}
-    # Try the injuries endpoint
     url = "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/injuries"
     data = _get(url)
     if data and "injuries" in data:
         for team_entry in data["injuries"]:
-            team = team_entry.get("team", {})
-            abbr = team.get("abbreviation", "")
+            display_name = team_entry.get("displayName", "")
+            abbr = _NAME_TO_ABBR.get(display_name) or team_entry.get("team", {}).get("abbreviation", "")
+            if not abbr:
+                continue
             players = []
             for inj in team_entry.get("injuries", []):
                 athlete = inj.get("athlete", {})
