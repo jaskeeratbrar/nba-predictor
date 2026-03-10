@@ -20,11 +20,18 @@ git pull --rebase >> "$LOG" 2>&1
 
 # Ensure run_analysis.sh exists (may be wiped by git pull since it's gitignored)
 if [ ! -f "run_analysis.sh" ]; then
-    cat > run_analysis.sh << 'SCRIPT'
+    SCRIPT_DIR="$(pwd)"
+    cat > run_analysis.sh << EOF
 #!/bin/bash
-YESTERDAY=$(python3 -c "from datetime import date, timedelta; print((date.today()-timedelta(1)).strftime('%Y-%m-%d'))")
-curl -s "http://localhost:6789/analyze?date=$YESTERDAY"
-SCRIPT
+cd "$SCRIPT_DIR"
+YESTERDAY=\$(python3 -c "from datetime import date, timedelta; print((date.today()-timedelta(1)).strftime('%Y-%m-%d'))")
+curl -s "http://localhost:6789/analyze?date=\$YESTERDAY"
+git add history/*.json performance/factor_accuracy.json 2>/dev/null || true
+if ! git diff --staged --quiet; then
+    git commit -m "analysis: \$YESTERDAY"
+    git push
+fi
+EOF
     chmod +x run_analysis.sh
 fi
 
@@ -32,9 +39,11 @@ fi
 echo "[$TIMESTAMP] Running predictions..." >> "$LOG"
 curl -s "http://localhost:6789/run?fmt=text" >> "$LOG" 2>&1
 
-# 2. Commit and push public/index.html → triggers Vercel redeploy
+# 2. Commit and push public/index.html + history files → triggers Vercel redeploy
 if [ -f "public/index.html" ]; then
     git add public/index.html
+    git add history/*.json 2>/dev/null || true
+    git add performance/factor_accuracy.json 2>/dev/null || true
 
     if ! git diff --staged --quiet; then
         git commit -m "picks: $DATE"

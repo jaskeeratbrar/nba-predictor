@@ -8,7 +8,7 @@ data/player_form.json
 data/standings_current.json
 data/injuries_current.json
 reports/
-history/
+history/*.json.tmp
 performance/
 !performance/factor_accuracy.json
 *.db

@@ -152,10 +152,16 @@ echo "--- Installing cron jobs ---"
 chmod +x "$SCRIPT_DIR/deploy.sh"
 
 # Helper script for post-game analysis (handles macOS/Linux date differences)
-cat > "$SCRIPT_DIR/run_analysis.sh" <<'EOF'
+cat > "$SCRIPT_DIR/run_analysis.sh" <<EOF
 #!/bin/bash
-YESTERDAY=$(python3 -c "from datetime import date, timedelta; print((date.today()-timedelta(1)).strftime('%Y-%m-%d'))")
-curl -s "http://localhost:6789/analyze?date=$YESTERDAY"
+cd "$SCRIPT_DIR"
+YESTERDAY=\$(python3 -c "from datetime import date, timedelta; print((date.today()-timedelta(1)).strftime('%Y-%m-%d'))")
+curl -s "http://localhost:6789/analyze?date=\$YESTERDAY"
+git add history/*.json performance/factor_accuracy.json 2>/dev/null || true
+if ! git diff --staged --quiet; then
+    git commit -m "analysis: \$YESTERDAY"
+    git push
+fi
 EOF
 chmod +x "$SCRIPT_DIR/run_analysis.sh"
 

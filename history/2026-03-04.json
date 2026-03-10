@@ -1,0 +1,271 @@
+{
+  "date": "2026-03-04",
+  "generated_at": "2026-03-08T11:37:16.965006",
+  "num_games": 6,
+  "predictions": [
+    {
+      "home_team": "LA Clippers",
+      "home_abbr": "LAC",
+      "away_team": "Indiana Pacers",
+      "away_abbr": "IND",
+      "home_record": "31-32",
+      "away_record": "15-48",
+      "home_win_prob": 0.7967,
+      "away_win_prob": 0.2033,
+      "predicted_winner": "LAC",
+      "predicted_winner_name": "LA Clippers",
+      "confidence": 0.7967,
+      "recommendation": "STRONG PICK",
+      "venue": "Intuit Dome",
+      "game_time": "2026-03-05T03:30Z",
+      "factors": {
+        "win_pct": {
+          "home": 0.8599,
+          "away": 0.1401
+        },
+        "recent_form": {
+          "home": 0.9428,
+          "away": 0.0572
+        },
+        "home_away": {
+          "home": 0.9433,
+          "away": 0.0567
+        },
+        "injuries": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "streak": {
+          "home": 0.7297,
+          "away": 0.2703
+        },
+        "rest_days": {
+          "home": 0.5,
+          "away": 0.5
+        }
+      },
+      "home_injuries": 0,
+      "away_injuries": 0
+    },
+    {
+      "home_team": "Philadelphia 76ers",
+      "home_abbr": "PHI",
+      "away_team": "Utah Jazz",
+      "away_abbr": "UTA",
+      "home_record": "34-29",
+      "away_record": "18-44",
+      "home_win_prob": 0.6821,
+      "away_win_prob": 0.3179,
+      "predicted_winner": "PHI",
+      "predicted_winner_name": "Philadelphia 76ers",
+      "confidence": 0.6821,
+      "recommendation": "LEAN",
+      "venue": "Xfinity Mobile Arena",
+      "game_time": "2026-03-05T00:30Z",
+      "factors": {
+        "win_pct": {
+          "home": 0.8249,
+          "away": 0.1751
+        },
+        "recent_form": {
+          "home": 0.8036,
+          "away": 0.1964
+        },
+        "home_away": {
+          "home": 0.5652,
+          "away": 0.4348
+        },
+        "injuries": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "streak": {
+          "home": 0.4792,
+          "away": 0.5208
+        },
+        "rest_days": {
+          "home": 0.5,
+          "away": 0.5
+        }
+      },
+      "home_injuries": 0,
+      "away_injuries": 0
+    },
+    {
+      "home_team": "Milwaukee Bucks",
+      "home_abbr": "MIL",
+      "away_team": "Atlanta Hawks",
+      "away_abbr": "ATL",
+      "home_record": "27-35",
+      "away_record": "33-31",
+      "home_win_prob": 0.4059,
+      "away_win_prob": 0.5941,
+      "predicted_winner": "ATL",
+      "predicted_winner_name": "Atlanta Hawks",
+      "confidence": 0.5941,
+      "recommendation": "SLIGHT LEAN",
+      "venue": "Fiserv Forum",
+      "game_time": "2026-03-05T02:30Z",
+      "factors": {
+        "win_pct": {
+          "home": 0.396,
+          "away": 0.604
+        },
+        "recent_form": {
+          "home": 0.2692,
+          "away": 0.7308
+        },
+        "home_away": {
+          "home": 0.4913,
+          "away": 0.5087
+        },
+        "injuries": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "streak": {
+          "home": 0.4219,
+          "away": 0.5781
+        },
+        "rest_days": {
+          "home": 0.5,
+          "away": 0.5
+        }
+      },
+      "home_injuries": 0,
+      "away_injuries": 0
+    },
+    {
+      "home_team": "Boston Celtics",
+      "home_abbr": "BOS",
+      "away_team": "Charlotte Hornets",
+      "away_abbr": "CHA",
+      "home_record": "42-21",
+      "away_record": "32-32",
+      "home_win_prob": 0.5846,
+      "away_win_prob": 0.4154,
+      "predicted_winner": "BOS",
+      "predicted_winner_name": "Boston Celtics",
+      "confidence": 0.5846,
+      "recommendation": "SLIGHT LEAN",
+      "venue": "TD Garden",
+      "game_time": "2026-03-05T00:30Z",
+      "factors": {
+        "win_pct": {
+          "home": 0.6724,
+          "away": 0.3276
+        },
+        "recent_form": {
+          "home": 0.5361,
+          "away": 0.4639
+        },
+        "home_away": {
+          "home": 0.6455,
+          "away": 0.3545
+        },
+        "injuries": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "streak": {
+          "home": 0.54,
+          "away": 0.46
+        },
+        "rest_days": {
+          "home": 0.5,
+          "away": 0.5
+        }
+      },
+      "home_injuries": 0,
+      "away_injuries": 0
+    },
+    {
+      "home_team": "New York Knicks",
+      "home_abbr": "NYK",
+      "away_team": "Oklahoma City Thunder",
+      "away_abbr": "OKC",
+      "home_record": "40-23",
+      "away_record": "50-15",
+      "home_win_prob": 0.4175,
+      "away_win_prob": 0.5825,
+      "predicted_winner": "OKC",
+      "predicted_winner_name": "Oklahoma City Thunder",
+      "confidence": 0.5825,
+      "recommendation": "SLIGHT LEAN",
+      "venue": "Madison Square Garden",
+      "game_time": "2026-03-05T00:00Z",
+      "factors": {
+        "win_pct": {
+          "home": 0.3823,
+          "away": 0.6177
+        },
+        "recent_form": {
+          "home": 0.419,
+          "away": 0.581
+        },
+        "home_away": {
+          "home": 0.3479,
+          "away": 0.6521
+        },
+        "injuries": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "streak": {
+          "home": 0.4167,
+          "away": 0.5833
+        },
+        "rest_days": {
+          "home": 0.5,
+          "away": 0.5
+        }
+      },
+      "home_injuries": 0,
+      "away_injuries": 0
+    },
+    {
+      "home_team": "Memphis Grizzlies",
+      "home_abbr": "MEM",
+      "away_team": "Portland Trail Blazers",
+      "away_abbr": "POR",
+      "home_record": "23-39",
+      "away_record": "30-34",
+      "home_win_prob": 0.4199,
+      "away_win_prob": 0.5801,
+      "predicted_winner": "POR",
+      "predicted_winner_name": "Portland Trail Blazers",
+      "confidence": 0.5801,
+      "recommendation": "SLIGHT LEAN",
+      "venue": "FedExForum",
+      "game_time": "2026-03-05T01:00Z",
+      "factors": {
+        "win_pct": {
+          "home": 0.3578,
+          "away": 0.6422
+        },
+        "recent_form": {
+          "home": 0.3637,
+          "away": 0.6363
+        },
+        "home_away": {
+          "home": 0.4937,
+          "away": 0.5063
+        },
+        "injuries": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "streak": {
+          "home": 0.4524,
+          "away": 0.5476
+        },
+        "rest_days": {
+          "home": 0.5,
+          "away": 0.5
+        }
+      },
+      "home_injuries": 0,
+      "away_injuries": 0
+    }
+  ]
+}
