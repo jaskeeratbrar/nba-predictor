@@ -78,6 +78,21 @@ level (below 60%) regardless of model output.
 
 ---
 
+## Priority 6 — SQLite is write-only, nothing reads from it (NOT STARTED)
+**Status:** Not started. The DB has 43 predictions, 42 game results, 418 player form
+snapshots, 290 team recent form rows — but zero of this is used for analysis or learning.
+Everything reads from JSON files. The DB is an audit trail that nobody consults.
+
+**What's possible:** analyzer.py could query `predictions` + `game_results` joined
+directly from the DB instead of scanning JSON files. Factor accuracy ledger could
+be stored and queried from DB. Player form snapshots could power richer historical
+analysis (e.g. true season averages, not just last 10 games).
+
+**Not urgent** — JSON files work and are now in git. But long-term the DB is the
+right data layer, especially as history grows beyond a season.
+
+---
+
 ## Completed
 - [x] Fix ESPN injury API (team name structure changed, all injuries were silently dropped) — 2026-03-09
 - [x] Star player detection: reb/blk/stl now in form_score, not just pts — 2026-03-10
