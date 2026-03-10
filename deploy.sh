@@ -15,6 +15,9 @@ TIMESTAMP=$(date "+%Y-%m-%d %H:%M")
 
 echo "[$TIMESTAMP] Starting deploy..." >> "$LOG"
 
+# 0. Pull latest code changes from GitHub
+git pull --rebase >> "$LOG" 2>&1
+
 # 1. Run predictions (updates public/index.html as a side effect)
 echo "[$TIMESTAMP] Running predictions..." >> "$LOG"
 curl -s "http://localhost:6789/run?fmt=text" >> "$LOG" 2>&1
