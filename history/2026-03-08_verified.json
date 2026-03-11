@@ -1,0 +1,548 @@
+{
+  "date": "2026-03-08",
+  "correct": 9,
+  "total": 10,
+  "accuracy": 90.0,
+  "results": [
+    {
+      "home_team": "Portland Trail Blazers",
+      "home_abbr": "POR",
+      "away_team": "Indiana Pacers",
+      "away_abbr": "IND",
+      "home_record": "31-34",
+      "away_record": "15-49",
+      "home_win_prob": 0.7512,
+      "away_win_prob": 0.2488,
+      "predicted_winner": "POR",
+      "predicted_winner_name": "Portland Trail Blazers",
+      "confidence": 0.7512,
+      "recommendation": "STRONG PICK",
+      "venue": "Moda Center",
+      "game_time": "2026-03-09T01:00Z",
+      "factors": {
+        "win_pct": {
+          "home": 0.7822,
+          "away": 0.2178
+        },
+        "recent_form": {
+          "home": 0.9286,
+          "away": 0.0714
+        },
+        "home_away": {
+          "home": 0.9434,
+          "away": 0.0566
+        },
+        "injuries": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "streak": {
+          "home": 0.7297,
+          "away": 0.2703
+        },
+        "rest_days": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "player_form": {
+          "home": 0.6898,
+          "away": 0.3102
+        }
+      },
+      "home_injuries": 0,
+      "away_injuries": 0,
+      "home_injury_detail": [],
+      "away_injury_detail": [],
+      "actual_winner": "POR",
+      "home_score": 131.0,
+      "away_score": 111.0,
+      "correct": true
+    },
+    {
+      "home_team": "Toronto Raptors",
+      "home_abbr": "TOR",
+      "away_team": "Dallas Mavericks",
+      "away_abbr": "DAL",
+      "home_record": "36-27",
+      "away_record": "21-43",
+      "home_win_prob": 0.7283,
+      "away_win_prob": 0.2717,
+      "predicted_winner": "TOR",
+      "predicted_winner_name": "Toronto Raptors",
+      "confidence": 0.7283,
+      "recommendation": "STRONG PICK",
+      "venue": "Scotiabank Arena",
+      "game_time": "2026-03-08T22:00Z",
+      "factors": {
+        "win_pct": {
+          "home": 0.7308,
+          "away": 0.2692
+        },
+        "recent_form": {
+          "home": 0.7944,
+          "away": 0.2056
+        },
+        "home_away": {
+          "home": 0.8666,
+          "away": 0.1334
+        },
+        "injuries": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "streak": {
+          "home": 0.7105,
+          "away": 0.2895
+        },
+        "rest_days": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "player_form": {
+          "home": 0.8111,
+          "away": 0.1889
+        }
+      },
+      "home_injuries": 0,
+      "away_injuries": 0,
+      "home_injury_detail": [],
+      "away_injury_detail": [],
+      "actual_winner": "TOR",
+      "home_score": 122.0,
+      "away_score": 92.0,
+      "correct": true
+    },
+    {
+      "home_team": "New Orleans Pelicans",
+      "home_abbr": "NOP",
+      "away_team": "Washington Wizards",
+      "away_abbr": "WAS",
+      "home_record": "21-45",
+      "away_record": "16-47",
+      "home_win_prob": 0.6186,
+      "away_win_prob": 0.3814,
+      "predicted_winner": "NOP",
+      "predicted_winner_name": "New Orleans Pelicans",
+      "confidence": 0.6186,
+      "recommendation": "LEAN",
+      "venue": "Smoothie King Center",
+      "game_time": "2026-03-08T23:00Z",
+      "factors": {
+        "win_pct": {
+          "home": 0.6001,
+          "away": 0.3999
+        },
+        "recent_form": {
+          "home": 0.8411,
+          "away": 0.1589
+        },
+        "home_away": {
+          "home": 0.5515,
+          "away": 0.4485
+        },
+        "injuries": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "streak": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "rest_days": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "player_form": {
+          "home": 0.6254,
+          "away": 0.3746
+        }
+      },
+      "home_injuries": 0,
+      "away_injuries": 0,
+      "home_injury_detail": [],
+      "away_injury_detail": [],
+      "actual_winner": "NOP",
+      "home_score": 138.0,
+      "away_score": 118.0,
+      "correct": true
+    },
+    {
+      "home_team": "Milwaukee Bucks",
+      "home_abbr": "MIL",
+      "away_team": "Orlando Magic",
+      "away_abbr": "ORL",
+      "home_record": "27-36",
+      "away_record": "35-28",
+      "home_win_prob": 0.3838,
+      "away_win_prob": 0.6162,
+      "predicted_winner": "ORL",
+      "predicted_winner_name": "Orlando Magic",
+      "confidence": 0.6162,
+      "recommendation": "LEAN",
+      "venue": "Fiserv Forum",
+      "game_time": "2026-03-09T00:00Z",
+      "factors": {
+        "win_pct": {
+          "home": 0.3853,
+          "away": 0.6147
+        },
+        "recent_form": {
+          "home": 0.3723,
+          "away": 0.6277
+        },
+        "home_away": {
+          "home": 0.5215,
+          "away": 0.4785
+        },
+        "injuries": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "streak": {
+          "home": 0.4107,
+          "away": 0.5893
+        },
+        "rest_days": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "player_form": {
+          "home": 0.1991,
+          "away": 0.8009
+        }
+      },
+      "home_injuries": 0,
+      "away_injuries": 0,
+      "home_injury_detail": [],
+      "away_injury_detail": [],
+      "actual_winner": "ORL",
+      "home_score": 91.0,
+      "away_score": 130.0,
+      "correct": true
+    },
+    {
+      "home_team": "San Antonio Spurs",
+      "home_abbr": "SAS",
+      "away_team": "Houston Rockets",
+      "away_abbr": "HOU",
+      "home_record": "47-17",
+      "away_record": "39-24",
+      "home_win_prob": 0.5646,
+      "away_win_prob": 0.4354,
+      "predicted_winner": "SAS",
+      "predicted_winner_name": "San Antonio Spurs",
+      "confidence": 0.5646,
+      "recommendation": "SLIGHT LEAN",
+      "venue": "Frost Bank Center",
+      "game_time": "2026-03-09T00:00Z",
+      "factors": {
+        "win_pct": {
+          "home": 0.5763,
+          "away": 0.4237
+        },
+        "recent_form": {
+          "home": 0.6185,
+          "away": 0.3815
+        },
+        "home_away": {
+          "home": 0.522,
+          "away": 0.478
+        },
+        "injuries": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "streak": {
+          "home": 0.5208,
+          "away": 0.4792
+        },
+        "rest_days": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "player_form": {
+          "home": 0.596,
+          "away": 0.404
+        }
+      },
+      "home_injuries": 0,
+      "away_injuries": 0,
+      "home_injury_detail": [],
+      "away_injury_detail": [],
+      "actual_winner": "SAS",
+      "home_score": 145.0,
+      "away_score": 120.0,
+      "correct": true
+    },
+    {
+      "home_team": "Miami Heat",
+      "home_abbr": "MIA",
+      "away_team": "Detroit Pistons",
+      "away_abbr": "DET",
+      "home_record": "36-29",
+      "away_record": "45-18",
+      "home_win_prob": 0.5502,
+      "away_win_prob": 0.4498,
+      "predicted_winner": "MIA",
+      "predicted_winner_name": "Miami Heat",
+      "confidence": 0.5502,
+      "recommendation": "SLIGHT LEAN",
+      "venue": "Kaseya Center",
+      "game_time": "2026-03-08T22:00Z",
+      "factors": {
+        "win_pct": {
+          "home": 0.3875,
+          "away": 0.6125
+        },
+        "recent_form": {
+          "home": 0.6762,
+          "away": 0.3238
+        },
+        "home_away": {
+          "home": 0.5232,
+          "away": 0.4768
+        },
+        "injuries": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "streak": {
+          "home": 0.6731,
+          "away": 0.3269
+        },
+        "rest_days": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "player_form": {
+          "home": 0.6906,
+          "away": 0.3094
+        }
+      },
+      "home_injuries": 0,
+      "away_injuries": 0,
+      "home_injury_detail": [],
+      "away_injury_detail": [],
+      "actual_winner": "MIA",
+      "home_score": 121.0,
+      "away_score": 110.0,
+      "correct": true
+    },
+    {
+      "home_team": "Sacramento Kings",
+      "home_abbr": "SAC",
+      "away_team": "Chicago Bulls",
+      "away_abbr": "CHI",
+      "home_record": "15-50",
+      "away_record": "26-38",
+      "home_win_prob": 0.4677,
+      "away_win_prob": 0.5323,
+      "predicted_winner": "CHI",
+      "predicted_winner_name": "Chicago Bulls",
+      "confidence": 0.5323,
+      "recommendation": "SKIP",
+      "venue": "Golden 1 Center",
+      "game_time": "2026-03-09T01:00Z",
+      "factors": {
+        "win_pct": {
+          "home": 0.2654,
+          "away": 0.7346
+        },
+        "recent_form": {
+          "home": 0.6082,
+          "away": 0.3918
+        },
+        "home_away": {
+          "home": 0.5476,
+          "away": 0.4524
+        },
+        "injuries": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "streak": {
+          "home": 0.54,
+          "away": 0.46
+        },
+        "rest_days": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "player_form": {
+          "home": 0.5252,
+          "away": 0.4748
+        }
+      },
+      "home_injuries": 0,
+      "away_injuries": 0,
+      "home_injury_detail": [],
+      "away_injury_detail": [],
+      "actual_winner": "SAC",
+      "home_score": 126.0,
+      "away_score": 110.0,
+      "correct": false
+    },
+    {
+      "home_team": "Los Angeles Lakers",
+      "home_abbr": "LAL",
+      "away_team": "New York Knicks",
+      "away_abbr": "NYK",
+      "home_record": "39-25",
+      "away_record": "41-24",
+      "home_win_prob": 0.5296,
+      "away_win_prob": 0.4704,
+      "predicted_winner": "LAL",
+      "predicted_winner_name": "Los Angeles Lakers",
+      "confidence": 0.5296,
+      "recommendation": "SKIP",
+      "venue": "crypto.com Arena",
+      "game_time": "2026-03-08T19:30Z",
+      "factors": {
+        "win_pct": {
+          "home": 0.4845,
+          "away": 0.5155
+        },
+        "recent_form": {
+          "home": 0.5097,
+          "away": 0.4903
+        },
+        "home_away": {
+          "home": 0.6517,
+          "away": 0.3483
+        },
+        "injuries": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "streak": {
+          "home": 0.537,
+          "away": 0.463
+        },
+        "rest_days": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "player_form": {
+          "home": 0.5678,
+          "away": 0.4322
+        }
+      },
+      "home_injuries": 0,
+      "away_injuries": 0,
+      "home_injury_detail": [],
+      "away_injury_detail": [],
+      "actual_winner": "LAL",
+      "home_score": 110.0,
+      "away_score": 97.0,
+      "correct": true
+    },
+    {
+      "home_team": "Cleveland Cavaliers",
+      "home_abbr": "CLE",
+      "away_team": "Boston Celtics",
+      "away_abbr": "BOS",
+      "home_record": "39-25",
+      "away_record": "43-21",
+      "home_win_prob": 0.4705,
+      "away_win_prob": 0.5295,
+      "predicted_winner": "BOS",
+      "predicted_winner_name": "Boston Celtics",
+      "confidence": 0.5295,
+      "recommendation": "SKIP",
+      "venue": "Rocket Arena",
+      "game_time": "2026-03-08T17:00Z",
+      "factors": {
+        "win_pct": {
+          "home": 0.4562,
+          "away": 0.5438
+        },
+        "recent_form": {
+          "home": 0.3846,
+          "away": 0.6154
+        },
+        "home_away": {
+          "home": 0.5168,
+          "away": 0.4832
+        },
+        "injuries": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "streak": {
+          "home": 0.4423,
+          "away": 0.5577
+        },
+        "rest_days": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "player_form": {
+          "home": 0.5201,
+          "away": 0.4799
+        }
+      },
+      "home_injuries": 0,
+      "away_injuries": 0,
+      "home_injury_detail": [],
+      "away_injury_detail": [],
+      "actual_winner": "BOS",
+      "home_score": 98.0,
+      "away_score": 109.0,
+      "correct": true
+    },
+    {
+      "home_team": "Phoenix Suns",
+      "home_abbr": "PHX",
+      "away_team": "Charlotte Hornets",
+      "away_abbr": "CHA",
+      "home_record": "37-27",
+      "away_record": "32-33",
+      "home_win_prob": 0.5279,
+      "away_win_prob": 0.4721,
+      "predicted_winner": "PHX",
+      "predicted_winner_name": "Phoenix Suns",
+      "confidence": 0.5279,
+      "recommendation": "SKIP",
+      "venue": "Mortgage Matchup Center",
+      "game_time": "2026-03-09T02:00Z",
+      "factors": {
+        "win_pct": {
+          "home": 0.5718,
+          "away": 0.4282
+        },
+        "recent_form": {
+          "home": 0.4767,
+          "away": 0.5233
+        },
+        "home_away": {
+          "home": 0.6269,
+          "away": 0.3731
+        },
+        "injuries": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "streak": {
+          "home": 0.58,
+          "away": 0.42
+        },
+        "rest_days": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "player_form": {
+          "home": 0.4725,
+          "away": 0.5275
+        }
+      },
+      "home_injuries": 0,
+      "away_injuries": 0,
+      "home_injury_detail": [],
+      "away_injury_detail": [],
+      "actual_winner": "PHX",
+      "home_score": 111.0,
+      "away_score": 99.0,
+      "correct": true
+    }
+  ]
+}

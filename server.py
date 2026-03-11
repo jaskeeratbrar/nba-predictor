@@ -244,8 +244,13 @@ if __name__ == "__main__":
     except Exception:
         pass
 
+    # Write PID file so deploy/restart scripts can kill us reliably
+    pid_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "server.pid")
+    with open(pid_path, "w") as _pf:
+        _pf.write(str(os.getpid()))
+
     server = HTTPServer(("0.0.0.0", PORT), Handler)
-    print(f"NBA Predictor server running on http://localhost:{PORT}")
+    print(f"NBA Predictor server running on http://localhost:{PORT}  (PID {os.getpid()})")
     print(f"  GET http://localhost:{PORT}/run")
     print(f"  GET http://localhost:{PORT}/run?fmt=text")
     print(f"  GET http://localhost:{PORT}/analyze?date=2026-03-07")
@@ -255,3 +260,8 @@ if __name__ == "__main__":
         server.serve_forever()
     except KeyboardInterrupt:
         print("\nStopped.")
+    finally:
+        try:
+            os.remove(pid_path)
+        except OSError:
+            pass

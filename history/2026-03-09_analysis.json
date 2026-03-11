@@ -1,0 +1,413 @@
+{
+  "date": "2026-03-09",
+  "analyzed_at": "2026-03-10T00:00:29.790758",
+  "summary": {
+    "correct": 2,
+    "total": 5,
+    "accuracy": 0.4
+  },
+  "games": [
+    {
+      "matchup": "DEN @ OKC",
+      "home_abbr": "OKC",
+      "away_abbr": "DEN",
+      "home_team": "Oklahoma City Thunder",
+      "away_team": "Denver Nuggets",
+      "predicted_winner": "OKC",
+      "actual_winner": "OKC",
+      "correct": true,
+      "home_score": 129.0,
+      "away_score": 126.0,
+      "confidence": 0.5859,
+      "recommendation": "SLIGHT LEAN",
+      "factor_votes": {
+        "win_pct": {
+          "voted_for": "OKC",
+          "correct": true,
+          "margin": 0.2238,
+          "home_pct": 0.6119,
+          "away_pct": 0.3881,
+          "neutral": false
+        },
+        "recent_form": {
+          "voted_for": "OKC",
+          "correct": true,
+          "margin": 0.3974,
+          "home_pct": 0.6987,
+          "away_pct": 0.3013,
+          "neutral": false
+        },
+        "player_form": {
+          "voted_for": "OKC",
+          "correct": true,
+          "margin": 0.0632,
+          "home_pct": 0.5316,
+          "away_pct": 0.4684,
+          "neutral": false
+        },
+        "home_away": {
+          "voted_for": "OKC",
+          "correct": true,
+          "margin": 0.3218,
+          "home_pct": 0.6609,
+          "away_pct": 0.3391,
+          "neutral": false
+        },
+        "injuries": {
+          "voted_for": "DEN",
+          "correct": false,
+          "margin": 0.1936,
+          "home_pct": 0.4032,
+          "away_pct": 0.5968,
+          "neutral": false
+        },
+        "rest_days": {
+          "voted_for": null,
+          "correct": null,
+          "margin": 0.0,
+          "home_pct": 0.5,
+          "away_pct": 0.5,
+          "neutral": true
+        },
+        "streak": {
+          "voted_for": "OKC",
+          "correct": true,
+          "margin": 0.2758,
+          "home_pct": 0.6379,
+          "away_pct": 0.3621,
+          "neutral": false
+        }
+      },
+      "explanation": "Correct. The model picked Oklahoma City Thunder and they won (DEN 126-129 OKC). Factors supporting the pick: win pct favored Oklahoma City Thunder; recent form strongly favored Oklahoma City Thunder; player form slightly favored Oklahoma City Thunder; home away strongly favored Oklahoma City Thunder; streak favored Oklahoma City Thunder. Factors pointing the other way: injuries favored Denver Nuggets. Neutral (no signal): rest days. The model held up despite some signals pointing to Denver Nuggets."
+    },
+    {
+      "matchup": "GSW @ UTA",
+      "home_abbr": "UTA",
+      "away_abbr": "GSW",
+      "home_team": "Utah Jazz",
+      "away_team": "Golden State Warriors",
+      "predicted_winner": "GSW",
+      "actual_winner": "UTA",
+      "correct": false,
+      "home_score": 119.0,
+      "away_score": 116.0,
+      "confidence": 0.5709,
+      "recommendation": "SLIGHT LEAN",
+      "factor_votes": {
+        "win_pct": {
+          "voted_for": "GSW",
+          "correct": false,
+          "margin": 0.4112,
+          "home_pct": 0.2944,
+          "away_pct": 0.7056,
+          "neutral": false
+        },
+        "recent_form": {
+          "voted_for": "GSW",
+          "correct": false,
+          "margin": 0.099,
+          "home_pct": 0.4505,
+          "away_pct": 0.5495,
+          "neutral": false
+        },
+        "player_form": {
+          "voted_for": "GSW",
+          "correct": false,
+          "margin": 0.1182,
+          "home_pct": 0.4409,
+          "away_pct": 0.5591,
+          "neutral": false
+        },
+        "home_away": {
+          "voted_for": "UTA",
+          "correct": true,
+          "margin": 0.103,
+          "home_pct": 0.5515,
+          "away_pct": 0.4485,
+          "neutral": false
+        },
+        "injuries": {
+          "voted_for": null,
+          "correct": null,
+          "margin": 0.0,
+          "home_pct": 0.5,
+          "away_pct": 0.5,
+          "neutral": true
+        },
+        "rest_days": {
+          "voted_for": null,
+          "correct": null,
+          "margin": 0.0,
+          "home_pct": 0.5,
+          "away_pct": 0.5,
+          "neutral": true
+        },
+        "streak": {
+          "voted_for": null,
+          "correct": null,
+          "margin": 0.0,
+          "home_pct": 0.5,
+          "away_pct": 0.5,
+          "neutral": true
+        }
+      },
+      "explanation": "Incorrect. The model picked Golden State Warriors but Utah Jazz won (GSW 116-119 UTA). Factors supporting the pick: win pct strongly favored Golden State Warriors; recent form slightly favored Golden State Warriors; player form slightly favored Golden State Warriors. Factors pointing the other way: home away slightly favored Utah Jazz. Neutral (no signal): injuries, rest days, streak. The model overweighted the supporting factors and missed the contradicting signals \u2014 particularly home away slightly favored Utah Jazz."
+    },
+    {
+      "matchup": "PHI @ CLE",
+      "home_abbr": "CLE",
+      "away_abbr": "PHI",
+      "home_team": "Cleveland Cavaliers",
+      "away_team": "Philadelphia 76ers",
+      "predicted_winner": "CLE",
+      "actual_winner": "CLE",
+      "correct": true,
+      "home_score": 115.0,
+      "away_score": 101.0,
+      "confidence": 0.5703,
+      "recommendation": "SLIGHT LEAN",
+      "factor_votes": {
+        "win_pct": {
+          "voted_for": "CLE",
+          "correct": true,
+          "margin": 0.1316,
+          "home_pct": 0.5658,
+          "away_pct": 0.4342,
+          "neutral": false
+        },
+        "recent_form": {
+          "voted_for": "CLE",
+          "correct": true,
+          "margin": 0.1648,
+          "home_pct": 0.5824,
+          "away_pct": 0.4176,
+          "neutral": false
+        },
+        "player_form": {
+          "voted_for": "CLE",
+          "correct": true,
+          "margin": 0.1634,
+          "home_pct": 0.5817,
+          "away_pct": 0.4183,
+          "neutral": false
+        },
+        "home_away": {
+          "voted_for": "CLE",
+          "correct": true,
+          "margin": 0.2454,
+          "home_pct": 0.6227,
+          "away_pct": 0.3773,
+          "neutral": false
+        },
+        "injuries": {
+          "voted_for": "CLE",
+          "correct": true,
+          "margin": 0.0874,
+          "home_pct": 0.5437,
+          "away_pct": 0.4563,
+          "neutral": false
+        },
+        "rest_days": {
+          "voted_for": null,
+          "correct": null,
+          "margin": 0.0,
+          "home_pct": 0.5,
+          "away_pct": 0.5,
+          "neutral": true
+        },
+        "streak": {
+          "voted_for": "CLE",
+          "correct": true,
+          "margin": 0.125,
+          "home_pct": 0.5625,
+          "away_pct": 0.4375,
+          "neutral": false
+        }
+      },
+      "explanation": "Correct. The model picked Cleveland Cavaliers and they won (PHI 101-115 CLE). Factors supporting the pick: win pct slightly favored Cleveland Cavaliers; recent form favored Cleveland Cavaliers; player form favored Cleveland Cavaliers; home away favored Cleveland Cavaliers; injuries slightly favored Cleveland Cavaliers; streak slightly favored Cleveland Cavaliers. Neutral (no signal): rest days."
+    },
+    {
+      "matchup": "MEM @ BKN",
+      "home_abbr": "BKN",
+      "away_abbr": "MEM",
+      "home_team": "Brooklyn Nets",
+      "away_team": "Memphis Grizzlies",
+      "predicted_winner": "MEM",
+      "actual_winner": "BKN",
+      "correct": false,
+      "home_score": 126.0,
+      "away_score": 115.0,
+      "confidence": 0.554,
+      "recommendation": "SLIGHT LEAN",
+      "factor_votes": {
+        "win_pct": {
+          "voted_for": "MEM",
+          "correct": false,
+          "margin": 0.2786,
+          "home_pct": 0.3607,
+          "away_pct": 0.6393,
+          "neutral": false
+        },
+        "recent_form": {
+          "voted_for": "BKN",
+          "correct": true,
+          "margin": 0.0278,
+          "home_pct": 0.5139,
+          "away_pct": 0.4861,
+          "neutral": false
+        },
+        "player_form": {
+          "voted_for": "MEM",
+          "correct": false,
+          "margin": 0.299,
+          "home_pct": 0.3505,
+          "away_pct": 0.6495,
+          "neutral": false
+        },
+        "home_away": {
+          "voted_for": "MEM",
+          "correct": false,
+          "margin": 0.0362,
+          "home_pct": 0.4819,
+          "away_pct": 0.5181,
+          "neutral": false
+        },
+        "injuries": {
+          "voted_for": "BKN",
+          "correct": true,
+          "margin": 0.1204,
+          "home_pct": 0.5602,
+          "away_pct": 0.4398,
+          "neutral": false
+        },
+        "rest_days": {
+          "voted_for": null,
+          "correct": null,
+          "margin": 0.0,
+          "home_pct": 0.5,
+          "away_pct": 0.5,
+          "neutral": true
+        },
+        "streak": {
+          "voted_for": "BKN",
+          "correct": true,
+          "margin": 0.2608,
+          "home_pct": 0.6304,
+          "away_pct": 0.3696,
+          "neutral": false
+        }
+      },
+      "explanation": "Incorrect. The model picked Memphis Grizzlies but Brooklyn Nets won (MEM 115-126 BKN). Factors supporting the pick: win pct favored Memphis Grizzlies; player form favored Memphis Grizzlies; home away marginally favored Memphis Grizzlies. Factors pointing the other way: recent form marginally favored Brooklyn Nets; injuries slightly favored Brooklyn Nets; streak favored Brooklyn Nets. Neutral (no signal): rest days. The model overweighted the supporting factors and missed the contradicting signals \u2014 particularly recent form marginally favored Brooklyn Nets."
+    },
+    {
+      "matchup": "NYK @ LAC",
+      "home_abbr": "LAC",
+      "away_abbr": "NYK",
+      "home_team": "LA Clippers",
+      "away_team": "New York Knicks",
+      "predicted_winner": "NYK",
+      "actual_winner": "LAC",
+      "correct": false,
+      "home_score": 126.0,
+      "away_score": 118.0,
+      "confidence": 0.5146,
+      "recommendation": "SKIP",
+      "factor_votes": {
+        "win_pct": {
+          "voted_for": "NYK",
+          "correct": false,
+          "margin": 0.193,
+          "home_pct": 0.4035,
+          "away_pct": 0.5965,
+          "neutral": false
+        },
+        "recent_form": {
+          "voted_for": "LAC",
+          "correct": true,
+          "margin": 0.049,
+          "home_pct": 0.5245,
+          "away_pct": 0.4755,
+          "neutral": false
+        },
+        "player_form": {
+          "voted_for": "NYK",
+          "correct": false,
+          "margin": 0.0294,
+          "home_pct": 0.4853,
+          "away_pct": 0.5147,
+          "neutral": false
+        },
+        "home_away": {
+          "voted_for": "LAC",
+          "correct": true,
+          "margin": 0.2172,
+          "home_pct": 0.6086,
+          "away_pct": 0.3914,
+          "neutral": false
+        },
+        "injuries": {
+          "voted_for": "NYK",
+          "correct": false,
+          "margin": 0.0622,
+          "home_pct": 0.4689,
+          "away_pct": 0.5311,
+          "neutral": false
+        },
+        "rest_days": {
+          "voted_for": null,
+          "correct": null,
+          "margin": 0.0,
+          "home_pct": 0.5,
+          "away_pct": 0.5,
+          "neutral": true
+        },
+        "streak": {
+          "voted_for": "LAC",
+          "correct": true,
+          "margin": 0.074,
+          "home_pct": 0.537,
+          "away_pct": 0.463,
+          "neutral": false
+        }
+      },
+      "explanation": "Incorrect. The model picked New York Knicks but LA Clippers won (NYK 118-126 LAC). Factors supporting the pick: win pct favored New York Knicks; player form marginally favored New York Knicks; injuries slightly favored New York Knicks. Factors pointing the other way: recent form marginally favored LA Clippers; home away favored LA Clippers; streak slightly favored LA Clippers. Neutral (no signal): rest days. The model overweighted the supporting factors and missed the contradicting signals \u2014 particularly recent form marginally favored LA Clippers."
+    }
+  ],
+  "factor_accuracy_this_date": {
+    "win_pct": {
+      "correct": 2,
+      "total": 5,
+      "accuracy": 0.4
+    },
+    "recent_form": {
+      "correct": 4,
+      "total": 5,
+      "accuracy": 0.8
+    },
+    "player_form": {
+      "correct": 2,
+      "total": 5,
+      "accuracy": 0.4
+    },
+    "home_away": {
+      "correct": 4,
+      "total": 5,
+      "accuracy": 0.8
+    },
+    "injuries": {
+      "correct": 2,
+      "total": 4,
+      "accuracy": 0.5
+    },
+    "rest_days": {
+      "correct": 0,
+      "total": 0,
+      "accuracy": null
+    },
+    "streak": {
+      "correct": 4,
+      "total": 4,
+      "accuracy": 1.0
+    }
+  }
+}

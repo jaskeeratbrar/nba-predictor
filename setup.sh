@@ -151,33 +151,22 @@ echo "--- Installing cron jobs ---"
 # Make scripts executable
 chmod +x "$SCRIPT_DIR/deploy.sh"
 
-# Helper script for post-game analysis (handles macOS/Linux date differences)
-cat > "$SCRIPT_DIR/run_analysis.sh" <<EOF
-#!/bin/bash
-cd "$SCRIPT_DIR"
-YESTERDAY=\$(python3 -c "from datetime import date, timedelta; print((date.today()-timedelta(1)).strftime('%Y-%m-%d'))")
-curl -s "http://localhost:6789/analyze?date=\$YESTERDAY"
-git add history/*.json performance/factor_accuracy.json 2>/dev/null || true
-if ! git diff --staged --quiet; then
-    git commit -m "analysis: \$YESTERDAY"
-    git push
-fi
-EOF
-chmod +x "$SCRIPT_DIR/run_analysis.sh"
-
 # Remove any existing nba-predictor cron lines
 (crontab -l 2>/dev/null | grep -v "# nba-predictor") | crontab -
 
-# Install the three jobs
+# Install the four jobs
 (crontab -l 2>/dev/null; cat <<EOF
 
-# nba-predictor: predictions at 6 PM ET → commit → push → Vercel redeploys
-0 18 * * * "$SCRIPT_DIR/deploy.sh" # nba-predictor
+# nba-predictor: 6 PM — predictions + push (Vercel redeployment)
+0 18 * * * "$SCRIPT_DIR/deploy.sh" >> "$SCRIPT_DIR/cron.log" 2>&1 # nba-predictor
 
-# nba-predictor: post-game analysis at 9 AM (updates learning ledger)
-0 9  * * * "$SCRIPT_DIR/run_analysis.sh" >> "$SCRIPT_DIR/cron.log" 2>&1 # nba-predictor
+# nba-predictor: 1 AM — post-game analysis (scores yesterday's picks, no push)
+0 1 * * * "$SCRIPT_DIR/run_analysis.sh" >> "$SCRIPT_DIR/cron.log" 2>&1 # nba-predictor
 
-# nba-predictor: daily DB backup at 10 AM
+# nba-predictor: 8 AM — morning push (fresh injury data + results tab → Vercel)
+0 8 * * * "$SCRIPT_DIR/push_morning.sh" >> "$SCRIPT_DIR/cron.log" 2>&1 # nba-predictor
+
+# nba-predictor: 10 AM — daily DB backup
 0 10 * * * cp "$SCRIPT_DIR/nba_predictor.db" "$SCRIPT_DIR/backups/nba_\$(date +\%Y\%m\%d).db" # nba-predictor
 
 EOF

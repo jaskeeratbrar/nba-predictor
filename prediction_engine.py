@@ -23,12 +23,28 @@ def _safe_div(a, b, default=0.5):
 
 def compute_win_pct_factor(home_standings, away_standings):
     """
-    Compare overall season win percentages.
+    Compare effective win percentages: 60% season win% + 40% last-10 win%.
+    The blend ensures teams on a recent losing streak get penalized even if
+    their season record is strong, and vice versa.
     Uses power scaling to amplify differences between teams.
     Returns (home_edge, away_edge) each in [0, 1].
     """
-    h_pct = home_standings.get("win_pct", 0.5)
-    a_pct = away_standings.get("win_pct", 0.5)
+    def _effective_pct(s):
+        season = s.get("win_pct", 0.5)
+        l10 = s.get("last_10", "")
+        if l10 and "-" in str(l10):
+            try:
+                w, l = str(l10).split("-")
+                total = int(w) + int(l)
+                last10 = int(w) / total if total > 0 else season
+            except (ValueError, ZeroDivisionError):
+                last10 = season
+        else:
+            last10 = season
+        return 0.60 * season + 0.40 * last10
+
+    h_pct = _effective_pct(home_standings)
+    a_pct = _effective_pct(away_standings)
 
     # Power scaling: amplify gaps between good and bad teams
     # Reduced from 2.5 → 1.8: 2.5 was producing 83% confidence on .750 vs .400
@@ -494,6 +510,53 @@ def predict_game(game, standings, injuries, recent_form, player_form=None):
         f = factors.get(factor_name, {"home": 0.5, "away": 0.5})
         home_score += f["home"] * weight
         away_score += f["away"] * weight
+
+    # Playoff pressure: teams in a tight playoff/play-in race play with more urgency.
+    # Applied as a small additive delta before normalization — max ~3pp shift.
+    def _playoff_pressure(s):
+        """Return a small urgency score [0, 0.03] for a team in a tight standing race."""
+        conf = s.get("conference", "")
+        if not conf:
+            return 0.0
+        games_played = s.get("wins", 0) + s.get("losses", 0)
+        if games_played < 40:
+            return 0.0  # too early in the season for standings to be meaningful
+        conf_teams = sorted(
+            [t for t in standings.values() if t.get("conference") == conf],
+            key=lambda t: (t.get("wins", 0), -t.get("losses", 0)),
+            reverse=True
+        )
+        if len(conf_teams) < 10:
+            return 0.0
+        abbr = s.get("abbr", "")
+        rank = next((i + 1 for i, t in enumerate(conf_teams) if t.get("abbr") == abbr), 0)
+        if rank == 0:
+            return 0.0
+        wins_8th  = conf_teams[7].get("wins", 0)   # 8th seed — direct playoff
+        wins_10th = conf_teams[9].get("wins", 0)   # 10th seed — play-in cutoff
+        team_wins = s.get("wins", 0)
+        if 9 <= rank <= 10:
+            # Chasing a direct playoff spot — high urgency
+            gap = wins_8th - team_wins
+            if 0 <= gap <= 3:
+                return 0.03 * (1.0 - gap / 4.0)
+        elif 11 <= rank <= 13:
+            # Fighting to stay in the play-in — moderate urgency
+            gap = abs(team_wins - wins_10th)
+            if gap <= 3:
+                return 0.02 * (1.0 - gap / 4.0)
+        elif rank == 8:
+            # 8th seed at risk of dropping to play-in
+            wins_9th = conf_teams[8].get("wins", 0)
+            gap = team_wins - wins_9th
+            if gap <= 2:
+                return 0.01
+        return 0.0
+
+    h_pressure = _playoff_pressure(home_standings)
+    a_pressure = _playoff_pressure(away_standings)
+    home_score += h_pressure
+    away_score += a_pressure
 
     # Normalize to probabilities
     total = home_score + away_score

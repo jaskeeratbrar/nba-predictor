@@ -7,46 +7,61 @@
 # =============================================================================
 
 set -e
-cd "$(dirname "$0")"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$SCRIPT_DIR"
 
-LOG="$(pwd)/cron.log"
+LOG="$SCRIPT_DIR/cron.log"
 DATE=$(date +%Y-%m-%d)
 TIMESTAMP=$(date "+%Y-%m-%d %H:%M")
+PORT=6789
 
-echo "[$TIMESTAMP] Starting deploy..." >> "$LOG"
+echo "" >> "$LOG"
+echo "[$TIMESTAMP] ====== DEPLOY (predictions) ======" >> "$LOG"
 
 # 0. Pull latest code changes from GitHub
+echo "[$TIMESTAMP] Pulling latest code..." >> "$LOG"
 git pull --rebase >> "$LOG" 2>&1
 
-# Ensure run_analysis.sh exists (may be wiped by git pull since it's gitignored)
-if [ ! -f "run_analysis.sh" ]; then
-    SCRIPT_DIR="$(pwd)"
-    cat > run_analysis.sh << EOF
-#!/bin/bash
-cd "$SCRIPT_DIR"
-YESTERDAY=\$(python3 -c "from datetime import date, timedelta; print((date.today()-timedelta(1)).strftime('%Y-%m-%d'))")
-curl -s "http://localhost:6789/analyze?date=\$YESTERDAY"
-git add history/*.json performance/factor_accuracy.json 2>/dev/null || true
-if ! git diff --staged --quiet; then
-    git commit -m "analysis: \$YESTERDAY"
-    git push
-fi
-EOF
-    chmod +x run_analysis.sh
-fi
-
-# 0.5. Restart server to pick up any code changes from the pull
+# 1. Restart server to pick up any code changes from the pull
 echo "[$TIMESTAMP] Restarting server..." >> "$LOG"
-pkill -f "server.py 6789" 2>/dev/null || true
-sleep 2
-nohup python3 "$(pwd)/server.py" 6789 >> "$LOG" 2>&1 &
-sleep 3  # wait for server to be ready
-# 1. Run predictions (updates public/index.html as a side effect)
-echo "[$TIMESTAMP] Running predictions..." >> "$LOG"
-curl -s "http://localhost:6789/run?fmt=text" >> "$LOG" 2>&1
 
-# 2. Commit and push public/index.html + history files → triggers Vercel redeploy
-if [ -f "public/index.html" ]; then
+# Kill by PID file first (most reliable), fall back to pkill
+if [ -f "$SCRIPT_DIR/server.pid" ]; then
+    OLD_PID=$(cat "$SCRIPT_DIR/server.pid")
+    if kill -0 "$OLD_PID" 2>/dev/null; then
+        kill "$OLD_PID" 2>/dev/null || true
+        echo "[$TIMESTAMP]   Killed PID $OLD_PID" >> "$LOG"
+    fi
+    rm -f "$SCRIPT_DIR/server.pid"
+fi
+# Belt-and-suspenders: also pkill any stray processes
+pkill -f "server.py $PORT" 2>/dev/null || true
+sleep 2
+
+nohup python3 "$SCRIPT_DIR/server.py" $PORT >> "$LOG" 2>&1 &
+
+# Wait until /status responds (up to 15 seconds)
+echo "[$TIMESTAMP]   Waiting for server..." >> "$LOG"
+for i in $(seq 1 15); do
+    if curl -s "http://localhost:$PORT/status" 2>/dev/null | grep -q '"ok"'; then
+        echo "[$TIMESTAMP]   Server ready after ${i}s" >> "$LOG"
+        break
+    fi
+    sleep 1
+done
+
+# Verify it actually started — abort if not
+if ! curl -s "http://localhost:$PORT/status" 2>/dev/null | grep -q '"ok"'; then
+    echo "[$TIMESTAMP]   ERROR: Server failed to start. Aborting deploy." >> "$LOG"
+    exit 1
+fi
+
+# 2. Run predictions (updates public/index.html as a side effect)
+echo "[$TIMESTAMP] Running predictions..." >> "$LOG"
+curl -s "http://localhost:$PORT/run?fmt=text" >> "$LOG" 2>&1
+
+# 3. Commit and push public/index.html + history files → triggers Vercel redeploy
+if [ -f "$SCRIPT_DIR/public/index.html" ]; then
     git add public/index.html
     git add history/*.json 2>/dev/null || true
     git add performance/factor_accuracy.json 2>/dev/null || true
@@ -54,10 +69,10 @@ if [ -f "public/index.html" ]; then
     if ! git diff --staged --quiet; then
         git commit -m "picks: $DATE"
         git push
-        echo "[$TIMESTAMP] Pushed to GitHub — Vercel redeploying..." >> "$LOG"
+        echo "[$TIMESTAMP] Pushed predictions to GitHub — Vercel redeploying..." >> "$LOG"
     else
         echo "[$TIMESTAMP] No changes to deploy." >> "$LOG"
     fi
 fi
 
-echo "[$TIMESTAMP] Done." >> "$LOG"
+echo "[$TIMESTAMP] Deploy done." >> "$LOG"

@@ -1,11 +1,14 @@
 """
 NBA Prediction Dashboard Generator
 Creates an HTML report with predictions, confidence bars, and factor breakdowns.
+Automatically loads the previous day's analysis and renders it as a Results section
+above today's predictions so every dashboard push includes yesterday's outcomes.
 """
 
+import json
 import os
-from datetime import datetime
-from config import REPORTS_DIR
+from datetime import datetime, timedelta
+from config import REPORTS_DIR, HISTORY_DIR
 
 
 def _confidence_color(confidence):
@@ -48,6 +51,125 @@ def _factor_bar(home_val, away_val, label, home_abbr="HOME", away_abbr="AWAY"):
             <div style="width:{a_pct}%;background:linear-gradient(90deg,#f97316,#fb923c)"></div>
         </div>
     </div>"""
+
+
+def load_latest_analysis(for_date_str):
+    """
+    Load the analysis file for the day before for_date_str.
+    Returns the analysis dict or None if not available.
+    """
+    try:
+        prev = (datetime.strptime(for_date_str, "%Y-%m-%d") - timedelta(days=1)).strftime("%Y-%m-%d")
+        path = os.path.join(HISTORY_DIR, f"{prev}_analysis.json")
+        if os.path.exists(path):
+            with open(path) as f:
+                return json.load(f)
+    except Exception:
+        pass
+    return None
+
+
+def generate_results_section(analysis_data):
+    """Render yesterday's game results as an HTML section."""
+    if not analysis_data:
+        return ""
+
+    date_str = analysis_data.get("date", "")
+    summary  = analysis_data.get("summary", {})
+    games    = analysis_data.get("games", [])
+
+    correct  = summary.get("correct", 0)
+    total    = summary.get("total", 0)
+    accuracy = summary.get("accuracy", 0)
+
+    try:
+        date_display = datetime.strptime(date_str, "%Y-%m-%d").strftime("%b %d")
+    except Exception:
+        date_display = date_str
+
+    acc_color = "#22c55e" if accuracy >= 0.65 else "#eab308" if accuracy >= 0.50 else "#ef4444"
+
+    game_cards = ""
+    for g in games:
+        icon        = "✅" if g["correct"] else "❌"
+        away        = g["away_abbr"]
+        home        = g["home_abbr"]
+        away_score  = int(g.get("away_score", 0))
+        home_score  = int(g.get("home_score", 0))
+        score       = f"{away_score}-{home_score}" if away_score or home_score else "?"
+        pred        = g["predicted_winner"]
+        actual      = g["actual_winner"]
+        conf        = g.get("confidence", 0)
+        rec         = g.get("recommendation", "")
+        explanation = g.get("explanation", "")
+
+        # Factor vote rows (non-neutral only)
+        factor_rows = ""
+        for fname, fv in g.get("factor_votes", {}).items():
+            if fv.get("neutral"):
+                continue
+            voted  = fv.get("voted_for", "?")
+            margin = f"{fv['margin']*100:.0f}%"
+            chk_color = "#22c55e" if fv.get("correct") else "#ef4444"
+            chk = "✓" if fv.get("correct") else "✗"
+            factor_rows += (
+                f'<div style="display:flex;justify-content:space-between;'
+                f'font-size:0.72em;color:#94a3b8;padding:2px 0">'
+                f'<span style="min-width:90px;color:#64748b">{fname.replace("_"," ")}</span>'
+                f'<span style="color:#cbd5e1;min-width:40px">{voted}</span>'
+                f'<span style="color:#475569;min-width:32px;text-align:right">{margin}</span>'
+                f'<span style="color:{chk_color};font-weight:700;margin-left:8px">{chk}</span>'
+                f'</div>'
+            )
+
+        factors_html = ""
+        if factor_rows:
+            factors_html = (
+                f'<details style="margin-top:6px;cursor:pointer">'
+                f'<summary style="font-size:0.72em;color:#334155;user-select:none;letter-spacing:0.5px">FACTOR VOTES</summary>'
+                f'<div style="margin-top:4px">{factor_rows}</div>'
+                f'</details>'
+            )
+
+        expl_html = ""
+        if explanation:
+            expl_html = (
+                f'<div style="font-size:0.75em;color:#64748b;margin-top:6px;line-height:1.5">'
+                f'{explanation}</div>'
+            )
+
+        card_bg     = "#071220" if g["correct"] else "#150808"
+        border_col  = "#14311e" if g["correct"] else "#351010"
+        actual_col  = "#22c55e" if g["correct"] else "#ef4444"
+
+        game_cards += f"""
+        <div style="background:{card_bg};border:1px solid {border_col};border-radius:8px;padding:12px;margin:8px 0">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                <span style="font-size:1em;font-weight:700">{icon} {away} @ {home}</span>
+                <span style="font-size:0.73em;color:#475569">{rec} · {conf*100:.0f}%</span>
+            </div>
+            <div style="font-size:0.82em;color:#94a3b8;margin-bottom:2px">
+                Final: <span style="color:#e2e8f0;font-weight:600">{score}</span>
+                &nbsp;·&nbsp; Picked: <span style="color:#60a5fa;font-weight:600">{pred}</span>
+                &nbsp;·&nbsp; Won: <span style="color:{actual_col};font-weight:600">{actual}</span>
+            </div>
+            {factors_html}
+            {expl_html}
+        </div>"""
+
+    return f"""
+    <div style="margin-bottom:28px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <h2 style="font-size:0.85em;font-weight:700;color:#475569;letter-spacing:1px;text-transform:uppercase">
+                Results — {date_display}
+            </h2>
+            <span style="font-size:1.2em;font-weight:800;color:{acc_color}">{correct}/{total}
+                <span style="font-size:0.65em;color:#475569;font-weight:500">correct</span>
+            </span>
+        </div>
+        {game_cards}
+    </div>
+    <div style="border-top:1px solid #1e293b;margin:0 0 28px 0"></div>"""
 
 
 def generate_game_card(pred):
@@ -143,7 +265,11 @@ def generate_game_card(pred):
 
 
 def generate_dashboard(predictions, date_str, history_stats=None):
-    """Generate complete HTML dashboard."""
+    """
+    Generate complete HTML dashboard.
+    Automatically loads yesterday's analysis (if available) and renders it
+    as a Results section above today's predictions.
+    """
     total_games = len(predictions)
     strong_picks = sum(1 for p in predictions if p["recommendation"] == "STRONG PICK")
     leans = sum(1 for p in predictions if p["recommendation"] in ("LEAN", "SLIGHT LEAN"))
@@ -166,6 +292,10 @@ def generate_dashboard(predictions, date_str, history_stats=None):
                 <div style="font-size:0.75em;color:#64748b;margin-top:4px">Correct Picks</div>
             </div>
         </div>"""
+
+    # Auto-load yesterday's analysis for the results section
+    yesterday_analysis = load_latest_analysis(date_str)
+    results_html = generate_results_section(yesterday_analysis)
 
     game_cards = "\n".join(generate_game_card(p) for p in predictions)
 
@@ -222,7 +352,13 @@ def generate_dashboard(predictions, date_str, history_stats=None):
 
         {history_html}
 
-        <!-- Game Predictions -->
+        <!-- Yesterday's Results -->
+        {results_html}
+
+        <!-- Today's Predictions -->
+        <div style="font-size:0.85em;font-weight:700;color:#475569;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">
+            Predictions — {date_str}
+        </div>
         {game_cards}
 
     </div>

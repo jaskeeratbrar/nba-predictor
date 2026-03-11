@@ -139,6 +139,8 @@ right data layer, especially as history grows beyond a season.
 ---
 
 ## Completed
+- [x] Effective win% — blend 60% season win% + 40% last-10 win% in compute_win_pct_factor() — 2026-03-11
+- [x] Playoff position pressure — teams within 2-3 games of play-in/playoff cut get urgency boost in predict_game() — 2026-03-11
 - [x] Fix ESPN injury API (team name structure changed, all injuries were silently dropped) — 2026-03-09
 - [x] Star player detection: reb/blk/stl now in form_score, not just pts — 2026-03-10
 - [x] Position-based fallback for long-term injured players (Steph, Ja etc.) — 2026-03-10
