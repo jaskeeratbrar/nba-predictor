@@ -1,9 +1,10 @@
 # NBA Predictor — Claude Context
 
 ## Machine roles
-- **This MacBook (jbrar)** — R&D only. No cron jobs, no server running.
+- **This MacBook (jbrar)** — R&D only. No persistent cron jobs.
   Used for analysis, model improvements, and pushing code changes to git.
-  Never start the server here, never install cron jobs here.
+  Temporary server/script runs for testing are fine — just kill them when done.
+  Never install cron jobs here.
 
 - **Other machine (Linux server)** — Production. Runs cron + server.py 6789 continuously.
   Pulls from git and runs the daily cycle:
