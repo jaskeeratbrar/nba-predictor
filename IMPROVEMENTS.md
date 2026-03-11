@@ -123,6 +123,49 @@ If result >= 30, proceed with building calibrate.py using the Opus design below.
 
 ---
 
+## Priority 7 — Logistic regression weight learning (WAITING — next season)
+**Status:** Not started. Do NOT build until a full season of clean data exists.
+
+**Why waiting:** Logistic regression needs ~200+ games per feature to produce reliable
+coefficients. With 7 factors that means ~1,400+ factor votes minimum. We have ~53 games
+total (11 with injury factor clean). This is a next-season project (~Oct 2026).
+
+**Why it's worth doing eventually:** The current heuristic (`suggest_weights()` in
+analyzer.py) scales weights by accuracy independently — it ignores feature interactions.
+Logistic regression would learn the joint contribution of all 7 factors simultaneously,
+handling correlations like win_pct + recent_form moving together.
+
+**Migration path:**
+1. `calibrate.py` (Priority 6, ~Mar 31) — Bayesian shrinkage, bridges us to end of season
+2. End of 2025-26 season — evaluate: do we have 200+ clean games? If yes, build LR.
+3. Logistic regression replaces `suggest_weights()` in analyzer.py. Same output format
+   (`weight_suggestions` dict), same auto-apply mechanism — just a better algorithm inside.
+
+**What NOT to build:** XGBoost, random forests, neural nets. 7 binary features + binary
+outcome = logistic regression is the correct tool. Tree models need 500+ samples and
+become black boxes that can't tell you which factors actually matter.
+
+**How to check when ready (~Oct 2026):**
+```bash
+python3 -c "
+import db
+conn = db.get_connection()
+cursor = conn.cursor()
+cursor.execute('''
+    SELECT COUNT(*) FROM predictions p
+    JOIN game_results gr ON p.game_date = gr.game_date
+        AND p.home_abbr = gr.home_abbr
+    WHERE p.game_date >= '2026-03-09'
+''')
+print('Clean games available:', cursor.fetchone()[0])
+conn.close()
+"
+```
+Target: 200+ before building. At ~1,200 regular season games/year, expect ~200 clean
+games by mid-November 2026 (assuming cron runs nightly).
+
+---
+
 ## Priority 6b — SQLite is write-only, nothing reads from it (NOT STARTED)
 **Status:** Not started. The DB has 43 predictions, 42 game results, 418 player form
 snapshots, 290 team recent form rows — but zero of this is used for analysis or learning.
