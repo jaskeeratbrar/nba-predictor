@@ -1,6 +1,6 @@
 {
   "date": "2026-03-12",
-  "generated_at": "2026-03-12T18:00:08.099919",
+  "generated_at": "2026-03-12T18:22:21.659687",
   "num_games": 9,
   "predictions": [
     {
@@ -10,11 +10,11 @@
       "away_abbr": "PHX",
       "home_record": "15-50",
       "away_record": "38-27",
-      "home_win_prob": 0.2343,
-      "away_win_prob": 0.7657,
+      "home_win_prob": 0.2408,
+      "away_win_prob": 0.7592,
       "predicted_winner": "PHX",
       "predicted_winner_name": "Phoenix Suns",
-      "confidence": 0.7657,
+      "confidence": 0.7592,
       "recommendation": "STRONG PICK",
       "venue": "Gainbridge Fieldhouse",
       "game_time": "2026-03-12T23:00Z",
@@ -32,8 +32,8 @@
           "away": 0.6878
         },
         "injuries": {
-          "home": 0.4115,
-          "away": 0.5885
+          "home": 0.4392,
+          "away": 0.5608
         },
         "streak": {
           "home": 0.2439,
@@ -44,12 +44,12 @@
           "away": 0.5
         },
         "player_form": {
-          "home": 0.3694,
-          "away": 0.6306
+          "home": 0.384,
+          "away": 0.616
         }
       },
       "home_injuries": 7,
-      "away_injuries": 4,
+      "away_injuries": 3,
       "home_injury_detail": [
         {
           "name": "Obi Toppin",
@@ -103,25 +103,18 @@
       ],
       "away_injury_detail": [
         {
+          "name": "Grayson Allen",
+          "status": "Out",
+          "impact": "starter",
+          "mins_avg": 28.7,
+          "pts_avg": 18.9
+        },
+        {
           "name": "Dillon Brooks",
           "status": "Out",
           "impact": "bench",
           "mins_avg": 7.0,
           "pts_avg": 5.0
-        },
-        {
-          "name": "Haywood Highsmith",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 17.0,
-          "pts_avg": 4.5
-        },
-        {
-          "name": "Grayson Allen",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 28.7,
-          "pts_avg": 18.9
         },
         {
           "name": "Mark Williams",
@@ -613,11 +606,11 @@
       "away_abbr": "PHI",
       "home_record": "46-18",
       "away_record": "35-30",
-      "home_win_prob": 0.5695,
-      "away_win_prob": 0.4305,
+      "home_win_prob": 0.567,
+      "away_win_prob": 0.433,
       "predicted_winner": "DET",
       "predicted_winner_name": "Detroit Pistons",
-      "confidence": 0.5695,
+      "confidence": 0.567,
       "recommendation": "SLIGHT LEAN",
       "venue": "Little Caesars Arena",
       "game_time": "2026-03-12T23:00Z",
@@ -647,8 +640,8 @@
           "away": 0.5
         },
         "player_form": {
-          "home": 0.6837,
-          "away": 0.3163
+          "home": 0.6701,
+          "away": 0.3299
         }
       },
       "home_injuries": 3,
@@ -678,18 +671,18 @@
       ],
       "away_injury_detail": [
         {
+          "name": "Andre Drummond",
+          "status": "Out",
+          "impact": "role",
+          "mins_avg": 16.8,
+          "pts_avg": 4.1
+        },
+        {
           "name": "Adem Bona",
           "status": "Out",
           "impact": "role",
           "mins_avg": 20.9,
           "pts_avg": 6.1
-        },
-        {
-          "name": "Andre Drummond",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 16.8,
-          "pts_avg": 4.1
         },
         {
           "name": "Kelly Oubre Jr.",
