@@ -1,6 +1,6 @@
 {
   "date": "2026-03-13",
-  "generated_at": "2026-03-13T18:00:07.205543",
+  "generated_at": "2026-03-13T18:45:48.157747",
   "num_games": 8,
   "predictions": [
     {
@@ -10,12 +10,12 @@
       "away_abbr": "NYK",
       "home_record": "15-51",
       "away_record": "42-25",
-      "home_win_prob": 0.2193,
-      "away_win_prob": 0.7807,
+      "home_win_prob": 0.2324,
+      "away_win_prob": 0.7676,
       "predicted_winner": "NYK",
       "predicted_winner_name": "New York Knicks",
-      "confidence": 0.7807,
-      "recommendation": "STRONG PICK",
+      "confidence": 0.6956,
+      "recommendation": "LEAN",
       "venue": "Gainbridge Fieldhouse",
       "game_time": "2026-03-13T23:30Z",
       "factors": {
@@ -32,8 +32,8 @@
           "away": 0.6708
         },
         "injuries": {
-          "home": 0.4309,
-          "away": 0.5691
+          "home": 0.4949,
+          "away": 0.5051
         },
         "streak": {
           "home": 0.2857,
@@ -44,58 +44,23 @@
           "away": 0.5
         },
         "player_form": {
-          "home": 0.2631,
-          "away": 0.7369
+          "home": 0.2859,
+          "away": 0.7141
         }
       },
-      "home_injuries": 9,
+      "home_injuries": 4,
       "away_injuries": 4,
       "home_injury_detail": [
         {
           "name": "Quenton Jackson",
-          "status": "Day-To-Day",
+          "status": "Out",
           "impact": "role",
           "mins_avg": 21.8,
           "pts_avg": 9.7
         },
         {
-          "name": "Andrew Nembhard",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 26.7,
-          "pts_avg": 17.7
-        },
-        {
-          "name": "T.J. McConnell",
-          "status": "Out",
-          "impact": "role",
-          "mins_avg": 16.0,
-          "pts_avg": 7.9
-        },
-        {
-          "name": "Aaron Nesmith",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 25.8,
-          "pts_avg": 11.8
-        },
-        {
-          "name": "Obi Toppin",
-          "status": "Day-To-Day",
-          "impact": "bench",
-          "mins_avg": 11.0,
-          "pts_avg": 5.0
-        },
-        {
-          "name": "Ivica Zubac",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 16.0,
-          "pts_avg": 8.0
-        },
-        {
           "name": "Pascal Siakam",
-          "status": "Day-To-Day",
+          "status": "Out",
           "impact": "starter",
           "mins_avg": 30.0,
           "pts_avg": 26.8
@@ -117,22 +82,22 @@
       ],
       "away_injury_detail": [
         {
-          "name": "Josh Hart",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 28.2,
-          "pts_avg": 11.4
-        },
-        {
           "name": "Jeremy Sochan",
-          "status": "Day-To-Day",
+          "status": "Out",
           "impact": "bench",
           "mins_avg": 7.8,
           "pts_avg": 1.5
         },
         {
+          "name": "Josh Hart",
+          "status": "Out",
+          "impact": "starter",
+          "mins_avg": 28.2,
+          "pts_avg": 11.4
+        },
+        {
           "name": "Karl-Anthony Towns",
-          "status": "Day-To-Day",
+          "status": "Out",
           "impact": "starter",
           "mins_avg": 30.7,
           "pts_avg": 20.7
@@ -303,12 +268,12 @@
       "away_abbr": "CLE",
       "home_record": "22-44",
       "away_record": "40-26",
-      "home_win_prob": 0.3424,
-      "away_win_prob": 0.6576,
+      "home_win_prob": 0.338,
+      "away_win_prob": 0.662,
       "predicted_winner": "CLE",
       "predicted_winner_name": "Cleveland Cavaliers",
-      "confidence": 0.6201,
-      "recommendation": "LEAN",
+      "confidence": 0.587,
+      "recommendation": "SLIGHT LEAN",
       "venue": "American Airlines Center",
       "game_time": "2026-03-13T23:30Z",
       "factors": {
@@ -325,8 +290,8 @@
           "away": 0.5848
         },
         "injuries": {
-          "home": 0.4857,
-          "away": 0.5143
+          "home": 0.4686,
+          "away": 0.5314
         },
         "streak": {
           "home": 0.54,
@@ -337,47 +302,33 @@
           "away": 0.5882
         },
         "player_form": {
-          "home": 0.3157,
-          "away": 0.6843
+          "home": 0.3045,
+          "away": 0.6955
         }
       },
-      "home_injuries": 7,
+      "home_injuries": 5,
       "away_injuries": 4,
       "home_injury_detail": [
+        {
+          "name": "P.J. Washington",
+          "status": "Out",
+          "impact": "starter",
+          "mins_avg": 29.7,
+          "pts_avg": 11.0
+        },
+        {
+          "name": "Daniel Gafford",
+          "status": "Out",
+          "impact": "role",
+          "mins_avg": 22.6,
+          "pts_avg": 13.8
+        },
         {
           "name": "Moussa Cisse",
           "status": "Out",
           "impact": "role",
           "mins_avg": 16.8,
           "pts_avg": 4.0
-        },
-        {
-          "name": "Naji Marshall",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 28.4,
-          "pts_avg": 13.4
-        },
-        {
-          "name": "P.J. Washington",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 29.7,
-          "pts_avg": 11.0
-        },
-        {
-          "name": "Caleb Martin",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 19.5,
-          "pts_avg": 6.1
-        },
-        {
-          "name": "Daniel Gafford",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 22.6,
-          "pts_avg": 13.8
         },
         {
           "name": "Kyrie Irving",
@@ -676,11 +627,11 @@
       "away_abbr": "PHX",
       "home_record": "36-29",
       "away_record": "39-27",
-      "home_win_prob": 0.4343,
-      "away_win_prob": 0.5657,
+      "home_win_prob": 0.4346,
+      "away_win_prob": 0.5654,
       "predicted_winner": "PHX",
       "predicted_winner_name": "Phoenix Suns",
-      "confidence": 0.5657,
+      "confidence": 0.5654,
       "recommendation": "SLIGHT LEAN",
       "venue": "Scotiabank Arena",
       "game_time": "2026-03-13T23:30Z",
@@ -698,8 +649,8 @@
           "away": 0.4822
         },
         "injuries": {
-          "home": 0.4707,
-          "away": 0.5293
+          "home": 0.4734,
+          "away": 0.5266
         },
         "streak": {
           "home": 0.3889,
@@ -714,8 +665,8 @@
           "away": 0.4905
         }
       },
-      "home_injuries": 3,
-      "away_injuries": 3,
+      "home_injuries": 2,
+      "away_injuries": 2,
       "home_injury_detail": [
         {
           "name": "Collin Murray-Boyles",
@@ -723,13 +674,6 @@
           "impact": "role",
           "mins_avg": 23.5,
           "pts_avg": 6.8
-        },
-        {
-          "name": "Scottie Barnes",
-          "status": "Day-To-Day",
-          "impact": "star",
-          "mins_avg": 33.9,
-          "pts_avg": 15.8
         },
         {
           "name": "Chucky Hepburn",
@@ -740,13 +684,6 @@
         }
       ],
       "away_injury_detail": [
-        {
-          "name": "Jordan Goodwin",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 19.0,
-          "pts_avg": 9.7
-        },
         {
           "name": "Dillon Brooks",
           "status": "Out",
@@ -770,11 +707,11 @@
       "away_abbr": "NOP",
       "home_record": "40-25",
       "away_record": "22-45",
-      "home_win_prob": 0.5586,
-      "away_win_prob": 0.4414,
+      "home_win_prob": 0.554,
+      "away_win_prob": 0.446,
       "predicted_winner": "HOU",
       "predicted_winner_name": "Houston Rockets",
-      "confidence": 0.5586,
+      "confidence": 0.554,
       "recommendation": "SLIGHT LEAN",
       "venue": "Toyota Center (Houston)",
       "game_time": "2026-03-14T00:00Z",
@@ -792,8 +729,8 @@
           "away": 0.2828
         },
         "injuries": {
-          "home": 0.4174,
-          "away": 0.5826
+          "home": 0.3987,
+          "away": 0.6013
         },
         "streak": {
           "home": 0.4792,
@@ -804,8 +741,8 @@
           "away": 0.5
         },
         "player_form": {
-          "home": 0.4618,
-          "away": 0.5382
+          "home": 0.4509,
+          "away": 0.5491
         }
       },
       "home_injuries": 4,
@@ -813,7 +750,7 @@
       "home_injury_detail": [
         {
           "name": "Alperen Sengun",
-          "status": "Day-To-Day",
+          "status": "Out",
           "impact": "starter",
           "mins_avg": 31.6,
           "pts_avg": 18.8
