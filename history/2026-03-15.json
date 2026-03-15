@@ -1,6 +1,6 @@
 {
   "date": "2026-03-15",
-  "generated_at": "2026-03-15T11:17:04.510502",
+  "generated_at": "2026-03-15T18:00:08.717108",
   "num_games": 7,
   "predictions": [
     {
@@ -8,76 +8,55 @@
       "home_abbr": "MIL",
       "away_team": "Indiana Pacers",
       "away_abbr": "IND",
-      "home_record": "27-39",
-      "away_record": "15-52",
-      "home_win_prob": 0.7206,
-      "away_win_prob": 0.2794,
+      "home_record": "28-39",
+      "away_record": "15-53",
+      "home_win_prob": 0.7284,
+      "away_win_prob": 0.2716,
       "predicted_winner": "MIL",
       "predicted_winner_name": "Milwaukee Bucks",
-      "confidence": 0.6936,
+      "confidence": 0.6489,
       "recommendation": "LEAN",
       "venue": "Fiserv Forum",
       "game_time": "2026-03-15T19:30Z",
       "factors": {
         "win_pct": {
-          "home": 0.831,
-          "away": 0.169
+          "home": 0.8387,
+          "away": 0.1613
         },
         "recent_form": {
           "home": 1.0,
           "away": 0.0
         },
         "home_away": {
-          "home": 0.9303,
-          "away": 0.0697
+          "home": 0.9384,
+          "away": 0.0616
         },
         "injuries": {
-          "home": 0.5396,
-          "away": 0.4604
+          "home": 0.5229,
+          "away": 0.4771
         },
         "streak": {
-          "home": 0.6296,
-          "away": 0.3704
+          "home": 0.7297,
+          "away": 0.2703
         },
         "rest_days": {
           "home": 0.4118,
           "away": 0.5882
         },
         "player_form": {
-          "home": 0.5202,
-          "away": 0.4798
+          "home": 0.5354,
+          "away": 0.4646
         }
       },
-      "home_injuries": 7,
-      "away_injuries": 10,
+      "home_injuries": 4,
+      "away_injuries": 6,
       "home_injury_detail": [
         {
           "name": "Ousmane Dieng",
-          "status": "Day-To-Day",
+          "status": "Out",
           "impact": "role",
           "mins_avg": 23.6,
           "pts_avg": 7.1
-        },
-        {
-          "name": "Bobby Portis",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 23.1,
-          "pts_avg": 14.4
-        },
-        {
-          "name": "Myles Turner",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 23.0,
-          "pts_avg": 10.3
-        },
-        {
-          "name": "Giannis Antetokounmpo",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 27.8,
-          "pts_avg": 24.6
         },
         {
           "name": "Kevin Porter Jr.",
@@ -103,53 +82,25 @@
       ],
       "away_injury_detail": [
         {
-          "name": "Aaron Nesmith",
+          "name": "Micah Potter",
           "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 27.4,
-          "pts_avg": 11.8
-        },
-        {
-          "name": "Andrew Nembhard",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 27.4,
-          "pts_avg": 16.5
+          "impact": "role",
+          "mins_avg": 20.2,
+          "pts_avg": 12.4
         },
         {
           "name": "Ben Sheppard",
-          "status": "Day-To-Day",
+          "status": "Out",
           "impact": "role",
           "mins_avg": 22.2,
           "pts_avg": 8.1
         },
         {
-          "name": "T.J. McConnell",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 16.7,
-          "pts_avg": 8.0
-        },
-        {
-          "name": "Obi Toppin",
-          "status": "Day-To-Day",
-          "impact": "bench",
-          "mins_avg": 11.7,
-          "pts_avg": 5.6
-        },
-        {
-          "name": "Quenton Jackson",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 21.6,
-          "pts_avg": 8.2
-        },
-        {
-          "name": "Ivica Zubac",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 22.5,
-          "pts_avg": 9.5
+          "name": "Andrew Nembhard",
+          "status": "Out",
+          "impact": "starter",
+          "mins_avg": 27.4,
+          "pts_avg": 16.5
         },
         {
           "name": "Pascal Siakam",
@@ -179,52 +130,52 @@
       "home_abbr": "CLE",
       "away_team": "Dallas Mavericks",
       "away_abbr": "DAL",
-      "home_record": "41-26",
-      "away_record": "22-45",
-      "home_win_prob": 0.7215,
-      "away_win_prob": 0.2785,
+      "home_record": "41-27",
+      "away_record": "23-45",
+      "home_win_prob": 0.713,
+      "away_win_prob": 0.287,
       "predicted_winner": "CLE",
       "predicted_winner_name": "Cleveland Cavaliers",
-      "confidence": 0.6615,
+      "confidence": 0.633,
       "recommendation": "LEAN",
       "venue": "Rocket Arena",
       "game_time": "2026-03-15T19:30Z",
       "factors": {
         "win_pct": {
-          "home": 0.8279,
-          "away": 0.1721
+          "home": 0.7746,
+          "away": 0.2254
         },
         "recent_form": {
           "home": 0.8101,
           "away": 0.1899
         },
         "home_away": {
-          "home": 0.8959,
-          "away": 0.1041
+          "home": 0.8711,
+          "away": 0.1289
         },
         "injuries": {
-          "home": 0.4566,
-          "away": 0.5434
+          "home": 0.5,
+          "away": 0.5
         },
         "streak": {
-          "home": 0.54,
-          "away": 0.46
+          "home": 0.46,
+          "away": 0.54
         },
         "rest_days": {
           "home": 0.5,
           "away": 0.5
         },
         "player_form": {
-          "home": 0.7708,
-          "away": 0.2292
+          "home": 0.8,
+          "away": 0.2
         }
       },
-      "home_injuries": 6,
-      "away_injuries": 6,
+      "home_injuries": 5,
+      "away_injuries": 4,
       "home_injury_detail": [
         {
           "name": "Jaylon Tyson",
-          "status": "Day-To-Day",
+          "status": "Out",
           "impact": "starter",
           "mins_avg": 26.3,
           "pts_avg": 11.0
@@ -256,43 +207,22 @@
           "impact": "starter",
           "mins_avg": 29.0,
           "pts_avg": 18.3
-        },
-        {
-          "name": "Max Strus",
-          "status": "Out",
-          "impact": "bench",
-          "mins_avg": 0,
-          "pts_avg": 0
         }
       ],
       "away_injury_detail": [
         {
-          "name": "P.J. Washington",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 29.7,
-          "pts_avg": 10.7
-        },
-        {
           "name": "Daniel Gafford",
-          "status": "Day-To-Day",
+          "status": "Out",
           "impact": "role",
           "mins_avg": 23.4,
           "pts_avg": 14.4
         },
         {
           "name": "Klay Thompson",
-          "status": "Day-To-Day",
+          "status": "Out",
           "impact": "role",
           "mins_avg": 20.0,
           "pts_avg": 12.9
-        },
-        {
-          "name": "Caleb Martin",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 18.6,
-          "pts_avg": 6.2
         },
         {
           "name": "Kyrie Irving",
@@ -317,11 +247,11 @@
       "away_abbr": "GSW",
       "home_record": "43-25",
       "away_record": "32-34",
-      "home_win_prob": 0.6284,
-      "away_win_prob": 0.3716,
+      "home_win_prob": 0.6289,
+      "away_win_prob": 0.3711,
       "predicted_winner": "NYK",
       "predicted_winner_name": "New York Knicks",
-      "confidence": 0.6284,
+      "confidence": 0.6289,
       "recommendation": "LEAN",
       "venue": "Madison Square Garden",
       "game_time": "2026-03-16T00:00Z",
@@ -339,8 +269,8 @@
           "away": 0.4485
         },
         "injuries": {
-          "home": 0.5916,
-          "away": 0.4084
+          "home": 0.5954,
+          "away": 0.4046
         },
         "streak": {
           "home": 0.5,
@@ -355,7 +285,7 @@
           "away": 0.3484
         }
       },
-      "home_injuries": 3,
+      "home_injuries": 2,
       "away_injuries": 9,
       "home_injury_detail": [
         {
@@ -364,13 +294,6 @@
           "impact": "bench",
           "mins_avg": 6.7,
           "pts_avg": 1.3
-        },
-        {
-          "name": "Josh Hart",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 27.6,
-          "pts_avg": 11.5
         },
         {
           "name": "Miles McBride",
@@ -524,10 +447,10 @@
       "home_abbr": "OKC",
       "away_team": "Minnesota Timberwolves",
       "away_abbr": "MIN",
-      "home_record": "52-15",
-      "away_record": "41-26",
-      "home_win_prob": 0.583,
-      "away_win_prob": 0.417,
+      "home_record": "53-15",
+      "away_record": "41-27",
+      "home_win_prob": 0.5765,
+      "away_win_prob": 0.4235,
       "predicted_winner": "OKC",
       "predicted_winner_name": "Oklahoma City Thunder",
       "confidence": 0.57,
@@ -536,36 +459,36 @@
       "game_time": "2026-03-15T17:00Z",
       "factors": {
         "win_pct": {
+          "home": 0.6396,
+          "away": 0.3604
+        },
+        "recent_form": {
+          "home": 0.6231,
+          "away": 0.3769
+        },
+        "home_away": {
+          "home": 0.7179,
+          "away": 0.2821
+        },
+        "injuries": {
+          "home": 0.3873,
+          "away": 0.6127
+        },
+        "streak": {
           "home": 0.6349,
           "away": 0.3651
         },
-        "recent_form": {
-          "home": 0.5901,
-          "away": 0.4099
-        },
-        "home_away": {
-          "home": 0.7028,
-          "away": 0.2972
-        },
-        "injuries": {
-          "home": 0.3792,
-          "away": 0.6208
-        },
-        "streak": {
-          "home": 0.5909,
-          "away": 0.4091
-        },
         "rest_days": {
-          "home": 0.5882,
-          "away": 0.4118
+          "home": 0.5,
+          "away": 0.5
         },
         "player_form": {
-          "home": 0.5925,
-          "away": 0.4075
+          "home": 0.5418,
+          "away": 0.4582
         }
       },
-      "home_injuries": 4,
-      "away_injuries": 1,
+      "home_injuries": 3,
+      "away_injuries": 0,
       "home_injury_detail": [
         {
           "name": "Branden Carlson",
@@ -582,13 +505,6 @@
           "pts_avg": 0
         },
         {
-          "name": "Isaiah Hartenstein",
-          "status": "Out",
-          "impact": "role",
-          "mins_avg": 23.8,
-          "pts_avg": 8.0
-        },
-        {
           "name": "Thomas Sorber",
           "status": "Out",
           "impact": "bench",
@@ -596,13 +512,127 @@
           "pts_avg": 0
         }
       ],
+      "away_injury_detail": []
+    },
+    {
+      "home_team": "Philadelphia 76ers",
+      "home_abbr": "PHI",
+      "away_team": "Portland Trail Blazers",
+      "away_abbr": "POR",
+      "home_record": "36-31",
+      "away_record": "32-35",
+      "home_win_prob": 0.4982,
+      "away_win_prob": 0.5018,
+      "predicted_winner": "POR",
+      "predicted_winner_name": "Portland Trail Blazers",
+      "confidence": 0.5,
+      "recommendation": "SKIP",
+      "venue": "Xfinity Mobile Arena",
+      "game_time": "2026-03-15T22:00Z",
+      "factors": {
+        "win_pct": {
+          "home": 0.5319,
+          "away": 0.4681
+        },
+        "recent_form": {
+          "home": 0.5039,
+          "away": 0.4961
+        },
+        "home_away": {
+          "home": 0.6687,
+          "away": 0.3313
+        },
+        "injuries": {
+          "home": 0.4747,
+          "away": 0.5253
+        },
+        "streak": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "rest_days": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "player_form": {
+          "home": 0.3336,
+          "away": 0.6664
+        }
+      },
+      "home_injuries": 7,
+      "away_injuries": 3,
+      "home_injury_detail": [
+        {
+          "name": "Dalen Terry",
+          "status": "Out",
+          "impact": "role",
+          "mins_avg": 17.5,
+          "pts_avg": 5.2
+        },
+        {
+          "name": "Jabari Walker",
+          "status": "Out",
+          "impact": "role",
+          "mins_avg": 16.1,
+          "pts_avg": 10.6
+        },
+        {
+          "name": "Joel Embiid",
+          "status": "Out",
+          "impact": "starter",
+          "mins_avg": 28.5,
+          "pts_avg": 26.5
+        },
+        {
+          "name": "Kelly Oubre Jr.",
+          "status": "Out",
+          "impact": "starter",
+          "mins_avg": 30.7,
+          "pts_avg": 16.2
+        },
+        {
+          "name": "Tyrese Maxey",
+          "status": "Out",
+          "impact": "star",
+          "mins_avg": 36.0,
+          "pts_avg": 28.3
+        },
+        {
+          "name": "Johni Broome",
+          "status": "Out",
+          "impact": "bench",
+          "mins_avg": 0,
+          "pts_avg": 0
+        },
+        {
+          "name": "Paul George",
+          "status": "Suspension",
+          "impact": "bench",
+          "mins_avg": 0,
+          "pts_avg": 0
+        }
+      ],
       "away_injury_detail": [
         {
-          "name": "Anthony Edwards",
-          "status": "Day-To-Day",
-          "impact": "star",
-          "mins_avg": 35.3,
-          "pts_avg": 30.3
+          "name": "Chris Youngblood",
+          "status": "Out",
+          "impact": "bench",
+          "mins_avg": 0,
+          "pts_avg": 0
+        },
+        {
+          "name": "Shaedon Sharpe",
+          "status": "Out",
+          "impact": "bench",
+          "mins_avg": 0,
+          "pts_avg": 0
+        },
+        {
+          "name": "Damian Lillard",
+          "status": "Out",
+          "impact": "bench",
+          "mins_avg": 0,
+          "pts_avg": 0
         }
       ]
     },
@@ -613,11 +643,11 @@
       "away_abbr": "UTA",
       "home_record": "17-51",
       "away_record": "20-47",
-      "home_win_prob": 0.5814,
-      "away_win_prob": 0.4186,
+      "home_win_prob": 0.5793,
+      "away_win_prob": 0.4207,
       "predicted_winner": "SAC",
       "predicted_winner_name": "Sacramento Kings",
-      "confidence": 0.5014,
+      "confidence": 0.5,
       "recommendation": "SKIP",
       "venue": "Golden 1 Center",
       "game_time": "2026-03-16T02:00Z",
@@ -647,26 +677,33 @@
           "away": 0.5
         },
         "player_form": {
-          "home": 0.6871,
-          "away": 0.3129
+          "home": 0.6759,
+          "away": 0.3241
         }
       },
-      "home_injuries": 8,
+      "home_injuries": 9,
       "away_injuries": 8,
       "home_injury_detail": [
         {
+          "name": "Devin Carter",
+          "status": "Out",
+          "impact": "role",
+          "mins_avg": 16.8,
+          "pts_avg": 10.0
+        },
+        {
           "name": "Drew Eubanks",
-          "status": "Day-To-Day",
+          "status": "Out",
           "impact": "bench",
           "mins_avg": 13.4,
           "pts_avg": 7.1
         },
         {
-          "name": "Devin Carter",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 16.8,
-          "pts_avg": 10.0
+          "name": "Russell Westbrook",
+          "status": "Out",
+          "impact": "starter",
+          "mins_avg": 30.2,
+          "pts_avg": 18.4
         },
         {
           "name": "Malik Monk",
@@ -763,135 +800,6 @@
         },
         {
           "name": "Walker Kessler",
-          "status": "Out",
-          "impact": "bench",
-          "mins_avg": 0,
-          "pts_avg": 0
-        }
-      ]
-    },
-    {
-      "home_team": "Philadelphia 76ers",
-      "home_abbr": "PHI",
-      "away_team": "Portland Trail Blazers",
-      "away_abbr": "POR",
-      "home_record": "36-31",
-      "away_record": "32-35",
-      "home_win_prob": 0.4946,
-      "away_win_prob": 0.5054,
-      "predicted_winner": "POR",
-      "predicted_winner_name": "Portland Trail Blazers",
-      "confidence": 0.5,
-      "recommendation": "SKIP",
-      "venue": "Xfinity Mobile Arena",
-      "game_time": "2026-03-15T22:00Z",
-      "factors": {
-        "win_pct": {
-          "home": 0.5319,
-          "away": 0.4681
-        },
-        "recent_form": {
-          "home": 0.5039,
-          "away": 0.4961
-        },
-        "home_away": {
-          "home": 0.6687,
-          "away": 0.3313
-        },
-        "injuries": {
-          "home": 0.4438,
-          "away": 0.5562
-        },
-        "streak": {
-          "home": 0.5,
-          "away": 0.5
-        },
-        "rest_days": {
-          "home": 0.5,
-          "away": 0.5
-        },
-        "player_form": {
-          "home": 0.3369,
-          "away": 0.6631
-        }
-      },
-      "home_injuries": 7,
-      "away_injuries": 4,
-      "home_injury_detail": [
-        {
-          "name": "Jabari Walker",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 16.1,
-          "pts_avg": 10.6
-        },
-        {
-          "name": "Andre Drummond",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 15.2,
-          "pts_avg": 3.7
-        },
-        {
-          "name": "Joel Embiid",
-          "status": "Out",
-          "impact": "starter",
-          "mins_avg": 28.5,
-          "pts_avg": 26.5
-        },
-        {
-          "name": "Kelly Oubre Jr.",
-          "status": "Out",
-          "impact": "starter",
-          "mins_avg": 30.7,
-          "pts_avg": 16.2
-        },
-        {
-          "name": "Tyrese Maxey",
-          "status": "Out",
-          "impact": "star",
-          "mins_avg": 36.0,
-          "pts_avg": 28.3
-        },
-        {
-          "name": "Johni Broome",
-          "status": "Out",
-          "impact": "bench",
-          "mins_avg": 0,
-          "pts_avg": 0
-        },
-        {
-          "name": "Paul George",
-          "status": "Suspension",
-          "impact": "bench",
-          "mins_avg": 0,
-          "pts_avg": 0
-        }
-      ],
-      "away_injury_detail": [
-        {
-          "name": "Robert Williams III",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 20.3,
-          "pts_avg": 9.9
-        },
-        {
-          "name": "Chris Youngblood",
-          "status": "Day-To-Day",
-          "impact": "bench",
-          "mins_avg": 0,
-          "pts_avg": 0
-        },
-        {
-          "name": "Shaedon Sharpe",
-          "status": "Out",
-          "impact": "bench",
-          "mins_avg": 0,
-          "pts_avg": 0
-        },
-        {
-          "name": "Damian Lillard",
           "status": "Out",
           "impact": "bench",
           "mins_avg": 0,
