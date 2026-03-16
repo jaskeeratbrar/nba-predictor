@@ -240,14 +240,20 @@ def compute_injury_factor(home_abbr, away_abbr, injuries, player_form=None):
             else:
                 continue
 
-            # Scale by player impact using minutes as primary proxy.
+            # Scale by player impact using form_score (captures pts, efficiency,
+            # rebounds, assists, plus/minus — not just minutes).
+            # form_score range: ~2 (bench) to ~55 (MVP). Normalize to [0.5, 2.5].
             # Fallback to position-based estimate for players not in recent form
             # (e.g. long-term injured like Steph Curry, Ja Morant).
-            # Position fallback: C 1.6× (hardest to replace), PG/G 1.4×, SG 1.3×, F 1.2×
             pform = form_by_name.get(player_name)
             if pform:
-                mins = pform.get("minutes_avg", 20)
-                impact = min(2.0, max(0.5, mins / 20.0))
+                fs = pform.get("form_score", 0)
+                mins = pform.get("minutes_avg", 0)
+                # form_score-based: scale 0→0.5, 15→1.2, 30→1.8, 50+→2.5
+                impact = min(2.5, max(0.5, 0.5 + fs / 25.0))
+                # Floor: anyone playing 20+ min is at least 1.0 impact
+                if mins >= 20 and impact < 1.0:
+                    impact = 1.0
             else:
                 pos = inj.get("position", "").upper()
                 if pos == "C":
@@ -406,7 +412,19 @@ def _injury_detail(team_injuries, team_form):
         pform  = form_by_name.get(name.lower())
         mins   = pform.get("minutes_avg", 0) if pform else 0
         pts    = pform.get("pts_avg", 0) if pform else 0
-        impact = "star" if mins >= 32 else "starter" if mins >= 25 else "role" if mins >= 15 else "bench"
+        fs     = pform.get("form_score", 0) if pform else 0
+        # Classify by form_score (captures full player value, not just minutes)
+        # star: form_score >= 25 (top ~2-3 players per team) OR 32+ min high-usage
+        # starter: form_score >= 12 OR 25+ min
+        # role: form_score >= 5 OR 15+ min
+        if fs >= 25 or (mins >= 32 and pts >= 18):
+            impact = "star"
+        elif fs >= 12 or mins >= 25:
+            impact = "starter"
+        elif fs >= 5 or mins >= 15:
+            impact = "role"
+        else:
+            impact = "bench"
         detail.append({"name": name, "status": status, "impact": impact,
                         "mins_avg": round(mins, 1), "pts_avg": round(pts, 1)})
     return detail
@@ -681,8 +699,8 @@ def predict_game(game, standings, injuries, recent_form, player_form=None, team_
     factors["player_form"] = {"home": h_pf, "away": a_pf}
 
     # Priority 4 & 5: measure total injury load on each team.
-    # weighted_absence = sum of impact scores for Out/Doubtful players.
-    # star(32+min or position fallback C)=2.0, starter(25+)=1.5, role=1.0, bench=0.5
+    # weighted_absence uses form_score to differentiate star absence from role player.
+    # form_score range: ~2 (bench) → ~55 (MVP). Mapped to load: 0.5 → 2.5.
     def _absence_load(team_abbr):
         form_by_name = {
             p.get("name", "").lower(): p
@@ -694,11 +712,14 @@ def predict_game(game, standings, injuries, recent_form, player_form=None, team_
                 continue
             pform = form_by_name.get(inj["name"].lower())
             if pform:
+                fs = pform.get("form_score", 0)
                 mins = pform.get("minutes_avg", 0)
-                if mins >= 32:   load += 2.0
-                elif mins >= 25: load += 1.5
-                elif mins >= 15: load += 1.0
-                else:            load += 0.5
+                # form_score-based load: matches injury_penalty scaling
+                player_load = min(2.5, max(0.5, 0.5 + fs / 25.0))
+                # Floor: 20+ min players are at least 1.0
+                if mins >= 20 and player_load < 1.0:
+                    player_load = 1.0
+                load += player_load
             else:
                 pos = inj.get("position", "").upper()
                 if pos == "C":             load += 1.8
