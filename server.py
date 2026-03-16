@@ -62,8 +62,13 @@ def _run_predictions(date_str):
 
     try:
         import db as _db
+        from prediction_engine import _WEIGHT_OVERRIDE
+        from config import WEIGHTS as _CFG_W
         _conn = _db.get_connection()
         _db.upsert_predictions(_conn, date_str, predictions)
+        _active = dict(_WEIGHT_OVERRIDE) if _WEIGHT_OVERRIDE else dict(_CFG_W)
+        _db.save_weights_snapshot(_conn, date_str, _active,
+                                  source="learned" if _WEIGHT_OVERRIDE else "config")
         _conn.commit()
         _conn.close()
     except Exception as _e:

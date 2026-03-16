@@ -23,15 +23,24 @@ CONFIDENCE_LOW = 0.55       # Skip / too close to call
 MIN_WEIGHT = 0.03
 
 # Weighting factors for the prediction model
+# rest_days zeroed out: 33.3% accuracy (ESPN doesn't provide pre-game rest data reliably).
+# Its 0.08 weight redistributed proportionally to reliable factors.
+# rest_days is still computed and used as a raw edge signal in risk/reward classification.
 WEIGHTS = {
-    "win_pct":          0.25,   # Overall season win percentage
-    "recent_form":      0.20,   # Last 10 games performance
-    "player_form":      0.20,   # Individual player performance last 5 games
-    "home_away":        0.11,   # Home court advantage / road record (61.5% accuracy → trimmed)
-    "injuries":         0.11,   # Key player availability
-    "rest_days":        0.08,   # Back-to-back or rested
-    "streak":           0.05,   # Current win/loss streak (80.8% accuracy → bumped from 3%)
+    "win_pct":          0.27,   # Overall season win percentage
+    "recent_form":      0.22,   # Last 10 games performance
+    "player_form":      0.22,   # Individual player performance last 5 games
+    "home_away":        0.12,   # Home court advantage / road record
+    "injuries":         0.12,   # Key player availability
+    "rest_days":        0.00,   # Excluded from confidence (33% accuracy); used only for edge scoring
+    "streak":           0.05,   # Current win/loss streak
 }
+
+# Risk / Reward classification thresholds
+RISK_HIGH     = 0.55   # risk_score >= this → HIGH RISK
+RISK_MODERATE = 0.30   # risk_score >= this → MODERATE RISK (below = LOW RISK)
+EDGE_STRONG   = 0.40   # edge_score >= this → STRONG EDGE
+EDGE_MODERATE = 0.20   # edge_score >= this → MODERATE EDGE (below = WEAK)
 
 # Home court advantage baseline (historically ~60% home win rate in NBA)
 HOME_COURT_BOOST = 0.035

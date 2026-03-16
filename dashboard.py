@@ -35,6 +35,42 @@ def _recommendation_badge(rec):
     return f'<span style="background:{bg};color:{text};padding:3px 10px;border-radius:12px;font-weight:700;font-size:0.8em;letter-spacing:0.5px">{rec}</span>'
 
 
+def _play_type_badge(play_type):
+    """Return styled badge HTML for play type classification."""
+    styles = {
+        "LOCK":           ("#22c55e", "#052e16"),
+        "VALUE PLAY":     ("#3b82f6", "#172554"),
+        "RISKY — WORTH IT": ("#f59e0b", "#451a03"),
+        "RISKY — AVOID":  ("#ef4444", "#450a0a"),
+        "SKIP":           ("#475569", "#0f172a"),
+    }
+    bg, text = styles.get(play_type, ("#6b7280", "#1f2937"))
+    return f'<span style="background:{bg};color:{text};padding:3px 10px;border-radius:12px;font-weight:700;font-size:0.75em;letter-spacing:0.5px">{play_type}</span>'
+
+
+def _risk_edge_bars(risk_score, edge_score):
+    """Two thin bars showing risk level and edge strength."""
+    risk_pct = round(risk_score * 100, 1)
+    edge_pct = round(edge_score * 100, 1)
+    risk_color = "#ef4444" if risk_score >= 0.55 else "#f59e0b" if risk_score >= 0.30 else "#22c55e"
+    edge_color = "#22c55e" if edge_score >= 0.40 else "#3b82f6" if edge_score >= 0.20 else "#64748b"
+    return f"""
+    <div style="margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;font-size:0.72em;color:#64748b;margin-bottom:3px">
+            <span>Risk</span><span style="color:{risk_color};font-weight:700">{risk_pct}%</span>
+        </div>
+        <div style="height:5px;background:#1e293b;border-radius:3px;overflow:hidden;margin-bottom:6px">
+            <div style="height:100%;width:{risk_pct}%;background:{risk_color};border-radius:3px"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.72em;color:#64748b;margin-bottom:3px">
+            <span>Edge</span><span style="color:{edge_color};font-weight:700">{edge_pct}%</span>
+        </div>
+        <div style="height:5px;background:#1e293b;border-radius:3px;overflow:hidden">
+            <div style="height:100%;width:{edge_pct}%;background:{edge_color};border-radius:3px"></div>
+        </div>
+    </div>"""
+
+
 def _factor_bar(home_val, away_val, label, home_abbr="HOME", away_abbr="AWAY"):
     """Create a horizontal comparison bar for a factor."""
     h_pct = round(home_val * 100, 1)
@@ -207,15 +243,43 @@ def generate_game_card(pred):
     badge = _recommendation_badge(rec)
     h_injuries = pred.get("home_injuries", 0)
     a_injuries = pred.get("away_injuries", 0)
+    play_type   = pred.get("play_type", "")
+    risk_score  = pred.get("risk_score", 0.0)
+    edge_score  = pred.get("edge_score", 0.0)
+    explanation = pred.get("play_explanation", "")
 
+    eff_edge = pred.get("efficiency_edge")
     winner_side = "HOME" if pred["predicted_winner"] == h_abbr else "AWAY"
+
+    play_badge      = _play_type_badge(play_type) if play_type else ""
+    risk_edge_html  = _risk_edge_bars(risk_score, edge_score) if play_type else ""
+    explanation_html = (
+        f'<div style="font-size:0.75em;color:#64748b;font-style:italic;margin-bottom:12px">{explanation}</div>'
+        if explanation else ""
+    )
+
+    # Efficiency edge indicator (scoring margin delta, informational only)
+    eff_html = ""
+    if eff_edge is not None:
+        eff_abs  = abs(eff_edge)
+        eff_team = h_abbr if eff_edge > 0 else a_abbr
+        eff_color = "#22c55e" if eff_abs >= 0.3 else "#64748b"
+        eff_label = f"{eff_team} +{eff_abs:.2f}" if eff_abs >= 0.05 else "Even"
+        eff_html = (
+            f'<div style="text-align:center;font-size:0.72em;color:{eff_color};margin-bottom:8px">'
+            f'Efficiency Edge: <span style="font-weight:700">{eff_label}</span>'
+            f'</div>'
+        )
 
     return f"""
     <div style="background:#0f172a;border:1px solid #1e293b;border-radius:12px;padding:24px;margin:16px 0;box-shadow:0 4px 12px rgba(0,0,0,0.3)">
         <!-- Header -->
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
             <div style="font-size:0.8em;color:#64748b">{venue}</div>
-            {badge}
+            <div style="display:flex;gap:8px;align-items:center">
+                {play_badge}
+                {badge}
+            </div>
         </div>
 
         <!-- Teams -->
@@ -248,11 +312,19 @@ def generate_game_card(pred):
             </div>
         </div>
 
+        <!-- Risk / Edge Bars -->
+        {risk_edge_html}
+
         <!-- Prediction -->
         <div style="text-align:center;padding:12px;background:#1e293b;border-radius:8px;margin-bottom:12px">
             <span style="color:#94a3b8;font-size:0.85em">Predicted Winner: </span>
             <span style="color:#f0f9ff;font-weight:800;font-size:1.05em">{winner}</span>
         </div>
+
+        {eff_html}
+
+        <!-- Play Explanation -->
+        {explanation_html}
 
         <!-- Factor Breakdown -->
         <details style="cursor:pointer">
@@ -270,10 +342,15 @@ def generate_dashboard(predictions, date_str, history_stats=None):
     Automatically loads yesterday's analysis (if available) and renders it
     as a Results section above today's predictions.
     """
-    total_games = len(predictions)
+    total_games  = len(predictions)
     strong_picks = sum(1 for p in predictions if p["recommendation"] == "STRONG PICK")
-    leans = sum(1 for p in predictions if p["recommendation"] in ("LEAN", "SLIGHT LEAN"))
-    skips = sum(1 for p in predictions if p["recommendation"] == "SKIP")
+    leans        = sum(1 for p in predictions if p["recommendation"] in ("LEAN", "SLIGHT LEAN"))
+    skips        = sum(1 for p in predictions if p["recommendation"] == "SKIP")
+
+    locks         = sum(1 for p in predictions if p.get("play_type") == "LOCK")
+    value_plays   = sum(1 for p in predictions if p.get("play_type") == "VALUE PLAY")
+    risky_worth   = sum(1 for p in predictions if p.get("play_type") == "RISKY — WORTH IT")
+    risky_avoid   = sum(1 for p in predictions if p.get("play_type") == "RISKY — AVOID")
 
     # History stats
     history_html = ""
@@ -331,7 +408,7 @@ def generate_dashboard(predictions, date_str, history_stats=None):
         </div>
 
         <!-- Summary Stats -->
-        <div style="display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap">
+        <div style="display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap">
             <div style="flex:1;min-width:100px;background:#1e293b;border-radius:8px;padding:14px;text-align:center">
                 <div style="font-size:1.8em;font-weight:800;color:#60a5fa">{total_games}</div>
                 <div style="font-size:0.7em;color:#64748b;margin-top:2px">Games</div>
@@ -347,6 +424,25 @@ def generate_dashboard(predictions, date_str, history_stats=None):
             <div style="flex:1;min-width:100px;background:#1e293b;border-radius:8px;padding:14px;text-align:center">
                 <div style="font-size:1.8em;font-weight:800;color:#ef4444">{skips}</div>
                 <div style="font-size:0.7em;color:#64748b;margin-top:2px">Skips</div>
+            </div>
+        </div>
+        <!-- Play Type Breakdown -->
+        <div style="display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap">
+            <div style="flex:1;min-width:100px;background:#0a1f0f;border:1px solid #14311e;border-radius:8px;padding:12px;text-align:center">
+                <div style="font-size:1.5em;font-weight:800;color:#22c55e">{locks}</div>
+                <div style="font-size:0.65em;color:#64748b;margin-top:2px">Locks</div>
+            </div>
+            <div style="flex:1;min-width:100px;background:#0a0f1f;border:1px solid #172554;border-radius:8px;padding:12px;text-align:center">
+                <div style="font-size:1.5em;font-weight:800;color:#3b82f6">{value_plays}</div>
+                <div style="font-size:0.65em;color:#64748b;margin-top:2px">Value Plays</div>
+            </div>
+            <div style="flex:1;min-width:100px;background:#1a1000;border:1px solid #451a03;border-radius:8px;padding:12px;text-align:center">
+                <div style="font-size:1.5em;font-weight:800;color:#f59e0b">{risky_worth}</div>
+                <div style="font-size:0.65em;color:#64748b;margin-top:2px">Risky Worth It</div>
+            </div>
+            <div style="flex:1;min-width:100px;background:#150808;border:1px solid #450a0a;border-radius:8px;padding:12px;text-align:center">
+                <div style="font-size:1.5em;font-weight:800;color:#ef4444">{risky_avoid}</div>
+                <div style="font-size:0.65em;color:#64748b;margin-top:2px">Risky Avoid</div>
             </div>
         </div>
 
