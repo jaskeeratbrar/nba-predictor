@@ -270,6 +270,7 @@ def main():
         data["injuries"],
         data["recent_form"],
         data.get("player_form", {}),
+        data.get("team_stats", {}),
     )
 
     # Step 3: Display predictions
