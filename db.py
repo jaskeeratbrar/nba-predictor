@@ -278,6 +278,13 @@ def init_schema():
             conn.execute(f"ALTER TABLE predictions ADD COLUMN {_col} {_coltype}")
         except Exception:
             pass  # column already exists
+
+    # Migrate team_efficiency_snapshots: ft_pct added when opp_ppg/scoring_margin removed.
+    try:
+        conn.execute("ALTER TABLE team_efficiency_snapshots ADD COLUMN ft_pct REAL")
+    except Exception:
+        pass  # column already exists or table schema is current
+
     conn.commit()
     conn.close()
 
