@@ -1,6 +1,6 @@
 {
   "date": "2026-03-16",
-  "generated_at": "2026-03-16T17:37:20.251735",
+  "generated_at": "2026-03-16T18:00:09.688751",
   "num_games": 8,
   "predictions": [
     {
@@ -127,11 +127,11 @@
       "away_abbr": "GSW",
       "home_record": "16-50",
       "away_record": "32-35",
-      "home_win_prob": 0.3218,
-      "away_win_prob": 0.6782,
+      "home_win_prob": 0.3215,
+      "away_win_prob": 0.6785,
       "predicted_winner": "GSW",
       "predicted_winner_name": "Golden State Warriors",
-      "confidence": 0.5982,
+      "confidence": 0.5985,
       "recommendation": "SLIGHT LEAN",
       "venue": "Capital One Arena",
       "game_time": "2026-03-16T23:00Z",
@@ -161,8 +161,8 @@
           "away": 0.4118
         },
         "player_form": {
-          "home": 0.4162,
-          "away": 0.5838
+          "home": 0.4145,
+          "away": 0.5855
         }
       },
       "home_injuries": 6,
@@ -213,6 +213,13 @@
       ],
       "away_injury_detail": [
         {
+          "name": "LJ Cryer",
+          "status": "Out",
+          "impact": "role",
+          "mins_avg": 18.0,
+          "pts_avg": 9.5
+        },
+        {
           "name": "Quinten Post",
           "status": "Day-To-Day",
           "impact": "role",
@@ -232,13 +239,6 @@
           "impact": "starter",
           "mins_avg": 30.9,
           "pts_avg": 9.4
-        },
-        {
-          "name": "LJ Cryer",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 18.0,
-          "pts_avg": 9.5
         },
         {
           "name": "Seth Curry",
@@ -270,16 +270,16 @@
         }
       ],
       "_h_load": 6.398124,
-      "_a_load": 5.379284,
+      "_a_load": 6.275288,
       "play_type": "RISKY \u2014 AVOID",
-      "risk_score": 0.4599,
-      "edge_score": 0.3278,
+      "risk_score": 0.4598,
+      "edge_score": 0.1934,
       "risk_components": {
-        "factor_disagreement": 0.7664,
+        "factor_disagreement": 0.7663,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
-        "health_edge": 0.3396,
+        "health_edge": 0.0409,
         "momentum_edge": 0.5,
         "rest_edge": 0.0
       },
