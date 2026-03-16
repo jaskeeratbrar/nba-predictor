@@ -38,6 +38,17 @@ try:
     if _games_analyzed >= 50:
         _suggestions = _ledger.get("weight_suggestions", {})
         if _suggestions and len(_suggestions) == len(WEIGHTS):
+            # Factors explicitly zeroed in config.py must stay zero — learned weights
+            # cannot override intentional exclusions (e.g. rest_days excluded due to
+            # broken data source; its tainted suggestion of ~0.10 must be ignored).
+            _excluded = {f for f, w in WEIGHTS.items() if w == 0.0}
+            if _excluded:
+                _suggestions = dict(_suggestions)
+                for _f in _excluded:
+                    _suggestions[_f] = 0.0
+                _total = sum(_suggestions.values())
+                if _total > 0:
+                    _suggestions = {f: round(v / _total, 4) for f, v in _suggestions.items()}
             set_weights(_suggestions)
             _active_weights = _suggestions
             _weights_source = "learned"

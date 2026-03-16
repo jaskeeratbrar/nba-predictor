@@ -3,7 +3,8 @@ NBA Prediction Engine
 Computes win probabilities using multiple weighted factors.
 """
 
-from config import WEIGHTS, HOME_COURT_BOOST, CONFIDENCE_HIGH, CONFIDENCE_MODERATE, CONFIDENCE_LOW, MIN_WEIGHT
+from config import (WEIGHTS, HOME_COURT_BOOST, CONFIDENCE_HIGH, CONFIDENCE_MODERATE,
+                    CONFIDENCE_LOW, MIN_WEIGHT, RISK_HIGH, RISK_MODERATE, EDGE_STRONG, EDGE_MODERATE)
 
 # Module-level weight override — set via set_weights() when learned weights are available
 _WEIGHT_OVERRIDE = None
@@ -59,11 +60,14 @@ def compute_win_pct_factor(home_standings, away_standings):
     return h_score / total, a_score / total
 
 
-def _dynamic_weights(home_standings, away_standings):
+def _dynamic_weights(home_standings, away_standings, home_injury_load=0.0, away_injury_load=0.0):
     """
-    Adjust win_pct vs recent_form weight based on season progress.
-    Early season (games 1-20): win_pct unreliable — shift weight to recent_form.
-    Late season (games 60+): win_pct is highly reliable — restore its weight.
+    Adjust weights based on two context signals:
+
+    1. Season progress: win_pct unreliable early (shift to recent_form), reliable late.
+    2. Injury load (Priority 2): when the more-decimated team's load exceeds threshold,
+       backward-looking factors (win_pct, player_form) describe a roster that may not
+       exist tonight. Shift weight toward live signals (injuries, streak).
     """
     h_games = home_standings.get("wins", 0) + home_standings.get("losses", 0)
     a_games = away_standings.get("wins", 0) + away_standings.get("losses", 0)
@@ -78,6 +82,24 @@ def _dynamic_weights(home_standings, away_standings):
     base = dict(_WEIGHT_OVERRIDE) if _WEIGHT_OVERRIDE is not None else dict(WEIGHTS)
     base["win_pct"]     = max(base.get("win_pct", 0.25) + wp_adj, MIN_WEIGHT)
     base["recent_form"] = max(base.get("recent_form", 0.20) - wp_adj, MIN_WEIGHT)
+
+    # Injury-conditional weighting: when either team is significantly decimated,
+    # historical signals become unreliable — shift weight to live signals.
+    # Threshold 2.0 ≈ two starters out; max effect at load 5.0.
+    INJURY_THRESHOLD = 2.0
+    INJURY_MAX_LOAD  = 5.0
+    MAX_ADJUST       = 0.06   # max reduction per backward-looking factor
+
+    max_load = max(home_injury_load, away_injury_load)
+    if max_load > INJURY_THRESHOLD and base.get("injuries", 0) > 0:
+        scale  = min((max_load - INJURY_THRESHOLD) / (INJURY_MAX_LOAD - INJURY_THRESHOLD), 1.0)
+        adjust = MAX_ADJUST * scale
+        # Draw down backward-looking factors
+        base["win_pct"]    = max(base.get("win_pct", 0)    - adjust, MIN_WEIGHT)
+        base["player_form"] = max(base.get("player_form", 0) - adjust, MIN_WEIGHT)
+        # Redistribute to live signals (70% → injuries, 30% → streak)
+        base["injuries"] = min(base.get("injuries", 0) + adjust * 0.70, 0.35)
+        base["streak"]   = min(base.get("streak", 0)   + adjust * 0.30, 0.20)
 
     total = sum(base.values())
     return {k: v / total for k, v in base.items()}
@@ -390,6 +412,189 @@ def _injury_detail(team_injuries, team_form):
     return detail
 
 
+# ---------------------------------------------------------------------------
+# Risk / Reward Classification
+# ---------------------------------------------------------------------------
+
+def _factor_disagreement(factors, predicted_winner, home_abbr):
+    """
+    Measure how much the 7 factors disagree with each other.
+    Returns variance across factor votes for the predicted winner, scaled to [0, 1].
+    High value = factors split; low value = strong consensus.
+    """
+    winner_is_home = (predicted_winner == home_abbr)
+    votes = [fv["home" if winner_is_home else "away"] for fv in factors.values()]
+    if not votes:
+        return 0.0
+    mean = sum(votes) / len(votes)
+    variance = sum((v - mean) ** 2 for v in votes) / len(votes)
+    # Scale: typical strong split ≈ 0.05 variance → clamp at 1.0
+    return min(variance / 0.05, 1.0)
+
+
+def _injury_uncertainty(home_injury_detail, away_injury_detail):
+    """
+    Measure roster uncertainty from QUESTIONABLE and DOUBTFUL players — these
+    may or may not play, unlike OUT (certain). Returns [0, 1].
+    """
+    impact_weights = {"star": 2.0, "starter": 1.5, "role": 1.0, "bench": 0.5}
+    load = 0.0
+    for inj in home_injury_detail + away_injury_detail:
+        status = inj.get("status", "").lower()
+        w = impact_weights.get(inj.get("impact", "bench"), 0.5)
+        if "questionable" in status:
+            load += w * 1.0
+        elif "doubtful" in status:
+            load += w * 0.5
+    # Normalize: 4.0 load (e.g. 2 questionable starters) = max uncertainty
+    return min(load / 4.0, 1.0)
+
+
+def _health_edge(h_load, a_load, predicted_winner, home_abbr):
+    """How much healthier is the predicted winner than the opponent? [0, 1]"""
+    winner_load = h_load if predicted_winner == home_abbr else a_load
+    loser_load  = a_load if predicted_winner == home_abbr else h_load
+    net = loser_load - winner_load  # positive = we're picking the healthier team
+    return min(max(net / 3.0, 0.0), 1.0)
+
+
+def _momentum_edge(factors, predicted_winner, home_abbr):
+    """
+    Both recent_form AND streak independently back the predicted winner.
+    Two different signal sources agreeing = genuine momentum edge. [0, 1]
+    """
+    winner_is_home = (predicted_winner == home_abbr)
+    key = "home" if winner_is_home else "away"
+    rf_val = factors.get("recent_form", {}).get(key, 0.5)
+    st_val = factors.get("streak", {}).get(key, 0.5)
+    # Both must meaningfully exceed neutral (0.5) to register
+    rf_edge = max(rf_val - 0.55, 0.0) / 0.45
+    st_edge = max(st_val - 0.55, 0.0) / 0.45
+    return min((rf_edge + st_edge) / 2.0, 1.0)
+
+
+def _rest_edge(home_recent, away_recent, predicted_winner, home_abbr):
+    """
+    Binary signal: 1.0 if predicted winner is rested (≥2 days) AND opponent
+    is on a back-to-back. Used as edge signal only (excluded from confidence).
+    """
+    from datetime import datetime
+
+    def _days(recent):
+        if not recent:
+            return 2
+        last = recent[-1].get("date", "") if recent else ""
+        if not last:
+            return 2
+        try:
+            return (datetime.now() - datetime.strptime(last[:10], "%Y-%m-%d")).days
+        except ValueError:
+            return 2
+
+    winner_is_home = (predicted_winner == home_abbr)
+    winner_rest = _days(home_recent if winner_is_home else away_recent)
+    loser_rest  = _days(away_recent if winner_is_home else home_recent)
+    return 1.0 if (winner_rest >= 2 and loser_rest <= 1) else 0.0
+
+
+def classify_play(pred, home_recent, away_recent):
+    """
+    Classify a game prediction into a play type based on risk and edge scores.
+
+    Risk = how uncertain is this prediction (factor disagreement + roster uncertainty).
+    Edge = is there a specific exploitable angle that justifies taking the risk.
+
+    Returns a dict with play_type, risk_score, edge_score, and their components.
+    """
+    factors         = pred.get("factors", {})
+    predicted_winner = pred["predicted_winner"]
+    home_abbr       = pred["home_abbr"]
+    h_load          = pred.get("_h_load", 0.0)
+    a_load          = pred.get("_a_load", 0.0)
+
+    fd_score = _factor_disagreement(factors, predicted_winner, home_abbr)
+    iu_score = _injury_uncertainty(pred.get("home_injury_detail", []), pred.get("away_injury_detail", []))
+    risk_score = round(0.60 * fd_score + 0.40 * iu_score, 4)
+
+    health_edge   = _health_edge(h_load, a_load, predicted_winner, home_abbr)
+    momentum_edge = _momentum_edge(factors, predicted_winner, home_abbr)
+    rest_edge     = _rest_edge(home_recent, away_recent, predicted_winner, home_abbr)
+    edge_score    = round(0.45 * health_edge + 0.35 * momentum_edge + 0.20 * rest_edge, 4)
+
+    conf = pred["confidence"]
+
+    if conf >= CONFIDENCE_HIGH:
+        # High confidence → always a LOCK regardless of factor spread
+        play_type = "LOCK"
+    elif risk_score < RISK_MODERATE and conf >= 0.65:
+        play_type = "LOCK"
+    elif risk_score < RISK_MODERATE and conf >= 0.55:
+        play_type = "VALUE PLAY"
+    elif risk_score >= RISK_MODERATE and edge_score >= 0.35:
+        play_type = "RISKY — WORTH IT"
+    elif risk_score >= RISK_MODERATE:
+        play_type = "RISKY — AVOID"
+    else:
+        play_type = "SKIP"
+
+    return {
+        "play_type":        play_type,
+        "risk_score":       risk_score,
+        "edge_score":       edge_score,
+        "risk_components":  {"factor_disagreement": round(fd_score, 4), "injury_uncertainty": round(iu_score, 4)},
+        "edge_components":  {"health_edge": round(health_edge, 4), "momentum_edge": round(momentum_edge, 4), "rest_edge": round(rest_edge, 4)},
+    }
+
+
+def generate_risk_explanation(pred, classify_result):
+    """Generate a 1-2 sentence human-readable rationale for the play classification."""
+    play_type = classify_result["play_type"]
+    ec        = classify_result["edge_components"]
+    rc        = classify_result["risk_components"]
+    winner    = pred.get("predicted_winner_name", "")
+
+    # Count factor votes for predicted winner
+    winner_is_home = pred["predicted_winner"] == pred["home_abbr"]
+    vote_key = "home" if winner_is_home else "away"
+    factors  = pred.get("factors", {})
+    votes_for     = sum(1 for f in factors.values() if f.get(vote_key, 0.5) > 0.52)
+    votes_against = sum(1 for f in factors.values() if f.get(vote_key, 0.5) < 0.48)
+    n_factors = len(factors)
+
+    if play_type == "LOCK":
+        return f"Strong consensus — {votes_for} of {n_factors} factors agree. Clean pick."
+
+    if play_type == "VALUE PLAY":
+        return f"Factors mostly aligned ({votes_for} of {n_factors} agree). Reliable at this confidence level."
+
+    # Build risk description
+    risk_parts = []
+    if rc["factor_disagreement"] > 0.35:
+        if votes_against > 0:
+            risk_parts.append(f"factors split {votes_for}-{votes_against}")
+        else:
+            risk_parts.append(f"factor signals spread across a wide range")
+    if rc["injury_uncertainty"] > 0.30:
+        risk_parts.append("questionable starters add roster uncertainty")
+    risk_str = " and ".join(risk_parts) if risk_parts else "elevated uncertainty"
+
+    # Build edge description
+    edge_parts = []
+    if ec["health_edge"] > 0.30:
+        edge_parts.append(f"{winner} is the healthier team tonight")
+    if ec["momentum_edge"] > 0.30:
+        edge_parts.append("strong recent form + streak alignment")
+    if ec["rest_edge"] > 0.5:
+        edge_parts.append("rested vs back-to-back opponent")
+    edge_str = ", ".join(edge_parts)
+
+    if play_type == "RISKY — WORTH IT":
+        return f"Risky ({risk_str}), but worth it — {edge_str}." if edge_str else f"Risky ({risk_str}), but edge present."
+    if play_type == "RISKY — AVOID":
+        return f"High uncertainty ({risk_str}) with no clear edge. Pass."
+    return "Too close to call. No play."
+
+
 def predict_game(game, standings, injuries, recent_form, player_form=None):
     """
     Generate a prediction for a single game.
@@ -502,8 +707,8 @@ def predict_game(game, standings, injuries, recent_form, player_form=None):
     h_load = _absence_load(home_abbr)
     a_load = _absence_load(away_abbr)
 
-    # Weighted combination — uses dynamic (season-progress-adjusted) weights
-    dynamic_weights = _dynamic_weights(home_standings, away_standings)
+    # Weighted combination — uses dynamic (season-progress + injury-conditional) weights
+    dynamic_weights = _dynamic_weights(home_standings, away_standings, h_load, a_load)
     home_score = 0.0
     away_score = 0.0
     for factor_name, weight in dynamic_weights.items():
@@ -595,7 +800,7 @@ def predict_game(game, standings, injuries, recent_form, player_form=None):
     else:
         recommendation = "SKIP"
 
-    return {
+    result = {
         "home_team": game["home"]["name"],
         "home_abbr": home_abbr,
         "away_team": game["away"]["name"],
@@ -615,7 +820,15 @@ def predict_game(game, standings, injuries, recent_form, player_form=None):
         "away_injuries": len(injuries.get(away_abbr, [])),
         "home_injury_detail": _injury_detail(injuries.get(home_abbr, []), player_form.get(home_abbr, {})),
         "away_injury_detail": _injury_detail(injuries.get(away_abbr, []), player_form.get(away_abbr, {})),
+        "_h_load": h_load,
+        "_a_load": a_load,
     }
+
+    classification = classify_play(result, home_recent, away_recent)
+    result.update(classification)
+    result["play_explanation"] = generate_risk_explanation(result, classification)
+
+    return result
 
 
 def predict_all_games(schedule, standings, injuries, recent_form, player_form=None):

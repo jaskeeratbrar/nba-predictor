@@ -1,6 +1,6 @@
 # Model Improvement Plan
 
-_Last updated: 2026-03-10_
+_Last updated: 2026-03-15_
 
 ## Context
 Opus-level reflection after Mar 9 results (2/5, 40%). The model is 75% backward-looking
@@ -13,28 +13,22 @@ managing rosters for playoffs).
 
 ---
 
-## Priority 1 — Calibrate injury factor (WAITING — ~2 weeks)
-**Status:** Waiting for data. Injury factor was broken all season (ESPN API structure
-changed, all injuries silently dropped). Fixed 2026-03-09. Now accumulating votes.
+## Priority 1 — Calibrate injury factor (WAITING — ~2026-03-25)
+**Status:** Accumulating votes. 8 clean votes as of 2026-03-15 (post API fix 2026-03-09).
+Need 15+ before drawing weight conclusions. Current weight: 12%. Target 15-20% once calibrated.
 
-**What to do:** After 15+ injury-factor votes in the ledger, check its standalone
-accuracy. Until then, do not change its weight — you have no evidence for what's right.
-Current weight: 11%. May need to go to 20-25% once calibrated.
-
-**Watch for:** Factor accuracy table in the daily `--analyze` output. Currently shows
-`n/a (0/15 games)`. Target: 15 votes before drawing conclusions.
+**What to do:** After 2026-03-20, check injury factor accuracy in `--analyze` output.
+If accuracy is stable at 70%+, increase weight toward 0.15-0.20 in config.py.
 
 ---
 
-## Priority 2 — Injuries should modulate other factors, not just vote (NOT STARTED)
-**Status:** Architectural change needed. Currently injuries cast one vote among seven.
-They should suppress the weight of win% and player_form when injury load is high.
+## Priority 2 — Injuries should modulate other factors, not just vote ✅ DONE 2026-03-15
+**Status:** Implemented. `_dynamic_weights()` now reduces win_pct and player_form when
+injury load exceeds threshold (2.0), redistributing to injuries (70%) and streak (30%).
+Max adjustment: 6pp per factor at load=5.0. See DEBUG.md for full detail.
 
-**The idea:** When a team's injury penalty exceeds a threshold (e.g. 2+ stars out),
-dynamically reduce that team's win_pct and player_form contribution in the final
-score calculation. The more decimated the roster, the less historical signals matter.
-
-**Blocked by:** Priority 1 — need calibrated injury data before tuning this interaction.
+**Next:** Monitor accuracy on injury-heavy slates (March–April) to validate the thresholds
+are well-tuned. Adjust INJURY_MAX_LOAD and MAX_ADJUST in `_dynamic_weights()` if needed.
 
 ---
 
@@ -182,6 +176,9 @@ right data layer, especially as history grows beyond a season.
 ---
 
 ## Completed
+- [x] Injury-conditional weighting (Priority 2) — win_pct/player_form suppressed on high-injury slates — 2026-03-15
+- [x] Fixed learned weights override — config zero-weights now enforced before set_weights() — 2026-03-15
+- [x] Play type accuracy tracking — LOCK/VALUE/RISKY etc. tracked in ledger + report — 2026-03-15
 - [x] Effective win% — blend 60% season win% + 40% last-10 win% in compute_win_pct_factor() — 2026-03-11
 - [x] Playoff position pressure — teams within 2-3 games of play-in/playoff cut get urgency boost in predict_game() — 2026-03-11
 - [x] Fix ESPN injury API (team name structure changed, all injuries were silently dropped) — 2026-03-09

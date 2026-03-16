@@ -211,6 +211,7 @@ def analyze_game(pred, actual):
         "away_score":       away_score,
         "confidence":       pred.get("confidence", 0),
         "recommendation":   pred.get("recommendation", ""),
+        "play_type":        pred.get("play_type", ""),
         "factor_votes":     factor_votes,
         "explanation":      explanation,
     }
@@ -246,6 +247,29 @@ def aggregate_date_factors(game_analyses):
     return result
 
 
+def aggregate_play_type_accuracy(game_analyses):
+    """
+    Count correct/total per play_type classification across all games.
+    Returns dict keyed by play_type, e.g. {"LOCK": {"correct": 5, "total": 6}, ...}
+    Games with no play_type recorded are skipped.
+    """
+    agg = {}
+    for ga in game_analyses:
+        pt = ga.get("play_type", "")
+        if not pt:
+            continue
+        if pt not in agg:
+            agg[pt] = {"correct": 0, "total": 0}
+        agg[pt]["total"] += 1
+        if ga.get("correct"):
+            agg[pt]["correct"] += 1
+    for pt in agg:
+        t = agg[pt]["total"]
+        c = agg[pt]["correct"]
+        agg[pt]["accuracy"] = round(c / t, 4) if t > 0 else None
+    return agg
+
+
 # ---------------------------------------------------------------------------
 # Section 4: Persistent factor accuracy ledger
 # ---------------------------------------------------------------------------
@@ -266,6 +290,7 @@ def load_factor_ledger():
                                    for f in FACTOR_NAMES},
         "dates_analyzed":        [],
         "weight_suggestions":    dict(WEIGHTS),
+        "play_type_accuracy":    {},
     }
 
 
@@ -277,10 +302,11 @@ def save_factor_ledger(ledger):
     os.replace(tmp, LEDGER_PATH)
 
 
-def merge_into_ledger(ledger, date_str, date_factor_acc, date_summary):
+def merge_into_ledger(ledger, date_str, date_factor_acc, date_summary, game_analyses=None):
     """
     Merge one date's results into the persistent ledger.
     Safe to re-run — skips if date already recorded.
+    game_analyses: list of analyze_game() dicts — used to update play_type accuracy.
     """
     if date_str in ledger.get("dates_analyzed", []):
         return ledger  # already counted
@@ -309,6 +335,20 @@ def merge_into_ledger(ledger, date_str, date_factor_acc, date_summary):
     for fname in FACTOR_NAMES:
         if fname in ledger["factors"]:
             ledger["factors"][fname]["suggested_weight"] = suggestions.get(fname, WEIGHTS.get(fname))
+
+    # Accumulate play_type accuracy
+    if game_analyses:
+        if "play_type_accuracy" not in ledger:
+            ledger["play_type_accuracy"] = {}
+        date_pt_acc = aggregate_play_type_accuracy(game_analyses)
+        for pt, counts in date_pt_acc.items():
+            if pt not in ledger["play_type_accuracy"]:
+                ledger["play_type_accuracy"][pt] = {"correct": 0, "total": 0, "accuracy": None}
+            ledger["play_type_accuracy"][pt]["correct"] += counts["correct"]
+            ledger["play_type_accuracy"][pt]["total"]   += counts["total"]
+            t = ledger["play_type_accuracy"][pt]["total"]
+            c = ledger["play_type_accuracy"][pt]["correct"]
+            ledger["play_type_accuracy"][pt]["accuracy"] = round(c / t, 4) if t > 0 else None
 
     return ledger
 
@@ -488,6 +528,35 @@ def print_report(date_str, game_analyses, date_summary, ledger):
     if not any_suggestion:
         print(f"  {DIM}Run analysis on more dates to unlock weight suggestions (need {MIN_SAMPLE}+ games per factor).{RESET}")
 
+    # Play type accuracy table
+    pt_acc = ledger.get("play_type_accuracy", {})
+    if pt_acc:
+        print()
+        print("━" * 60)
+        print("  PLAY TYPE ACCURACY  (all-time)")
+        print("━" * 60)
+        print()
+        # Display in meaningful order
+        pt_order = ["LOCK", "VALUE PLAY", "RISKY — WORTH IT", "RISKY — AVOID", "SKIP"]
+        print(f"  {'Play Type':<20} {'Accuracy':>8}  {'Record':>8}  {'Notes'}")
+        print(f"  {'-'*20} {'-'*8}  {'-'*8}  {'-'*20}")
+        for pt in pt_order + [p for p in pt_acc if p not in pt_order]:
+            if pt not in pt_acc:
+                continue
+            pd = pt_acc[pt]
+            acc = pd.get("accuracy")
+            c   = pd.get("correct", 0)
+            t   = pd.get("total", 0)
+            acc_str    = f"{acc*100:.1f}%" if acc is not None else "n/a"
+            record_str = f"{c}/{t}"
+            acc_color  = GREEN if (acc or 0) >= 0.70 else YELLOW if (acc or 0) >= 0.55 else RED
+            note = ""
+            if pt == "LOCK" and (acc or 0) < 0.80:
+                note = "⚠️  target ≥80%"
+            elif pt == "RISKY — AVOID" and (acc or 0) > 0.50:
+                note = "⚠️  should be losing more"
+            print(f"  {pt:<20} {acc_color}{acc_str:>8}{RESET}  {record_str:>8}  {note}")
+
     # Season record
     overall_acc   = ledger.get("overall_accuracy")
     total_analyzed = ledger.get("total_games_analyzed", 0)
@@ -572,7 +641,7 @@ def analyze_date(date_str):
 
     # Update persistent ledger
     ledger = load_factor_ledger()
-    ledger = merge_into_ledger(ledger, date_str, date_factor_acc, date_summary)
+    ledger = merge_into_ledger(ledger, date_str, date_factor_acc, date_summary, game_analyses)
     save_factor_ledger(ledger)
 
     # Persist to DB
