@@ -39,6 +39,17 @@ for k,v in d.get('factors',{}).items():
 
 ## Known Issues & Fixes
 
+### [2026-03-16] ESPN team efficiency stats pipeline added
+**What changed:** `fetch_team_stats_espn()` in data_manager.py pulls ppg/fg_pct/fg3_pct/ft_pct/reb_pg/ast_pg
+per team. Stored in `team_efficiency_snapshots` DB table daily. `efficiency_edge` (scoring margin delta from
+recent games, normalized [-1,1]) added to prediction output and dashboard.
+**Not in model yet.** Informational only — needs 2-3 weeks of snapshots before correlation check.
+
+### [2026-03-16] SQLite analytics endpoints added
+**Endpoints:** GET /stats, /history?team=X, /misses?conf=0.7. Read-only, query existing DB analytics functions.
+**DB schema migrated:** predictions table gained play_type, risk_score, edge_score columns (ALTER TABLE with try/except).
+**Server weight fix:** server.py startup now mirrors run_predictions.py exclusion logic. /run now saves weights_history.
+
 ### [2026-03-15] Injury-conditional weighting added (Priority 2)
 **What changed:** `_dynamic_weights()` in `prediction_engine.py` now accepts `home_injury_load`
 and `away_injury_load`. When `max(h_load, a_load) > 2.0`, backward-looking weights (win_pct,
@@ -82,7 +93,7 @@ Learned weights from `performance/factor_accuracy.json` override `config.py` WEI
 - `total_games_analyzed >= 50` AND
 - `weight_suggestions` dict has same number of keys as WEIGHTS
 
-**Current state (2026-03-10):** 53 games analyzed → learned weights ARE active.
+**Current state (2026-03-16):** 53 games analyzed → learned weights ARE active.
 
 **Fixed (2026-03-15):** Startup block in `run_predictions.py` now enforces config exclusions
 before calling `set_weights()`. Any factor with `weight == 0.0` in `config.py` is zeroed in
@@ -105,17 +116,17 @@ To force config weights entirely (bypass learned): comment out `set_weights(_sug
 
 ---
 
-## Factor Accuracy Status (as of 2026-03-10)
+## Factor Accuracy Status (as of 2026-03-16)
 
 | Factor | Accuracy | Weight (config) | Status |
 |--------|----------|----------------|--------|
-| recent_form | 80.8% | 0.22 | ✅ reliable |
-| streak | 77.6% | 0.05 | ✅ reliable |
-| injuries | 75.0% | 0.12 | ⚠️ only 8 clean votes post API fix |
-| player_form | 72.4% | 0.22 | ✅ reliable |
-| win_pct | 72.0% | 0.27 | ✅ reliable |
-| home_away | 67.4% | 0.12 | ✅ acceptable |
-| rest_days | 33.3% | 0.00 | ❌ excluded (broken data source) |
+| recent_form | 80.8% | 0.22 | reliable |
+| streak | 77.5% | 0.05 | reliable |
+| injuries | 75.0% | 0.12 | only 8 clean votes — accumulating (target: 15+ by 2026-03-25) |
+| player_form | 72.4% | 0.22 | reliable |
+| win_pct | 72.0% | 0.27 | reliable |
+| home_away | 67.3% | 0.12 | weakest — under watch, reduce if drops below 65% |
+| rest_days | 33.3% | 0.00 | excluded (broken data source, used only for edge scoring) |
 
 ---
 
