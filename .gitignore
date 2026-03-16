@@ -7,6 +7,8 @@ data/recent_form.json
 data/player_form.json
 data/standings_current.json
 data/injuries_current.json
+data/team_stats_*.json
+data/team_stats.json
 reports/
 history/*.json.tmp
 performance/
