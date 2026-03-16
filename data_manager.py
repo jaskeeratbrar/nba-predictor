@@ -221,6 +221,67 @@ def fetch_recent_games_espn(team_abbr, count=10):
 
 
 # ---------------------------------------------------------------------------
+# Team efficiency stats (ESPN season aggregates)
+# ---------------------------------------------------------------------------
+
+def fetch_team_stats_espn(team_abbr):
+    """
+    Fetch team season stats from ESPN team statistics endpoint.
+    Caches per team per day. Returns dict with ppg, opp_ppg, scoring_margin,
+    fg_pct, fg3_pct, reb_pg, ast_pg — or {} on failure.
+    """
+    today = datetime.now().strftime("%Y-%m-%d")
+    cache_file = f"team_stats_{team_abbr}_{today}.json"
+    cached = load_data(cache_file)
+    if cached:
+        return cached
+
+    slug = _ESPN_URL_SLUG.get(team_abbr.upper(), team_abbr.lower())
+    url = (f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba"
+           f"/teams/{slug}/statistics")
+    data = _get(url)
+    if not data:
+        return {}
+
+    # ESPN returns stats in nested categories — try two known response shapes
+    categories = None
+    if "results" in data:
+        categories = data["results"].get("stats", {}).get("categories", [])
+    if not categories and "splits" in data:
+        categories = data["splits"].get("categories", [])
+    if not categories:
+        return {}
+
+    # Flatten all stats into name→value dict
+    flat = {}
+    for cat in categories:
+        for s in cat.get("stats", []):
+            name = s.get("name", "")
+            if not name:
+                continue
+            val = s.get("value")
+            if val is None:
+                try:
+                    val = float(str(s.get("displayValue", "")).replace("%", ""))
+                except (ValueError, AttributeError):
+                    continue
+            flat[name] = val
+
+    result = {
+        "ppg":    flat.get("avgPoints"),
+        "fg_pct": flat.get("fieldGoalPct"),
+        "fg3_pct": flat.get("threePointPct") or flat.get("threePointFieldGoalPct"),
+        "ft_pct": flat.get("freeThrowPct"),
+        "reb_pg": flat.get("avgRebounds"),
+        "ast_pg": flat.get("avgAssists"),
+    }
+    result = {k: v for k, v in result.items() if v is not None}
+    if result:
+        save_data(cache_file, result)
+    return result
+
+
+# ---------------------------------------------------------------------------
 # Player form fetchers
 # ---------------------------------------------------------------------------
 
@@ -569,6 +630,24 @@ def refresh_all_data(target_date):
     else:
         player_form = load_data("player_form.json") or {}
 
+    # Fetch team efficiency stats for teams playing today
+    team_stats = {}
+    if schedule:
+        print(f"  Fetching team efficiency stats ({len(teams_playing)} teams)...")
+        fetched = 0
+        for abbr in teams_playing:
+            stats = fetch_team_stats_espn(abbr)
+            if stats:
+                team_stats[abbr] = stats
+                fetched += 1
+        if team_stats:
+            save_data("team_stats.json", team_stats)
+            print(f"    Got efficiency stats for {fetched} teams")
+        else:
+            print("    No efficiency stats available")
+    else:
+        team_stats = load_data("team_stats.json") or {}
+
     # Persist to SQLite (non-critical — errors never crash predictions)
     try:
         import db as _db
@@ -582,15 +661,18 @@ def refresh_all_data(target_date):
             _db.upsert_team_recent_form(_conn, _abbr, _games)
         for _abbr, _form in player_form.items():
             _db.upsert_player_form_snapshot(_conn, target_date, _abbr, _form)
+        for _abbr, _stats in team_stats.items():
+            _db.upsert_team_efficiency_snapshot(_conn, target_date, _abbr, _stats)
         _conn.commit()
         _conn.close()
     except Exception as _db_err:
         print(f"  [DB] Data write skipped: {_db_err}")
 
     return {
-        "schedule": schedule or [],
-        "standings": standings or {},
-        "injuries": injuries or {},
+        "schedule":   schedule or [],
+        "standings":  standings or {},
+        "injuries":   injuries or {},
         "recent_form": recent_form,
         "player_form": player_form,
+        "team_stats":  team_stats,
     }

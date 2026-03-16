@@ -595,7 +595,7 @@ def generate_risk_explanation(pred, classify_result):
     return "Too close to call. No play."
 
 
-def predict_game(game, standings, injuries, recent_form, player_form=None):
+def predict_game(game, standings, injuries, recent_form, player_form=None, team_stats=None):
     """
     Generate a prediction for a single game.
 
@@ -606,9 +606,12 @@ def predict_game(game, standings, injuries, recent_form, player_form=None):
         - confidence
         - recommendation ('PICK', 'LEAN', 'SKIP')
         - factors (detailed breakdown)
+        - efficiency_edge (informational scoring-margin delta, not in confidence yet)
     """
     if player_form is None:
         player_form = {}
+    if team_stats is None:
+        team_stats = {}
 
     home_abbr = game["home"]["abbr"]
     away_abbr = game["away"]["abbr"]
@@ -828,16 +831,37 @@ def predict_game(game, standings, injuries, recent_form, player_form=None):
     result.update(classification)
     result["play_explanation"] = generate_risk_explanation(result, classification)
 
+    # Informational: efficiency edge from average scoring margin over recent games.
+    # Positive = home team outscoring opponents by more. Not used in confidence yet.
+    def _avg_margin(recent_games):
+        margins = [
+            g.get("team_score", 0) - g.get("opp_score", 0)
+            for g in recent_games
+            if g.get("team_score") is not None and g.get("opp_score") is not None
+        ]
+        return sum(margins) / len(margins) if margins else None
+
+    h_margin = _avg_margin(home_recent)
+    a_margin = _avg_margin(away_recent)
+    if h_margin is not None and a_margin is not None:
+        raw_edge = h_margin - a_margin
+        # Normalize: clamp to ±15 pts → scale to [-1, 1]
+        result["efficiency_edge"] = round(max(min(raw_edge / 15.0, 1.0), -1.0), 4)
+    else:
+        result["efficiency_edge"] = None
+
     return result
 
 
-def predict_all_games(schedule, standings, injuries, recent_form, player_form=None):
+def predict_all_games(schedule, standings, injuries, recent_form, player_form=None, team_stats=None):
     """Generate predictions for all games in the schedule."""
     if player_form is None:
         player_form = {}
+    if team_stats is None:
+        team_stats = {}
     predictions = []
     for game in schedule:
-        pred = predict_game(game, standings, injuries, recent_form, player_form)
+        pred = predict_game(game, standings, injuries, recent_form, player_form, team_stats)
         predictions.append(pred)
 
     # Sort by confidence (highest first)

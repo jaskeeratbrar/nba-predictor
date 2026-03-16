@@ -13,6 +13,9 @@ Endpoints:
     GET /run?date=2026-03-08       # run for a specific date
     GET /analyze?date=2026-03-07   # post-game analysis for a past date
     GET /status                    # quick health check
+    GET /stats                     # season accuracy + factor breakdown (DB)
+    GET /history?team=LAL          # last N predictions for a team (DB)
+    GET /misses?conf=0.70          # high-confidence wrong predictions (DB)
 """
 
 import json
@@ -46,6 +49,7 @@ def _run_predictions(date_str):
         data["injuries"],
         data["recent_form"],
         data.get("player_form", {}),
+        data.get("team_stats", {}),
     )
 
     history_entry = {
@@ -95,14 +99,17 @@ def _run_predictions(date_str):
     skips   = [p for p in predictions if p["recommendation"] == "SKIP"]
 
     def _fmt(p):
-        pf = p.get("player_form_leader", "")
-        return {
-            "matchup":     f"{p['away_abbr']} @ {p['home_abbr']}",
-            "pick":        p["predicted_winner_name"],
-            "confidence":  f"{p['confidence']*100:.1f}%",
-            "away_record": p["away_record"],
-            "home_record": p["home_record"],
+        d = {
+            "matchup":        f"{p['away_abbr']} @ {p['home_abbr']}",
+            "pick":           p["predicted_winner_name"],
+            "confidence":     f"{p['confidence']*100:.1f}%",
+            "play_type":      p.get("play_type", ""),
+            "away_record":    p["away_record"],
+            "home_record":    p["home_record"],
         }
+        if p.get("efficiency_edge") is not None:
+            d["efficiency_edge"] = p["efficiency_edge"]
+        return d
 
     return {
         "date":       date_str,
@@ -126,12 +133,14 @@ def _format_text(result):
     if result["strong_picks"]:
         lines.append(f"\nSTRONG PICKS ({len(result['strong_picks'])}):")
         for p in result["strong_picks"]:
-            lines.append(f"  ✓ {p['pick']} ({p['confidence']})  {p['matchup']}")
+            pt = f"  [{p['play_type']}]" if p.get("play_type") else ""
+            lines.append(f"  ✓ {p['pick']} ({p['confidence']}){pt}  {p['matchup']}")
 
     if result["leans"]:
         lines.append(f"\nLEANS ({len(result['leans'])}):")
         for p in result["leans"]:
-            lines.append(f"  → {p['pick']} ({p['confidence']})  {p['matchup']}")
+            pt = f"  [{p['play_type']}]" if p.get("play_type") else ""
+            lines.append(f"  → {p['pick']} ({p['confidence']}){pt}  {p['matchup']}")
 
     if result["skips"]:
         lines.append(f"\nSKIP ({len(result['skips'])}) — too close:")
@@ -213,6 +222,67 @@ class Handler(BaseHTTPRequestHandler):
                 result = _run_analysis(date_str)
                 self._respond(result)
 
+            elif path == "/stats":
+                import db as _db
+                _conn = _db.get_connection()
+                summary   = _db.get_model_accuracy_summary(_conn)
+                by_tier   = _db.get_accuracy_by_confidence_tier(_conn)
+                by_factor = _db.get_cumulative_factor_accuracy(_conn)
+                _conn.close()
+
+                factor_out = {}
+                for col in ("win_pct", "recent_form", "player_form",
+                            "home_away", "injuries", "rest_days", "streak"):
+                    acc   = by_factor.get(col)
+                    votes = by_factor.get(f"{col}_votes")
+                    if acc is not None:
+                        factor_out[col] = {
+                            "accuracy": f"{acc*100:.1f}%",
+                            "votes":    int(votes) if votes else 0,
+                        }
+
+                total   = summary.get("total", 0) or 0
+                correct = summary.get("correct", 0) or 0
+                acc     = summary.get("accuracy")
+                self._respond({
+                    "season": {
+                        "total":    total,
+                        "correct":  correct,
+                        "accuracy": f"{acc*100:.1f}%" if acc is not None else "n/a",
+                    },
+                    "by_recommendation": [
+                        {
+                            "recommendation": r["recommendation"],
+                            "total":          r["total"],
+                            "correct":        r["correct"],
+                            "accuracy":       f"{r['accuracy']*100:.1f}%" if r.get("accuracy") else "n/a",
+                            "avg_confidence": f"{r['avg_confidence']*100:.1f}%" if r.get("avg_confidence") else "n/a",
+                        }
+                        for r in by_tier
+                    ],
+                    "factor_accuracy": factor_out,
+                })
+
+            elif path == "/history":
+                team = params.get("team", [None])[0]
+                if not team:
+                    self._respond({"error": "team param required, e.g. /history?team=LAL"}, 400)
+                    return
+                limit = int(params.get("limit", [20])[0])
+                import db as _db
+                _conn = _db.get_connection()
+                rows = _db.get_team_prediction_history(_conn, team.upper(), limit)
+                _conn.close()
+                self._respond({"team": team.upper(), "limit": limit, "games": rows})
+
+            elif path == "/misses":
+                min_conf = float(params.get("conf", [0.70])[0])
+                import db as _db
+                _conn = _db.get_connection()
+                rows = _db.get_high_confidence_misses(_conn, min_conf)
+                _conn.close()
+                self._respond({"min_confidence": min_conf, "misses": rows})
+
             else:
                 self._respond({
                     "endpoints": {
@@ -221,6 +291,9 @@ class Handler(BaseHTTPRequestHandler):
                         "GET /run?date=YYYY-MM-DD":      "specific date predictions",
                         "GET /run?fmt=text":             "plain text output (for notifications)",
                         "GET /analyze?date=YYYY-MM-DD":  "post-game analysis",
+                        "GET /stats":                    "season accuracy + factor breakdown",
+                        "GET /history?team=LAL":         "last N predictions for a team",
+                        "GET /misses?conf=0.70":         "high-confidence wrong predictions",
                     }
                 }, 404)
 
@@ -231,14 +304,25 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    # Apply learned weights at startup if enough games analyzed
+    # Apply learned weights at startup if enough games analyzed.
+    # Mirror the exclusion fix from run_predictions.py: zero out config-excluded
+    # factors before calling set_weights() so rest_days=0.0 is never overridden.
     try:
         from analyzer import load_factor_ledger
         from prediction_engine import set_weights
+        from config import WEIGHTS as _CONFIG_WEIGHTS
         _ledger = load_factor_ledger()
         if _ledger.get("total_games_analyzed", 0) >= 50:
             _suggestions = _ledger.get("weight_suggestions", {})
             if _suggestions:
+                _excluded = {f for f, w in _CONFIG_WEIGHTS.items() if w == 0.0}
+                if _excluded:
+                    _suggestions = dict(_suggestions)
+                    for _f in _excluded:
+                        _suggestions[_f] = 0.0
+                    _total = sum(_suggestions.values())
+                    if _total > 0:
+                        _suggestions = {f: round(v / _total, 4) for f, v in _suggestions.items()}
                 set_weights(_suggestions)
                 print(f"  Learned weights active ({_ledger['total_games_analyzed']} analyzed games)")
     except Exception:
@@ -255,6 +339,9 @@ if __name__ == "__main__":
     print(f"  GET http://localhost:{PORT}/run?fmt=text")
     print(f"  GET http://localhost:{PORT}/analyze?date=2026-03-07")
     print(f"  GET http://localhost:{PORT}/status")
+    print(f"  GET http://localhost:{PORT}/stats")
+    print(f"  GET http://localhost:{PORT}/history?team=LAL")
+    print(f"  GET http://localhost:{PORT}/misses?conf=0.70")
     print()
     try:
         server.serve_forever()

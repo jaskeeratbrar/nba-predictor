@@ -229,8 +229,26 @@ def init_schema():
         );
 
         -- ----------------------------------------------------------------
+        -- team_efficiency_snapshots: daily ESPN team stat snapshots
+        -- ----------------------------------------------------------------
+        CREATE TABLE IF NOT EXISTS team_efficiency_snapshots (
+            id              INTEGER PRIMARY KEY,
+            snapshot_date   TEXT NOT NULL,
+            team_abbr       TEXT NOT NULL,
+            ppg             REAL,
+            fg_pct          REAL,
+            fg3_pct         REAL,
+            ft_pct          REAL,
+            reb_pg          REAL,
+            ast_pg          REAL,
+            fetched_at      TEXT NOT NULL DEFAULT (datetime('now')),
+            UNIQUE(snapshot_date, team_abbr)
+        );
+
+        -- ----------------------------------------------------------------
         -- Indices
         -- ----------------------------------------------------------------
+        CREATE INDEX IF NOT EXISTS idx_tes_team_date        ON team_efficiency_snapshots(team_abbr, snapshot_date);
         CREATE INDEX IF NOT EXISTS idx_wh_date             ON weights_history(effective_date);
         CREATE INDEX IF NOT EXISTS idx_games_date          ON games(game_date);
         CREATE INDEX IF NOT EXISTS idx_games_home          ON games(home_team_abbr);
@@ -251,6 +269,15 @@ def init_schema():
         CREATE INDEX IF NOT EXISTS idx_pfs_team_date       ON player_form_snapshots(team_abbr, snapshot_date);
         CREATE INDEX IF NOT EXISTS idx_trf_team_date       ON team_recent_form(team_abbr, game_date_utc);
     """)
+    conn.commit()
+
+    # Migrate predictions table: add columns added after initial schema creation.
+    # SQLite doesn't support IF NOT EXISTS for ALTER TABLE, so we try/except each.
+    for _col, _coltype in [("play_type", "TEXT"), ("risk_score", "REAL"), ("edge_score", "REAL")]:
+        try:
+            conn.execute(f"ALTER TABLE predictions ADD COLUMN {_col} {_coltype}")
+        except Exception:
+            pass  # column already exists
     conn.commit()
     conn.close()
 
@@ -353,8 +380,9 @@ def upsert_predictions(conn, date_str: str, predictions: list):
                 factor_home_away_home,   factor_home_away_away,
                 factor_injuries_home,    factor_injuries_away,
                 factor_rest_days_home,   factor_rest_days_away,
-                factor_streak_home,      factor_streak_away
-            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                factor_streak_home,      factor_streak_away,
+                play_type, risk_score, edge_score
+            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         """, (
             game_id, predicted_at,
             pred.get("home_win_prob"), pred.get("away_win_prob"),
@@ -369,6 +397,7 @@ def upsert_predictions(conn, date_str: str, predictions: list):
             fv("injuries","home"),    fv("injuries","away"),
             fv("rest_days","home"),   fv("rest_days","away"),
             fv("streak","home"),      fv("streak","away"),
+            pred.get("play_type"), pred.get("risk_score"), pred.get("edge_score"),
         ))
 
 
@@ -725,6 +754,19 @@ def save_weights_snapshot(conn, date_str: str, weights: dict,
         weights.get("win_pct"), weights.get("recent_form"), weights.get("player_form"),
         weights.get("home_away"), weights.get("injuries"), weights.get("rest_days"),
         weights.get("streak"), total_games,
+    ))
+
+
+def upsert_team_efficiency_snapshot(conn, date_str: str, team_abbr: str, stats: dict):
+    """Store daily team efficiency snapshot from ESPN."""
+    conn.execute("""
+        INSERT OR REPLACE INTO team_efficiency_snapshots
+            (snapshot_date, team_abbr, ppg, fg_pct, fg3_pct, ft_pct, reb_pg, ast_pg)
+        VALUES (?,?,?,?,?,?,?,?)
+    """, (
+        date_str, team_abbr,
+        stats.get("ppg"), stats.get("fg_pct"), stats.get("fg3_pct"),
+        stats.get("ft_pct"), stats.get("reb_pg"), stats.get("ast_pg"),
     ))
 
 
