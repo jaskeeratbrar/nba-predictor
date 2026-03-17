@@ -1,6 +1,6 @@
 {
   "date": "2026-03-17",
-  "generated_at": "2026-03-17T17:39:51.890733",
+  "generated_at": "2026-03-17T18:00:09.606522",
   "num_games": 8,
   "predictions": [
     {
@@ -10,11 +10,11 @@
       "away_abbr": "IND",
       "home_record": "44-25",
       "away_record": "15-53",
-      "home_win_prob": 0.8414,
-      "away_win_prob": 0.1586,
+      "home_win_prob": 0.8314,
+      "away_win_prob": 0.1686,
       "predicted_winner": "NYK",
       "predicted_winner_name": "New York Knicks",
-      "confidence": 0.8414,
+      "confidence": 0.8104,
       "recommendation": "STRONG PICK",
       "venue": "Madison Square Garden",
       "game_time": "2026-03-17T23:30Z",
@@ -32,8 +32,8 @@
           "away": 0.0554
         },
         "injuries": {
-          "home": 0.5809,
-          "away": 0.4191
+          "home": 0.5507,
+          "away": 0.4493
         },
         "streak": {
           "home": 0.7143,
@@ -44,23 +44,16 @@
           "away": 0.5882
         },
         "player_form": {
-          "home": 0.7797,
-          "away": 0.2203
+          "home": 0.7551,
+          "away": 0.2449
         }
       },
-      "home_injuries": 3,
+      "home_injuries": 2,
       "away_injuries": 11,
       "home_injury_detail": [
         {
-          "name": "Mitchell Robinson",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 19.0,
-          "pts_avg": 5.6
-        },
-        {
           "name": "Jalen Brunson",
-          "status": "Day-To-Day",
+          "status": "Out",
           "impact": "star",
           "mins_avg": 35.9,
           "pts_avg": 24.1
@@ -152,17 +145,17 @@
           "pts_avg": 0
         }
       ],
-      "_h_load": 1.6,
+      "_h_load": 3.196816,
       "_a_load": 4.2,
       "play_type": "LOCK",
-      "risk_score": 0.4817,
-      "edge_score": 0.6289,
+      "risk_score": 0.502,
+      "edge_score": 0.3894,
       "risk_components": {
-        "factor_disagreement": 0.8029,
+        "factor_disagreement": 0.8366,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
-        "health_edge": 0.8667,
+        "health_edge": 0.3344,
         "momentum_edge": 0.6826,
         "rest_edge": 0.0
       },
