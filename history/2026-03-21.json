@@ -1,6 +1,6 @@
 {
   "date": "2026-03-21",
-  "generated_at": "2026-03-21T15:09:51.552817",
+  "generated_at": "2026-03-21T18:00:09.473623",
   "num_games": 10,
   "predictions": [
     {
@@ -366,7 +366,7 @@
           "away": 0.698
         }
       },
-      "home_injuries": 8,
+      "home_injuries": 7,
       "away_injuries": 4,
       "home_injury_detail": [
         {
@@ -382,13 +382,6 @@
           "impact": "starter",
           "mins_avg": 20.6,
           "pts_avg": 15.2
-        },
-        {
-          "name": "Will Riley",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 33.4,
-          "pts_avg": 15.0
         },
         {
           "name": "Leaky Black",
@@ -523,6 +516,20 @@
       "home_injury_detail": [],
       "away_injury_detail": [
         {
+          "name": "Stephen Curry",
+          "status": "Out",
+          "impact": "bench",
+          "mins_avg": 0,
+          "pts_avg": 0
+        },
+        {
+          "name": "Moses Moody",
+          "status": "Out",
+          "impact": "starter",
+          "mins_avg": 25.0,
+          "pts_avg": 10.0
+        },
+        {
           "name": "Malevy Leons",
           "status": "Day-To-Day",
           "impact": "bench",
@@ -565,20 +572,6 @@
           "pts_avg": 15.3
         },
         {
-          "name": "Moses Moody",
-          "status": "Out",
-          "impact": "starter",
-          "mins_avg": 25.0,
-          "pts_avg": 10.0
-        },
-        {
-          "name": "Stephen Curry",
-          "status": "Out",
-          "impact": "bench",
-          "mins_avg": 0,
-          "pts_avg": 0
-        },
-        {
           "name": "Seth Curry",
           "status": "Out",
           "impact": "role",
@@ -618,148 +611,17 @@
       "efficiency_edge": 1.0
     },
     {
-      "home_team": "Phoenix Suns",
-      "home_abbr": "PHX",
-      "away_team": "Milwaukee Bucks",
-      "away_abbr": "MIL",
-      "home_record": "39-31",
-      "away_record": "28-41",
-      "home_win_prob": 0.6523,
-      "away_win_prob": 0.3477,
-      "predicted_winner": "PHX",
-      "predicted_winner_name": "Phoenix Suns",
-      "confidence": 0.6523,
-      "recommendation": "LEAN",
-      "venue": "Mortgage Matchup Center",
-      "game_time": "2026-03-22T02:00Z",
-      "factors": {
-        "win_pct": {
-          "home": 0.7116,
-          "away": 0.2884
-        },
-        "recent_form": {
-          "home": 0.6507,
-          "away": 0.3493
-        },
-        "home_away": {
-          "home": 0.7965,
-          "away": 0.2035
-        },
-        "injuries": {
-          "home": 0.4365,
-          "away": 0.5635
-        },
-        "streak": {
-          "home": 0.4474,
-          "away": 0.5526
-        },
-        "rest_days": {
-          "home": 0.5,
-          "away": 0.5
-        },
-        "player_form": {
-          "home": 0.7071,
-          "away": 0.2929
-        }
-      },
-      "home_injuries": 6,
-      "away_injuries": 3,
-      "home_injury_detail": [
-        {
-          "name": "Amir Coffey",
-          "status": "Out",
-          "impact": "bench",
-          "mins_avg": 10.0,
-          "pts_avg": 3.0
-        },
-        {
-          "name": "Haywood Highsmith",
-          "status": "Out",
-          "impact": "role",
-          "mins_avg": 16.2,
-          "pts_avg": 6.6
-        },
-        {
-          "name": "Royce O'Neale",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 27.3,
-          "pts_avg": 8.9
-        },
-        {
-          "name": "Grayson Allen",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 27.3,
-          "pts_avg": 15.2
-        },
-        {
-          "name": "Dillon Brooks",
-          "status": "Out",
-          "impact": "bench",
-          "mins_avg": 0,
-          "pts_avg": 0
-        },
-        {
-          "name": "Mark Williams",
-          "status": "Out",
-          "impact": "role",
-          "mins_avg": 22.0,
-          "pts_avg": 10.0
-        }
-      ],
-      "away_injury_detail": [
-        {
-          "name": "Gary Harris",
-          "status": "Day-To-Day",
-          "impact": "bench",
-          "mins_avg": 12.0,
-          "pts_avg": 4.5
-        },
-        {
-          "name": "Kevin Porter Jr.",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 30.5,
-          "pts_avg": 14.2
-        },
-        {
-          "name": "Giannis Antetokounmpo",
-          "status": "Out",
-          "impact": "starter",
-          "mins_avg": 27.0,
-          "pts_avg": 25.7
-        }
-      ],
-      "_h_load": 3.541,
-      "_a_load": 1.333568,
-      "play_type": "LOCK",
-      "risk_score": 0.2139,
-      "edge_score": 0.0392,
-      "risk_components": {
-        "factor_disagreement": 0.3565,
-        "injury_uncertainty": 0.0
-      },
-      "edge_components": {
-        "health_edge": 0.0,
-        "momentum_edge": 0.1119,
-        "rest_edge": 0.0
-      },
-      "play_explanation": "Strong consensus \u2014 4 of 7 factors agree. Clean pick.",
-      "efficiency_edge": 1.0
-    },
-    {
       "home_team": "Dallas Mavericks",
       "home_abbr": "DAL",
       "away_team": "LA Clippers",
       "away_abbr": "LAC",
       "home_record": "23-47",
       "away_record": "34-36",
-      "home_win_prob": 0.3795,
-      "away_win_prob": 0.6205,
+      "home_win_prob": 0.3801,
+      "away_win_prob": 0.6199,
       "predicted_winner": "LAC",
       "predicted_winner_name": "LA Clippers",
-      "confidence": 0.5833,
+      "confidence": 0.5827,
       "recommendation": "SLIGHT LEAN",
       "venue": "American Airlines Center",
       "game_time": "2026-03-22T00:30Z",
@@ -777,8 +639,8 @@
           "away": 0.4571
         },
         "injuries": {
-          "home": 0.4979,
-          "away": 0.5021
+          "home": 0.5017,
+          "away": 0.4983
         },
         "streak": {
           "home": 0.5526,
@@ -793,16 +655,9 @@
           "away": 0.6747
         }
       },
-      "home_injuries": 5,
+      "home_injuries": 4,
       "away_injuries": 4,
       "home_injury_detail": [
-        {
-          "name": "Moussa Cisse",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 26.0,
-          "pts_avg": 6.0
-        },
         {
           "name": "Caleb Martin",
           "status": "Day-To-Day",
@@ -865,10 +720,10 @@
       "_h_load": 4.4,
       "_a_load": 4.076727999999999,
       "play_type": "VALUE PLAY",
-      "risk_score": 0.1689,
+      "risk_score": 0.1696,
       "edge_score": 0.0821,
       "risk_components": {
-        "factor_disagreement": 0.2815,
+        "factor_disagreement": 0.2826,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
@@ -886,11 +741,11 @@
       "away_abbr": "LAL",
       "home_record": "38-31",
       "away_record": "45-25",
-      "home_win_prob": 0.4256,
-      "away_win_prob": 0.5744,
+      "home_win_prob": 0.4262,
+      "away_win_prob": 0.5738,
       "predicted_winner": "LAL",
       "predicted_winner_name": "Los Angeles Lakers",
-      "confidence": 0.5744,
+      "confidence": 0.5738,
       "recommendation": "SLIGHT LEAN",
       "venue": "Kia Center",
       "game_time": "2026-03-21T23:00Z",
@@ -908,8 +763,8 @@
           "away": 0.4531
         },
         "injuries": {
-          "home": 0.4303,
-          "away": 0.5697
+          "home": 0.4349,
+          "away": 0.5651
         },
         "streak": {
           "home": 0.322,
@@ -924,7 +779,7 @@
           "away": 0.5784
         }
       },
-      "home_injuries": 4,
+      "home_injuries": 3,
       "away_injuries": 2,
       "home_injury_detail": [
         {
@@ -947,38 +802,31 @@
           "impact": "role",
           "mins_avg": 24.0,
           "pts_avg": 8.0
-        },
-        {
-          "name": "Wendell Carter Jr.",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 29.0,
-          "pts_avg": 13.4
         }
       ],
       "away_injury_detail": [
+        {
+          "name": "Kobe Bufkin",
+          "status": "Day-To-Day",
+          "impact": "bench",
+          "mins_avg": 0,
+          "pts_avg": 0
+        },
         {
           "name": "Maxi Kleber",
           "status": "Out",
           "impact": "bench",
           "mins_avg": 10.0,
           "pts_avg": 0.0
-        },
-        {
-          "name": "Austin Reaves",
-          "status": "Day-To-Day",
-          "impact": "star",
-          "mins_avg": 38.5,
-          "pts_avg": 21.5
         }
       ],
       "_h_load": 3.0,
       "_a_load": 0.5,
       "play_type": "VALUE PLAY",
-      "risk_score": 0.0853,
+      "risk_score": 0.0851,
       "edge_score": 0.4432,
       "risk_components": {
-        "factor_disagreement": 0.1421,
+        "factor_disagreement": 0.1418,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
@@ -988,6 +836,137 @@
       },
       "play_explanation": "Factors mostly aligned (5 of 7 agree). Reliable at this confidence level.",
       "efficiency_edge": -0.1
+    },
+    {
+      "home_team": "Phoenix Suns",
+      "home_abbr": "PHX",
+      "away_team": "Milwaukee Bucks",
+      "away_abbr": "MIL",
+      "home_record": "39-31",
+      "away_record": "28-41",
+      "home_win_prob": 0.6379,
+      "away_win_prob": 0.3621,
+      "predicted_winner": "PHX",
+      "predicted_winner_name": "Phoenix Suns",
+      "confidence": 0.57,
+      "recommendation": "SLIGHT LEAN",
+      "venue": "Mortgage Matchup Center",
+      "game_time": "2026-03-22T02:00Z",
+      "factors": {
+        "win_pct": {
+          "home": 0.7116,
+          "away": 0.2884
+        },
+        "recent_form": {
+          "home": 0.6507,
+          "away": 0.3493
+        },
+        "home_away": {
+          "home": 0.7965,
+          "away": 0.2035
+        },
+        "injuries": {
+          "home": 0.4063,
+          "away": 0.5937
+        },
+        "streak": {
+          "home": 0.4474,
+          "away": 0.5526
+        },
+        "rest_days": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "player_form": {
+          "home": 0.7127,
+          "away": 0.2873
+        }
+      },
+      "home_injuries": 6,
+      "away_injuries": 3,
+      "home_injury_detail": [
+        {
+          "name": "Royce O'Neale",
+          "status": "Out",
+          "impact": "starter",
+          "mins_avg": 27.3,
+          "pts_avg": 8.9
+        },
+        {
+          "name": "Grayson Allen",
+          "status": "Out",
+          "impact": "starter",
+          "mins_avg": 27.3,
+          "pts_avg": 15.2
+        },
+        {
+          "name": "Amir Coffey",
+          "status": "Out",
+          "impact": "bench",
+          "mins_avg": 10.0,
+          "pts_avg": 3.0
+        },
+        {
+          "name": "Haywood Highsmith",
+          "status": "Out",
+          "impact": "role",
+          "mins_avg": 16.2,
+          "pts_avg": 6.6
+        },
+        {
+          "name": "Dillon Brooks",
+          "status": "Out",
+          "impact": "bench",
+          "mins_avg": 0,
+          "pts_avg": 0
+        },
+        {
+          "name": "Mark Williams",
+          "status": "Out",
+          "impact": "role",
+          "mins_avg": 22.0,
+          "pts_avg": 10.0
+        }
+      ],
+      "away_injury_detail": [
+        {
+          "name": "Gary Harris",
+          "status": "Day-To-Day",
+          "impact": "bench",
+          "mins_avg": 12.0,
+          "pts_avg": 4.5
+        },
+        {
+          "name": "Kevin Porter Jr.",
+          "status": "Day-To-Day",
+          "impact": "starter",
+          "mins_avg": 30.5,
+          "pts_avg": 14.2
+        },
+        {
+          "name": "Giannis Antetokounmpo",
+          "status": "Out",
+          "impact": "starter",
+          "mins_avg": 27.0,
+          "pts_avg": 25.7
+        }
+      ],
+      "_h_load": 5.70216,
+      "_a_load": 1.333568,
+      "play_type": "VALUE PLAY",
+      "risk_score": 0.235,
+      "edge_score": 0.0392,
+      "risk_components": {
+        "factor_disagreement": 0.3916,
+        "injury_uncertainty": 0.0
+      },
+      "edge_components": {
+        "health_edge": 0.0,
+        "momentum_edge": 0.1119,
+        "rest_edge": 0.0
+      },
+      "play_explanation": "Factors mostly aligned (4 of 7 agree). Reliable at this confidence level.",
+      "efficiency_edge": 1.0
     },
     {
       "home_team": "New Orleans Pelicans",
