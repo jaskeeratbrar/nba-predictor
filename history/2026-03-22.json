@@ -1,6 +1,6 @@
 {
   "date": "2026-03-22",
-  "generated_at": "2026-03-22T14:11:55.130623",
+  "generated_at": "2026-03-22T18:00:07.034946",
   "num_games": 5,
   "predictions": [
     {
@@ -10,11 +10,11 @@
       "away_abbr": "WAS",
       "home_record": "46-25",
       "away_record": "16-54",
-      "home_win_prob": 0.7426,
-      "away_win_prob": 0.2574,
+      "home_win_prob": 0.7418,
+      "away_win_prob": 0.2582,
       "predicted_winner": "NYK",
       "predicted_winner_name": "New York Knicks",
-      "confidence": 0.7426,
+      "confidence": 0.7418,
       "recommendation": "STRONG PICK",
       "venue": "Madison Square Garden",
       "game_time": "2026-03-22T23:30Z",
@@ -32,8 +32,8 @@
           "away": 0.4485
         },
         "injuries": {
-          "home": 0.5694,
-          "away": 0.4306
+          "home": 0.565,
+          "away": 0.435
         },
         "streak": {
           "home": 0.5,
@@ -56,9 +56,16 @@
           "away": 0.426
         }
       },
-      "home_injuries": 3,
+      "home_injuries": 4,
       "away_injuries": 9,
       "home_injury_detail": [
+        {
+          "name": "Kevin McCullar Jr.",
+          "status": "Day-To-Day",
+          "impact": "bench",
+          "mins_avg": 0,
+          "pts_avg": 0
+        },
         {
           "name": "Landry Shamet",
           "status": "Out",
@@ -149,10 +156,10 @@
       "_h_load": 2.6,
       "_a_load": 8.726132,
       "play_type": "LOCK",
-      "risk_score": 0.4193,
+      "risk_score": 0.421,
       "edge_score": 0.825,
       "risk_components": {
-        "factor_disagreement": 0.6989,
+        "factor_disagreement": 0.7017,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
@@ -274,11 +281,11 @@
       "away_abbr": "BKN",
       "home_record": "18-53",
       "away_record": "17-53",
-      "home_win_prob": 0.6468,
-      "away_win_prob": 0.3532,
+      "home_win_prob": 0.649,
+      "away_win_prob": 0.351,
       "predicted_winner": "SAC",
       "predicted_winner_name": "Sacramento Kings",
-      "confidence": 0.5668,
+      "confidence": 0.569,
       "recommendation": "SLIGHT LEAN",
       "venue": "Golden 1 Center",
       "game_time": "2026-03-22T22:00Z",
@@ -308,8 +315,8 @@
           "away": 0.5
         },
         "player_form": {
-          "home": 0.646,
-          "away": 0.354
+          "home": 0.6623,
+          "away": 0.3377
         },
         "net_rating": {
           "home": 0.8947,
@@ -321,8 +328,15 @@
         }
       },
       "home_injuries": 8,
-      "away_injuries": 6,
+      "away_injuries": 5,
       "home_injury_detail": [
+        {
+          "name": "Daeqwon Plowden",
+          "status": "Out",
+          "impact": "starter",
+          "mins_avg": 28.1,
+          "pts_avg": 10.8
+        },
         {
           "name": "Isaiah Stevens",
           "status": "Out",
@@ -336,13 +350,6 @@
           "impact": "starter",
           "mins_avg": 29.5,
           "pts_avg": 14.5
-        },
-        {
-          "name": "Daeqwon Plowden",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 28.1,
-          "pts_avg": 10.8
         },
         {
           "name": "Drew Eubanks",
@@ -396,13 +403,6 @@
           "pts_avg": 7.2
         },
         {
-          "name": "Terance Mann",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 22.7,
-          "pts_avg": 5.8
-        },
-        {
           "name": "Michael Porter Jr.",
           "status": "Out",
           "impact": "starter",
@@ -424,13 +424,13 @@
           "pts_avg": 12.2
         }
       ],
-      "_h_load": 8.091632,
+      "_h_load": 9.091632,
       "_a_load": 5.7743839999999995,
       "play_type": "VALUE PLAY",
-      "risk_score": 0.2028,
+      "risk_score": 0.2033,
       "edge_score": 0.104,
       "risk_components": {
-        "factor_disagreement": 0.338,
+        "factor_disagreement": 0.3388,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
@@ -448,11 +448,11 @@
       "away_abbr": "TOR",
       "home_record": "39-32",
       "away_record": "39-30",
-      "home_win_prob": 0.4453,
-      "away_win_prob": 0.5547,
+      "home_win_prob": 0.443,
+      "away_win_prob": 0.557,
       "predicted_winner": "TOR",
       "predicted_winner_name": "Toronto Raptors",
-      "confidence": 0.5547,
+      "confidence": 0.557,
       "recommendation": "SLIGHT LEAN",
       "venue": "Mortgage Matchup Center",
       "game_time": "2026-03-23T01:00Z",
@@ -470,8 +470,8 @@
           "away": 0.4383
         },
         "injuries": {
-          "home": 0.46,
-          "away": 0.54
+          "home": 0.4354,
+          "away": 0.5646
         },
         "streak": {
           "home": 0.3947,
@@ -482,8 +482,8 @@
           "away": 0.5
         },
         "player_form": {
-          "home": 0.4069,
-          "away": 0.5931
+          "home": 0.42,
+          "away": 0.58
         },
         "net_rating": {
           "home": 0.4602,
@@ -505,18 +505,18 @@
           "pts_avg": 9.2
         },
         {
-          "name": "Haywood Highsmith",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 16.2,
-          "pts_avg": 6.6
-        },
-        {
           "name": "Amir Coffey",
-          "status": "Day-To-Day",
+          "status": "Out",
           "impact": "bench",
           "mins_avg": 9.6,
           "pts_avg": 3.2
+        },
+        {
+          "name": "Haywood Highsmith",
+          "status": "Out",
+          "impact": "role",
+          "mins_avg": 16.2,
+          "pts_avg": 6.6
         },
         {
           "name": "Grayson Allen",
@@ -563,17 +563,17 @@
           "pts_avg": 0
         }
       ],
-      "_h_load": 3.8948,
+      "_h_load": 5.468444,
       "_a_load": 2.6,
       "play_type": "VALUE PLAY",
-      "risk_score": 0.0434,
-      "edge_score": 0.2534,
+      "risk_score": 0.0424,
+      "edge_score": 0.4894,
       "risk_components": {
-        "factor_disagreement": 0.0723,
+        "factor_disagreement": 0.0706,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
-        "health_edge": 0.4316,
+        "health_edge": 0.9561,
         "momentum_edge": 0.169,
         "rest_edge": 0.0
       },
@@ -587,11 +587,11 @@
       "away_abbr": "POR",
       "home_record": "43-28",
       "away_record": "35-36",
-      "home_win_prob": 0.5259,
-      "away_win_prob": 0.4741,
+      "home_win_prob": 0.5359,
+      "away_win_prob": 0.4641,
       "predicted_winner": "DEN",
       "predicted_winner_name": "Denver Nuggets",
-      "confidence": 0.5259,
+      "confidence": 0.5359,
       "recommendation": "SKIP",
       "venue": "Ball Arena",
       "game_time": "2026-03-22T21:00Z",
@@ -609,8 +609,8 @@
           "away": 0.3222
         },
         "injuries": {
-          "home": 0.5571,
-          "away": 0.4429
+          "home": 0.6151,
+          "away": 0.3849
         },
         "streak": {
           "home": 0.4655,
@@ -621,8 +621,8 @@
           "away": 0.5
         },
         "player_form": {
-          "home": 0.5553,
-          "away": 0.4447
+          "home": 0.5571,
+          "away": 0.4429
         },
         "net_rating": {
           "home": 0.5257,
@@ -633,31 +633,23 @@
           "away": 0.528
         }
       },
-      "home_injuries": 1,
+      "home_injuries": 0,
       "away_injuries": 4,
-      "home_injury_detail": [
-        {
-          "name": "Peyton Watson",
-          "status": "Out",
-          "impact": "bench",
-          "mins_avg": 0,
-          "pts_avg": 0
-        }
-      ],
+      "home_injury_detail": [],
       "away_injury_detail": [
-        {
-          "name": "Jerami Grant",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 32.0,
-          "pts_avg": 17.5
-        },
         {
           "name": "Vit Krejci",
           "status": "Out",
           "impact": "role",
           "mins_avg": 19.0,
           "pts_avg": 5.4
+        },
+        {
+          "name": "Jerami Grant",
+          "status": "Out",
+          "impact": "starter",
+          "mins_avg": 32.0,
+          "pts_avg": 17.5
         },
         {
           "name": "Shaedon Sharpe",
@@ -674,17 +666,17 @@
           "pts_avg": 0
         }
       ],
-      "_h_load": 1.6,
-      "_a_load": 3.9318120000000003,
+      "_h_load": 0.0,
+      "_a_load": 5.079248,
       "play_type": "SKIP",
-      "risk_score": 0.0465,
-      "edge_score": 0.3498,
+      "risk_score": 0.0545,
+      "edge_score": 0.45,
       "risk_components": {
-        "factor_disagreement": 0.0775,
+        "factor_disagreement": 0.0909,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
-        "health_edge": 0.7773,
+        "health_edge": 1.0,
         "momentum_edge": 0.0,
         "rest_edge": 0.0
       },
