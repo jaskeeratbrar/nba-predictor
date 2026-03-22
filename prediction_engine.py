@@ -351,6 +351,97 @@ def compute_rest_factor(home_recent, away_recent):
     return h_score / total, a_score / total
 
 
+def compute_net_rating_factor(home_recent, away_recent):
+    """
+    Average point differential (team_score - opp_score) over last 10 games.
+    Measures sustained dominance independent of win/loss record.
+    A team winning by 12 pts/game is genuinely stronger than one squeaking by at +1,
+    even if both have the same win%.
+
+    Returns (home_edge, away_edge) each in [0, 1].
+    Neutral when both teams' avg margins are within ±2 pts of each other.
+    """
+    def _avg_margin(games):
+        if not games:
+            return None
+        vals = [
+            g.get("team_score", 0) - g.get("opp_score", 0)
+            for g in games
+            if g.get("team_score") is not None and g.get("opp_score") is not None
+        ]
+        return sum(vals) / len(vals) if vals else None
+
+    h_margin = _avg_margin(home_recent)
+    a_margin = _avg_margin(away_recent)
+
+    if h_margin is None and a_margin is None:
+        return 0.5, 0.5
+    if h_margin is None:
+        h_margin = 0.0
+    if a_margin is None:
+        a_margin = 0.0
+
+    # Scale margin to [0, 1]: 0 pts → 0.5 neutral, ±15 pts → ~0.83/0.17
+    NORMALIZE = 15.0
+    h_norm = 0.5 + max(min(h_margin / NORMALIZE, 1.0), -1.0) / 2.0
+    a_norm = 0.5 + max(min(a_margin / NORMALIZE, 1.0), -1.0) / 2.0
+
+    # Power scale to amplify meaningful differences (same as recent_form)
+    POWER = 1.3
+    h_scaled = h_norm ** POWER
+    a_scaled = a_norm ** POWER
+    total = h_scaled + a_scaled
+    if total == 0:
+        return 0.5, 0.5
+    return h_scaled / total, a_scaled / total
+
+
+def compute_defense_factor(home_recent, away_recent):
+    """
+    Average opponent score allowed per game over last 10 games — defensive quality.
+    The only factor that directly measures preventing scoring (all others measure scoring).
+    Lower opponent PPG allowed = stronger defense → higher edge for that team.
+
+    Returns (home_edge, away_edge) each in [0, 1].
+    Falls back to league average (112 pts) when data unavailable.
+    """
+    LEAGUE_AVG_ALLOWED = 112.0  # approximate NBA average opponent PPG
+
+    def _avg_allowed(games):
+        if not games:
+            return None
+        vals = [
+            g.get("opp_score", 0)
+            for g in games
+            if g.get("opp_score") is not None
+        ]
+        return sum(vals) / len(vals) if vals else None
+
+    h_allowed = _avg_allowed(home_recent)
+    a_allowed = _avg_allowed(away_recent)
+
+    if h_allowed is None and a_allowed is None:
+        return 0.5, 0.5
+    if h_allowed is None:
+        h_allowed = LEAGUE_AVG_ALLOWED
+    if a_allowed is None:
+        a_allowed = LEAGUE_AVG_ALLOWED
+
+    # Invert: lower allowed PPG = better defense = higher score
+    # 1/PPG is numerically stable since PPG > 0 always
+    h_score = 1.0 / max(h_allowed, 70.0)
+    a_score = 1.0 / max(a_allowed, 70.0)
+
+    # Power scale to amplify differences between clearly better/worse defenses
+    POWER = 1.5
+    h_scaled = h_score ** POWER
+    a_scaled = a_score ** POWER
+    total = h_scaled + a_scaled
+    if total == 0:
+        return 0.5, 0.5
+    return h_scaled / total, a_scaled / total
+
+
 def compute_player_form_factor(home_player_form, away_player_form):
     """
     Compute team-level form score from individual player performance
@@ -697,6 +788,12 @@ def predict_game(game, standings, injuries, recent_form, player_form=None, team_
         _active_form(away_abbr)
     )
     factors["player_form"] = {"home": h_pf, "away": a_pf}
+
+    h_nr, a_nr = compute_net_rating_factor(home_recent, away_recent)
+    factors["net_rating"] = {"home": h_nr, "away": a_nr}
+
+    h_def, a_def = compute_defense_factor(home_recent, away_recent)
+    factors["defense"] = {"home": h_def, "away": a_def}
 
     # Priority 4 & 5: measure total injury load on each team.
     # weighted_absence uses form_score to differentiate star absence from role player.

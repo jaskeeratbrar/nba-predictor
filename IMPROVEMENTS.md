@@ -98,6 +98,8 @@ divergences (model says 75%, market says 55% = potential edge).
 
 ## Completed
 
+- [x] **net_rating factor** — avg point differential last 10 games (0.05 weight); no new API calls — 2026-03-22
+- [x] **defense factor** — avg opponent PPG allowed last 10 games (0.07 weight); fills the only missing signal class — 2026-03-22
 - [x] **calibrate.py** — Bayesian weight calibrator, runs weekly — 2026-03-22
 - [x] **Injury weight bump** — injuries 0.12→0.15, win_pct 0.27→0.24 (79 votes @ 73.4%) — 2026-03-22
 - [x] **calibrated_weights.json wired into run_predictions.py** — takes priority over ledger suggestions — 2026-03-22

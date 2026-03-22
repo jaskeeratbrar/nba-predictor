@@ -296,11 +296,13 @@ def generate_game_card(pred):
     factor_labels = {
         "win_pct":     "Win %",
         "recent_form": "Recent Form",
+        "player_form": "Player Form",
         "home_away":   "Home/Away",
         "injuries":    "Health",
+        "net_rating":  "Net Rating",
+        "defense":     "Defense",
         "streak":      "Streak",
         "rest_days":   "Rest",
-        "player_form": "Player Form",
     }
     factor_bars = ""
     for key, label in factor_labels.items():

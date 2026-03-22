@@ -41,9 +41,11 @@ _Last updated: 2026-03-22_
 ## Active weights (config.py — updated 2026-03-22)
 
 ```
-win_pct: 0.24  |  recent_form: 0.22  |  player_form: 0.22
-home_away: 0.12 |  injuries: 0.15   |  streak: 0.05
-rest_days: 0.00 (frozen — broken data source)
+win_pct: 0.20  |  recent_form: 0.20  |  player_form: 0.20
+home_away: 0.11 |  injuries: 0.14   |  streak: 0.03
+net_rating: 0.05 (NEW — avg point differential last 10 games)
+defense:    0.07 (NEW — avg opponent PPG allowed last 10 games)
+rest_days:  0.00 (frozen — broken data source)
 ```
 
 Run-time override priority:
@@ -55,12 +57,14 @@ Run-time override priority:
 
 | Factor | Accuracy | Weight | Trend | Action needed |
 |--------|----------|--------|-------|--------------|
-| recent_form | 77.0% | 0.22 | Stable | None |
-| player_form | 76.7% | 0.22 | Stable | None |
-| win_pct | 75.0% | 0.24 | Stable | None |
-| home_away | 75.0% | 0.12 | Rebounded ↑ | None (was 67.3%) |
-| injuries | 73.4% | 0.15 | Stable | Weight bumped ✓ |
-| streak | 73.3% | 0.05 | Stable | None |
+| recent_form | 77.0% | 0.20 | Stable | None |
+| player_form | 76.7% | 0.20 | Stable | None |
+| win_pct | 75.0% | 0.20 | Stable | None |
+| home_away | 75.0% | 0.11 | Rebounded ↑ | None (was 67.3%) |
+| injuries | 73.4% | 0.14 | Stable | None |
+| streak | 73.3% | 0.03 | Stable | None |
+| net_rating | NEW | 0.05 | Accumulating | Check after 20+ votes |
+| defense | NEW | 0.07 | Accumulating | Check after 20+ votes |
 | rest_days | 53.3% | 0.00 | Frozen | Never re-enable without new data source |
 
 ## Known risks
