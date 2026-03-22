@@ -1,6 +1,6 @@
 {
   "date": "2026-03-22",
-  "generated_at": "2026-03-22T02:49:35.945608",
+  "generated_at": "2026-03-22T14:11:55.130623",
   "num_games": 5,
   "predictions": [
     {
@@ -10,11 +10,11 @@
       "away_abbr": "WAS",
       "home_record": "46-25",
       "away_record": "16-54",
-      "home_win_prob": 0.753,
-      "away_win_prob": 0.247,
+      "home_win_prob": 0.7426,
+      "away_win_prob": 0.2574,
       "predicted_winner": "NYK",
       "predicted_winner_name": "New York Knicks",
-      "confidence": 0.753,
+      "confidence": 0.7426,
       "recommendation": "STRONG PICK",
       "venue": "Madison Square Garden",
       "game_time": "2026-03-22T23:30Z",
@@ -44,8 +44,8 @@
           "away": 0.4118
         },
         "player_form": {
-          "home": 0.7348,
-          "away": 0.2652
+          "home": 0.7316,
+          "away": 0.2684
         },
         "net_rating": {
           "home": 0.998,
@@ -57,7 +57,7 @@
         }
       },
       "home_injuries": 3,
-      "away_injuries": 7,
+      "away_injuries": 9,
       "home_injury_detail": [
         {
           "name": "Landry Shamet",
@@ -83,6 +83,20 @@
       ],
       "away_injury_detail": [
         {
+          "name": "Justin Champagnie",
+          "status": "Suspension",
+          "impact": "starter",
+          "mins_avg": 20.3,
+          "pts_avg": 10.7
+        },
+        {
+          "name": "Leaky Black",
+          "status": "Out",
+          "impact": "starter",
+          "mins_avg": 32.2,
+          "pts_avg": 11.5
+        },
+        {
           "name": "Tre Johnson",
           "status": "Out",
           "impact": "role",
@@ -97,11 +111,11 @@
           "pts_avg": 15.2
         },
         {
-          "name": "Leaky Black",
+          "name": "Alex Sarr",
           "status": "Out",
-          "impact": "starter",
-          "mins_avg": 32.2,
-          "pts_avg": 11.5
+          "impact": "role",
+          "mins_avg": 21.0,
+          "pts_avg": 11.8
         },
         {
           "name": "Anthony Davis",
@@ -133,12 +147,12 @@
         }
       ],
       "_h_load": 2.6,
-      "_a_load": 7.726132,
+      "_a_load": 8.726132,
       "play_type": "LOCK",
-      "risk_score": 0.4195,
+      "risk_score": 0.4193,
       "edge_score": 0.825,
       "risk_components": {
-        "factor_disagreement": 0.6992,
+        "factor_disagreement": 0.6989,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
@@ -156,11 +170,11 @@
       "away_abbr": "MIN",
       "home_record": "47-23",
       "away_record": "43-28",
-      "home_win_prob": 0.5882,
-      "away_win_prob": 0.4118,
+      "home_win_prob": 0.5849,
+      "away_win_prob": 0.4151,
       "predicted_winner": "BOS",
       "predicted_winner_name": "Boston Celtics",
-      "confidence": 0.5882,
+      "confidence": 0.5849,
       "recommendation": "SLIGHT LEAN",
       "venue": "TD Garden",
       "game_time": "2026-03-23T00:00Z",
@@ -260,11 +274,11 @@
       "away_abbr": "BKN",
       "home_record": "18-53",
       "away_record": "17-53",
-      "home_win_prob": 0.6515,
-      "away_win_prob": 0.3485,
+      "home_win_prob": 0.6468,
+      "away_win_prob": 0.3532,
       "predicted_winner": "SAC",
       "predicted_winner_name": "Sacramento Kings",
-      "confidence": 0.5715,
+      "confidence": 0.5668,
       "recommendation": "SLIGHT LEAN",
       "venue": "Golden 1 Center",
       "game_time": "2026-03-22T22:00Z",
@@ -306,9 +320,16 @@
           "away": 0.5172
         }
       },
-      "home_injuries": 7,
+      "home_injuries": 8,
       "away_injuries": 6,
       "home_injury_detail": [
+        {
+          "name": "Isaiah Stevens",
+          "status": "Out",
+          "impact": "bench",
+          "mins_avg": 0,
+          "pts_avg": 0
+        },
         {
           "name": "Russell Westbrook",
           "status": "Out",
@@ -403,7 +424,7 @@
           "pts_avg": 12.2
         }
       ],
-      "_h_load": 6.491631999999999,
+      "_h_load": 8.091632,
       "_a_load": 5.7743839999999995,
       "play_type": "VALUE PLAY",
       "risk_score": 0.2028,
@@ -427,11 +448,11 @@
       "away_abbr": "TOR",
       "home_record": "39-32",
       "away_record": "39-30",
-      "home_win_prob": 0.4356,
-      "away_win_prob": 0.5644,
+      "home_win_prob": 0.4453,
+      "away_win_prob": 0.5547,
       "predicted_winner": "TOR",
       "predicted_winner_name": "Toronto Raptors",
-      "confidence": 0.5644,
+      "confidence": 0.5547,
       "recommendation": "SLIGHT LEAN",
       "venue": "Mortgage Matchup Center",
       "game_time": "2026-03-23T01:00Z",
@@ -449,8 +470,8 @@
           "away": 0.4383
         },
         "injuries": {
-          "home": 0.4354,
-          "away": 0.5646
+          "home": 0.46,
+          "away": 0.54
         },
         "streak": {
           "home": 0.3947,
@@ -461,8 +482,8 @@
           "away": 0.5
         },
         "player_form": {
-          "home": 0.4275,
-          "away": 0.5725
+          "home": 0.4069,
+          "away": 0.5931
         },
         "net_rating": {
           "home": 0.4602,
@@ -478,10 +499,24 @@
       "home_injury_detail": [
         {
           "name": "Royce O'Neale",
-          "status": "Out",
+          "status": "Day-To-Day",
           "impact": "starter",
           "mins_avg": 27.1,
           "pts_avg": 9.2
+        },
+        {
+          "name": "Haywood Highsmith",
+          "status": "Day-To-Day",
+          "impact": "role",
+          "mins_avg": 16.2,
+          "pts_avg": 6.6
+        },
+        {
+          "name": "Amir Coffey",
+          "status": "Day-To-Day",
+          "impact": "bench",
+          "mins_avg": 9.6,
+          "pts_avg": 3.2
         },
         {
           "name": "Grayson Allen",
@@ -489,20 +524,6 @@
           "impact": "starter",
           "mins_avg": 27.8,
           "pts_avg": 14.6
-        },
-        {
-          "name": "Amir Coffey",
-          "status": "Out",
-          "impact": "bench",
-          "mins_avg": 9.6,
-          "pts_avg": 3.2
-        },
-        {
-          "name": "Haywood Highsmith",
-          "status": "Out",
-          "impact": "role",
-          "mins_avg": 16.2,
-          "pts_avg": 6.6
         },
         {
           "name": "Dillon Brooks",
@@ -542,17 +563,17 @@
           "pts_avg": 0
         }
       ],
-      "_h_load": 6.468444,
+      "_h_load": 3.8948,
       "_a_load": 2.6,
       "play_type": "VALUE PLAY",
-      "risk_score": 0.0418,
-      "edge_score": 0.5091,
+      "risk_score": 0.0434,
+      "edge_score": 0.2534,
       "risk_components": {
-        "factor_disagreement": 0.0696,
+        "factor_disagreement": 0.0723,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
-        "health_edge": 1.0,
+        "health_edge": 0.4316,
         "momentum_edge": 0.169,
         "rest_edge": 0.0
       },
@@ -566,11 +587,11 @@
       "away_abbr": "POR",
       "home_record": "43-28",
       "away_record": "35-36",
-      "home_win_prob": 0.533,
-      "away_win_prob": 0.467,
+      "home_win_prob": 0.5259,
+      "away_win_prob": 0.4741,
       "predicted_winner": "DEN",
       "predicted_winner_name": "Denver Nuggets",
-      "confidence": 0.533,
+      "confidence": 0.5259,
       "recommendation": "SKIP",
       "venue": "Ball Arena",
       "game_time": "2026-03-22T21:00Z",
