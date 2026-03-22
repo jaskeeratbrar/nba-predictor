@@ -217,24 +217,51 @@ def verify_predictions(date_str):
 
 
 def get_season_accuracy():
-    """Calculate overall season prediction accuracy."""
+    """
+    Calculate overall season prediction accuracy from analysis files.
+    Also computes tier breakdown (STRONG PICK / LEAN / SKIP) for the dashboard.
+    """
     total_correct = 0
     total_predictions = 0
+    tiers = {
+        "STRONG PICK": [0, 0],
+        "LEAN":        [0, 0],
+        "SKIP":        [0, 0],
+    }
 
-    for f in os.listdir(HISTORY_DIR):
-        if f.endswith("_verified.json"):
-            filepath = os.path.join(HISTORY_DIR, f)
+    for f in sorted(os.listdir(HISTORY_DIR)):
+        if not f.endswith("_analysis.json"):
+            continue
+        filepath = os.path.join(HISTORY_DIR, f)
+        try:
             with open(filepath) as fh:
                 data = json.load(fh)
-                total_correct += data.get("correct", 0)
-                total_predictions += data.get("total", 0)
+        except Exception:
+            continue
+        for game in data.get("games", []):
+            total_predictions += 1
+            if game.get("correct"):
+                total_correct += 1
+            rec = game.get("recommendation", "")
+            # Normalize SLIGHT LEAN → LEAN for tier tracking
+            if rec in ("LEAN", "SLIGHT LEAN"):
+                rec = "LEAN"
+            if rec in tiers:
+                tiers[rec][1] += 1
+                if game.get("correct"):
+                    tiers[rec][0] += 1
 
     if total_predictions > 0:
-        return {
-            "correct": total_correct,
+        result = {
+            "correct":           total_correct,
             "total_predictions": total_predictions,
-            "accuracy": (total_correct / total_predictions) * 100,
+            "accuracy":          (total_correct / total_predictions) * 100,
         }
+        for tier, (c, t) in tiers.items():
+            key = tier.lower().replace(" ", "_")
+            result[f"{key}_correct"] = c
+            result[f"{key}_total"]   = t
+        return result
     return None
 
 

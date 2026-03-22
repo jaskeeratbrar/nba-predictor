@@ -7,8 +7,10 @@ above today's predictions so every dashboard push includes yesterday's outcomes.
 
 import json
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from config import REPORTS_DIR, HISTORY_DIR
+
+_ET = timezone(timedelta(hours=-4))  # EDT (Mar–Nov); update to -5 in Nov for EST
 
 
 def _confidence_color(confidence):
@@ -48,27 +50,93 @@ def _play_type_badge(play_type):
     return f'<span style="background:{bg};color:{text};padding:3px 10px;border-radius:12px;font-weight:700;font-size:0.75em;letter-spacing:0.5px">{play_type}</span>'
 
 
-def _risk_edge_bars(risk_score, edge_score):
-    """Two thin bars showing risk level and edge strength."""
+def _risk_edge_bars(risk_score, edge_score, risk_components=None, edge_components=None):
+    """Two thin bars showing risk level and edge strength, with subcomponent breakdown."""
     risk_pct = round(risk_score * 100, 1)
     edge_pct = round(edge_score * 100, 1)
     risk_color = "#ef4444" if risk_score >= 0.55 else "#f59e0b" if risk_score >= 0.30 else "#22c55e"
     edge_color = "#22c55e" if edge_score >= 0.40 else "#3b82f6" if edge_score >= 0.20 else "#64748b"
+
+    # Risk subcomponent label: factor disagreement vs injury uncertainty
+    risk_sub = ""
+    if risk_components:
+        fd  = risk_components.get("factor_disagreement", 0)
+        iu  = risk_components.get("injury_uncertainty", 0)
+        total = fd + iu
+        if total > 0:
+            fd_pct = round(fd / total * 100)
+            iu_pct = 100 - fd_pct
+            risk_sub = (
+                f'<div style="font-size:0.63em;color:#334155;margin-top:2px;margin-bottom:6px">'
+                f'factor split {fd_pct}% · injury uncertainty {iu_pct}%</div>'
+            )
+
+    # Edge subcomponent label: health / momentum / rest
+    edge_sub = ""
+    if edge_components:
+        he  = edge_components.get("health_edge", 0)
+        me  = edge_components.get("momentum_edge", 0)
+        re_ = edge_components.get("rest_edge", 0)
+        total = he + me + re_
+        if total > 0:
+            he_pct = round(he / total * 100)
+            me_pct = round(me / total * 100)
+            re_pct = 100 - he_pct - me_pct
+            edge_sub = (
+                f'<div style="font-size:0.63em;color:#334155;margin-top:2px">'
+                f'health {he_pct}% · momentum {me_pct}% · rest {re_pct}%</div>'
+            )
+
     return f"""
     <div style="margin-bottom:16px">
         <div style="display:flex;justify-content:space-between;font-size:0.72em;color:#64748b;margin-bottom:3px">
             <span>Risk</span><span style="color:{risk_color};font-weight:700">{risk_pct}%</span>
         </div>
-        <div style="height:5px;background:#1e293b;border-radius:3px;overflow:hidden;margin-bottom:6px">
+        <div style="height:5px;background:#1e293b;border-radius:3px;overflow:hidden">
             <div style="height:100%;width:{risk_pct}%;background:{risk_color};border-radius:3px"></div>
         </div>
+        {risk_sub}
         <div style="display:flex;justify-content:space-between;font-size:0.72em;color:#64748b;margin-bottom:3px">
             <span>Edge</span><span style="color:{edge_color};font-weight:700">{edge_pct}%</span>
         </div>
         <div style="height:5px;background:#1e293b;border-radius:3px;overflow:hidden">
             <div style="height:100%;width:{edge_pct}%;background:{edge_color};border-radius:3px"></div>
         </div>
+        {edge_sub}
     </div>"""
+
+
+def _injury_detail_html(injury_detail, total_count):
+    """
+    Render a compact injury list showing star/starter players by name.
+    Falls back to a plain count for bench/role players.
+    """
+    if not injury_detail and total_count == 0:
+        return ""
+
+    named = [p for p in injury_detail if p.get("impact") in ("star", "starter")]
+    others = total_count - len(named)
+
+    lines = []
+    for p in named:
+        icon   = "⭐" if p.get("impact") == "star" else "🏥"
+        status = p.get("status", "")
+        pts    = p.get("pts_avg", 0)
+        pts_str = f" {pts}pts" if pts else ""
+        lines.append(
+            f'<div style="font-size:0.68em;color:#f87171;white-space:nowrap">'
+            f'{icon} {p["name"]} ({status}){pts_str}</div>'
+        )
+    if others > 0 and others != total_count:
+        lines.append(
+            f'<div style="font-size:0.65em;color:#475569">+{others} more</div>'
+        )
+    elif not named and total_count > 0:
+        lines.append(
+            f'<div style="font-size:0.68em;color:#f87171">🏥 {total_count} injured</div>'
+        )
+
+    return "".join(lines)
 
 
 def _factor_bar(home_val, away_val, label, home_abbr="HOME", away_abbr="AWAY"):
@@ -224,15 +292,15 @@ def generate_game_card(pred):
     venue = pred.get("venue", "")
     factors = pred.get("factors", {})
 
-    # Build factor bars
+    # Build factor bars (player_form was previously missing — head_to_head key was wrong)
     factor_labels = {
-        "win_pct": "Win %",
+        "win_pct":     "Win %",
         "recent_form": "Recent Form",
-        "home_away": "Home/Away",
-        "injuries": "Health",
-        "streak": "Streak",
-        "rest_days": "Rest",
-        "head_to_head": "H2H",
+        "home_away":   "Home/Away",
+        "injuries":    "Health",
+        "streak":      "Streak",
+        "rest_days":   "Rest",
+        "player_form": "Player Form",
     }
     factor_bars = ""
     for key, label in factor_labels.items():
@@ -251,12 +319,32 @@ def generate_game_card(pred):
     eff_edge = pred.get("efficiency_edge")
     winner_side = "HOME" if pred["predicted_winner"] == h_abbr else "AWAY"
 
-    play_badge      = _play_type_badge(play_type) if play_type else ""
-    risk_edge_html  = _risk_edge_bars(risk_score, edge_score) if play_type else ""
+    play_badge = _play_type_badge(play_type) if play_type else ""
+    risk_edge_html = (
+        _risk_edge_bars(
+            risk_score, edge_score,
+            pred.get("risk_components"), pred.get("edge_components"),
+        )
+        if play_type else ""
+    )
     explanation_html = (
         f'<div style="font-size:0.75em;color:#64748b;font-style:italic;margin-bottom:12px">{explanation}</div>'
         if explanation else ""
     )
+
+    # Game time in ET
+    game_time_str = ""
+    raw_game_time = pred.get("game_time", "")
+    if raw_game_time:
+        try:
+            gt = datetime.fromisoformat(raw_game_time.replace("Z", "+00:00")).astimezone(_ET)
+            game_time_str = gt.strftime("%-I:%M %p ET")
+        except Exception:
+            pass
+
+    # Injury detail: named players for star/starter, count for rest
+    h_inj_html = _injury_detail_html(pred.get("home_injury_detail", []), h_injuries)
+    a_inj_html = _injury_detail_html(pred.get("away_injury_detail", []), a_injuries)
 
     # Efficiency edge indicator (scoring margin delta, informational only)
     eff_html = ""
@@ -271,11 +359,15 @@ def generate_game_card(pred):
             f'</div>'
         )
 
+    venue_time = venue
+    if game_time_str:
+        venue_time = f"{venue} · {game_time_str}" if venue else game_time_str
+
     return f"""
     <div style="background:#0f172a;border:1px solid #1e293b;border-radius:12px;padding:24px;margin:16px 0;box-shadow:0 4px 12px rgba(0,0,0,0.3)">
         <!-- Header -->
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-            <div style="font-size:0.8em;color:#64748b">{venue}</div>
+            <div style="font-size:0.8em;color:#64748b">{venue_time}</div>
             <div style="display:flex;gap:8px;align-items:center">
                 {play_badge}
                 {badge}
@@ -289,7 +381,7 @@ def generate_game_card(pred):
                 <div style="font-size:0.85em;color:#94a3b8">{away}</div>
                 <div style="font-size:0.8em;color:#64748b">{a_rec}</div>
                 <div style="font-size:1.6em;font-weight:800;color:{'#60a5fa' if winner_side == 'AWAY' else '#475569'};margin-top:4px">{round(a_prob*100)}%</div>
-                {'<div style="font-size:0.7em;color:#f87171">🏥 ' + str(a_injuries) + ' injured</div>' if a_injuries > 0 else ''}
+                {a_inj_html}
             </div>
             <div style="font-size:1.2em;color:#334155;font-weight:700;padding:0 16px">@</div>
             <div style="text-align:center;flex:1">
@@ -297,7 +389,7 @@ def generate_game_card(pred):
                 <div style="font-size:0.85em;color:#94a3b8">{home}</div>
                 <div style="font-size:0.8em;color:#64748b">{h_rec}</div>
                 <div style="font-size:1.6em;font-weight:800;color:{'#60a5fa' if winner_side == 'HOME' else '#475569'};margin-top:4px">{round(h_prob*100)}%</div>
-                {'<div style="font-size:0.7em;color:#f87171">🏥 ' + str(h_injuries) + ' injured</div>' if h_injuries > 0 else ''}
+                {h_inj_html}
             </div>
         </div>
 
@@ -355,18 +447,48 @@ def generate_dashboard(predictions, date_str, history_stats=None):
     # History stats
     history_html = ""
     if history_stats:
-        acc = history_stats.get("accuracy", 0)
+        acc       = history_stats.get("accuracy", 0)
         total_hist = history_stats.get("total_predictions", 0)
-        correct = history_stats.get("correct", 0)
+        correct   = history_stats.get("correct", 0)
+        acc_color = "#22c55e" if acc >= 70 else "#eab308" if acc >= 60 else "#ef4444"
+
+        # Tier accuracy pills
+        def _tier_pill(label, c, t, color):
+            if t == 0:
+                return ""
+            pct = c / t * 100
+            return (
+                f'<div style="text-align:center;padding:6px 10px;background:#0f172a;'
+                f'border-radius:6px;min-width:72px">'
+                f'<div style="font-size:1em;font-weight:800;color:{color}">{pct:.0f}%</div>'
+                f'<div style="font-size:0.62em;color:#475569;margin-top:1px">{label} ({c}/{t})</div>'
+                f'</div>'
+            )
+
+        sp_pill = _tier_pill(
+            "STRONG", history_stats.get("strong_pick_correct", 0),
+            history_stats.get("strong_pick_total", 0), "#22c55e"
+        )
+        ln_pill = _tier_pill(
+            "LEAN", history_stats.get("lean_correct", 0),
+            history_stats.get("lean_total", 0), "#eab308"
+        )
+        sk_pill = _tier_pill(
+            "SKIP", history_stats.get("skip_correct", 0),
+            history_stats.get("skip_total", 0), "#64748b"
+        )
+
         history_html = f"""
-        <div style="display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap">
-            <div style="flex:1;min-width:140px;background:#1e293b;border-radius:8px;padding:16px;text-align:center">
-                <div style="font-size:2em;font-weight:800;color:{'#22c55e' if acc >= 60 else '#eab308'}">{acc:.1f}%</div>
-                <div style="font-size:0.75em;color:#64748b;margin-top:4px">Season Accuracy</div>
+        <div style="background:#1e293b;border-radius:8px;padding:16px;margin-bottom:24px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                <div>
+                    <span style="font-size:1.9em;font-weight:800;color:{acc_color}">{acc:.1f}%</span>
+                    <span style="font-size:0.75em;color:#64748b;margin-left:6px">season accuracy</span>
+                </div>
+                <div style="font-size:0.85em;color:#60a5fa;font-weight:700">{correct}/{total_hist}</div>
             </div>
-            <div style="flex:1;min-width:140px;background:#1e293b;border-radius:8px;padding:16px;text-align:center">
-                <div style="font-size:2em;font-weight:800;color:#60a5fa">{correct}/{total_hist}</div>
-                <div style="font-size:0.75em;color:#64748b;margin-top:4px">Correct Picks</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+                {sp_pill}{ln_pill}{sk_pill}
             </div>
         </div>"""
 
