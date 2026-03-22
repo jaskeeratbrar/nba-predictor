@@ -1,47 +1,129 @@
 # Model Improvement Plan
 
-_Last updated: 2026-03-16_
+_Last updated: 2026-03-22_
 
 ## Current State
 
-**Season: 41/53 — 77.4% accuracy.** Model is stable and well-calibrated. No firefighting
-needed. The next two weeks are about accumulating clean injury data and letting the new
-ESPN efficiency pipeline build up snapshots.
+**Season: 101/129 — 78.3% accuracy.** Model stable, weights updated.
 
 | Metric | Value | Notes |
 |--------|-------|-------|
-| Overall accuracy | 77.4% (41/53) | Across all recommendation tiers |
-| STRONG PICK | 85.7% | High-confidence picks are landing |
-| LEAN | 100% (8/8) | Small sample — will regress, but encouraging |
-| SKIP | 75.0% | Model correctly identifies toss-ups |
-| Injury factor votes | 8 (post-fix) | Need 15+ before weight adjustment |
+| Overall accuracy | 78.3% (101/129) | Across all recommendation tiers |
+| STRONG PICK | 90.0% (18/20) | Excellent |
+| LEAN | 86.7% (26/30) | Nearly as good as STRONG PICK |
+| SKIP | 67.4% (29/43) | Expected — genuine toss-ups |
+| Injury factor votes | 79 (post-fix) | Weight bumped to 0.15 ✓ |
+| home_away factor | 75.0% | Rebounded from 67.3% concern — stable |
 
 ---
 
 ## Active — Accumulating Data
 
-### Injury factor calibration (target: ~2026-03-25)
-**Status:** Waiting on data. Only 8 clean votes since the ESPN API fix on 2026-03-09.
-Current weight: 12%. The factor is hitting 75% accuracy — promising, but sample is too
-small to act on.
+### ESPN team efficiency stats pipeline (added 2026-03-16)
+**Status:** Fetching ppg, fg_pct, fg3_pct, ft_pct, reb_pg, ast_pg for every team playing
+today. Stored in `team_efficiency_snapshots` DB table. `efficiency_edge` (scoring margin
+delta normalized to [-1,1]) shown on dashboard and in API response.
 
-**When to act:** Check after 2026-03-25. If 15+ votes exist and accuracy holds at 70%+,
-bump weight from 0.12 to 0.15 in config.py and redistribute from win_pct (0.27 → 0.25).
+**Not used in model confidence yet.** Needs 2-3 weeks of snapshots to evaluate correlation
+with outcomes. Target: early April, cross-reference efficiency_edge with game results to
+decide whether to add as a weighted factor.
 
-**How to check:**
+**How to check correlation when ready (~2026-04-05):**
 ```bash
 python3 -c "
-import db; conn = db.get_connection()
-r = conn.execute('''
-    SELECT SUM(CASE WHEN vote_injuries_correct=1 THEN 1 ELSE 0 END) AS correct,
-           COUNT(*) AS total
-    FROM game_results
-    WHERE vote_injuries_neutral = 0 AND analyzed_at >= '2026-03-09'
-''').fetchone()
-print(f'Injury votes: {r[\"total\"]} | Accuracy: {r[\"correct\"]*100/r[\"total\"]:.1f}%' if r['total'] else 'Not enough data yet')
+import db, json; conn = db.get_connection()
+rows = conn.execute('''
+    SELECT p.predicted_winner_abbr, gr.correct, g.game_date
+    FROM predictions p
+    JOIN game_results gr ON gr.game_id = p.game_id
+    JOIN games g ON g.id = p.game_id
+    WHERE g.game_date >= \"2026-03-16\"
+''').fetchall()
+print(f'{len(rows)} games with efficiency data since 2026-03-16')
 conn.close()
 "
 ```
+
+---
+
+### Calibrate.py — run weekly starting now
+**Status:** Built (2026-03-22). Has 79+ clean games (well past the 30-game threshold).
+Run every Monday: `python3 calibrate.py`. Output goes to `performance/calibrated_weights.json`
+and is automatically picked up by `run_predictions.py` on next run.
+
+**How it works:** Bayesian accuracy with shrinkage (shrinkage_n=20 per factor). Correlation
+damping prevents win_pct + recent_form from both inflating simultaneously. rest_days
+permanently frozen at 0.0.
+
+---
+
+## Waiting
+
+### Logistic regression (target: ~Oct 2026, next season)
+**Status:** Not started. Needs 200+ clean games to produce reliable coefficients.
+At ~1,200 regular season games/year and assuming nightly cron, expect 200+ by
+mid-November 2026.
+
+**Why it's worth doing:** Current heuristic (`suggest_weights()`) scales weights by
+accuracy independently — ignores feature interactions. LR would learn joint contribution
+of all 7 factors simultaneously.
+
+**Migration path:**
+1. calibrate.py (Bayesian, built Mar 22) bridges us through the season
+2. End of 2025-26 season: evaluate sample size
+3. LR replaces `suggest_weights()` — same output format, better algorithm
+
+**What NOT to build:** XGBoost, random forests, neural nets. 7 binary features + binary
+outcome = logistic regression is the correct tool.
+
+---
+
+### Opponent quality / SOS adjustment (target: next season)
+**Status:** Not started. Recent_form currently treats a win vs lottery team the same as
+a win vs playoff team. An SOS multiplier on form_score would improve signal quality.
+
+**Not building yet.** Would require fetching opponent records at time of game (historical
+standings). Complex and low-ROI mid-season. Revisit as a 2026-27 preseason improvement.
+
+---
+
+### Kalshi / prediction markets integration (future project)
+**Status:** Not started. User trades on Kalshi informed by model output. A dedicated
+integration would pull Kalshi market prices, compare with model confidence, and flag
+divergences (model says 75%, market says 55% = potential edge).
+
+**Not building yet.** Revisit when model has 200+ games and calibrate.py is running.
+
+---
+
+## Completed
+
+- [x] **calibrate.py** — Bayesian weight calibrator, runs weekly — 2026-03-22
+- [x] **Injury weight bump** — injuries 0.12→0.15, win_pct 0.27→0.24 (79 votes @ 73.4%) — 2026-03-22
+- [x] **calibrated_weights.json wired into run_predictions.py** — takes priority over ledger suggestions — 2026-03-22
+- [x] **SQLite analytics endpoints** — /stats, /history, /misses expose DB data remotely — 2026-03-16
+- [x] **ESPN team efficiency stats** — fetch_team_stats_espn(), efficiency_edge on dashboard — 2026-03-16
+- [x] **DB schema: play_type/risk_score/edge_score** — ALTER TABLE migration + upsert — 2026-03-16
+- [x] **Server weight bug fixed** — startup exclusion logic mirrored from run_predictions.py — 2026-03-16
+- [x] **Server weights snapshot** — /run now records active weights in weights_history — 2026-03-16
+- [x] **Injury-conditional weighting** (P2) — win_pct/player_form suppressed on high-injury slates — 2026-03-15
+- [x] **Both-teams-decimated confidence compression** (P4) — compress toward 0.5 when both teams individually decimated (load > 3.0) — 2026-03-15
+- [x] **Severe injury auto-cap** (P5) — model picks more-injured team → cap confidence at 0.57 — 2026-03-15
+- [x] **Active roster filter** (P3) — Out/Doubtful players excluded from player_form before scoring — 2026-03-10
+- [x] **Learned weights exclusion fix** — config zero-weights enforced before set_weights() — 2026-03-15
+- [x] **Play type classification** — LOCK/VALUE/RISKY tracked in ledger + dashboard — 2026-03-15
+- [x] **rest_days excluded** — zeroed (33.3% accuracy), weight redistributed — 2026-03-15
+- [x] **Effective win%** — blend 60% season + 40% last-10 in win_pct factor — 2026-03-11
+- [x] **Playoff pressure** — play-in/playoff race urgency boost — 2026-03-11
+- [x] **ESPN injury API fix** — response structure changed, silently dropping all injuries — 2026-03-09
+- [x] **Star player detection** — reb/blk/stl in form_score — 2026-03-10
+- [x] **Position-based fallback** — long-term injured stars get impact estimate — 2026-03-10
+- [x] **Player form lookback 5 → 10 games** — 2026-03-10
+- [x] **Power scaling reduced** — win_pct 2.5→1.8, recent_form 1.8→1.3 — earlier
+- [x] **Season-progress dynamic weights** — earlier
+- [x] **Point differential in recent_form** — earlier
+- [x] **Atomic JSON writes** — earlier
+- [x] **True Shooting % in player form** — earlier
 
 ---
 

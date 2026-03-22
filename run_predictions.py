@@ -27,31 +27,50 @@ import db as _db
 
 _db.init_schema()
 
-# Apply learned weights if enough games have been analyzed
+# Apply learned weights — prefer calibrated_weights.json (Bayesian, manually run)
+# over the ledger's suggest_weights() (rolling heuristic, auto-updated each analysis run).
 _weights_source  = "config"
 _active_weights  = dict(WEIGHTS)
 _games_analyzed  = 0
+
+def _enforce_exclusions(weights):
+    """Zero out any factors that config.py has intentionally excluded (weight == 0.0)."""
+    excluded = {f for f, w in WEIGHTS.items() if w == 0.0}
+    if not excluded:
+        return weights
+    result = dict(weights)
+    for f in excluded:
+        result[f] = 0.0
+    total = sum(result.values())
+    if total > 0:
+        result = {f: round(v / total, 4) for f, v in result.items()}
+    return result
+
 try:
-    from analyzer import load_factor_ledger
-    _ledger = load_factor_ledger()
-    _games_analyzed = _ledger.get("total_games_analyzed", 0)
-    if _games_analyzed >= 50:
-        _suggestions = _ledger.get("weight_suggestions", {})
-        if _suggestions and len(_suggestions) == len(WEIGHTS):
-            # Factors explicitly zeroed in config.py must stay zero — learned weights
-            # cannot override intentional exclusions (e.g. rest_days excluded due to
-            # broken data source; its tainted suggestion of ~0.10 must be ignored).
-            _excluded = {f for f, w in WEIGHTS.items() if w == 0.0}
-            if _excluded:
-                _suggestions = dict(_suggestions)
-                for _f in _excluded:
-                    _suggestions[_f] = 0.0
-                _total = sum(_suggestions.values())
-                if _total > 0:
-                    _suggestions = {f: round(v / _total, 4) for f, v in _suggestions.items()}
-            set_weights(_suggestions)
-            _active_weights = _suggestions
-            _weights_source = "learned"
+    # Priority 1: calibrated_weights.json (Bayesian calibrator — run manually each Monday)
+    from config import PERFORMANCE_DIR as _PERF_DIR
+    _cal_path = os.path.join(_PERF_DIR, "calibrated_weights.json")
+    if os.path.exists(_cal_path):
+        with open(_cal_path) as _f:
+            _cal = json.load(_f)
+        _cal_weights = _cal.get("weights", {})
+        if _cal_weights and len(_cal_weights) == len(WEIGHTS):
+            _cal_weights = _enforce_exclusions(_cal_weights)
+            set_weights(_cal_weights)
+            _active_weights = _cal_weights
+            _weights_source = "calibrated"
+    else:
+        # Priority 2: ledger suggest_weights (rolling heuristic, updated each analysis run)
+        from analyzer import load_factor_ledger
+        _ledger = load_factor_ledger()
+        _games_analyzed = _ledger.get("total_games_analyzed", 0)
+        if _games_analyzed >= 50:
+            _suggestions = _ledger.get("weight_suggestions", {})
+            if _suggestions and len(_suggestions) == len(WEIGHTS):
+                _suggestions = _enforce_exclusions(_suggestions)
+                set_weights(_suggestions)
+                _active_weights = _suggestions
+                _weights_source = "learned"
 except Exception:
     pass
 

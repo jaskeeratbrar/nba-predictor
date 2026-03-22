@@ -27,11 +27,11 @@ MIN_WEIGHT = 0.03
 # Its 0.08 weight redistributed proportionally to reliable factors.
 # rest_days is still computed and used as a raw edge signal in risk/reward classification.
 WEIGHTS = {
-    "win_pct":          0.27,   # Overall season win percentage
+    "win_pct":          0.24,   # Overall season win percentage (reduced from 0.27 — 2026-03-22)
     "recent_form":      0.22,   # Last 10 games performance
     "player_form":      0.22,   # Individual player performance last 5 games
     "home_away":        0.12,   # Home court advantage / road record
-    "injuries":         0.12,   # Key player availability
+    "injuries":         0.15,   # Key player availability (bumped from 0.12 — 79 votes @ 73.4%)
     "rest_days":        0.00,   # Excluded from confidence (33% accuracy); used only for edge scoring
     "streak":           0.05,   # Current win/loss streak
 }
