@@ -84,8 +84,42 @@ Run-time override priority:
 |------|--------|
 | Every Monday | Run `python3 calibrate.py` on server — update calibrated_weights.json |
 | ~2026-04-05 | Check efficiency_edge correlation with outcomes. Worth adding as factor? |
+| ~2026-04-05 | net_rating + defense: check vote counts + accuracy (need 20+ votes each) |
 | End of season | Full season review — evaluate factor weights, home_away trend |
 | ~Oct 2026 | Check if 200+ clean games exist. If yes → build logistic regression |
+
+## New factors to watch (added 2026-03-22)
+
+| Factor | Added | Min votes | Check command | Pass threshold | Fail threshold |
+|--------|-------|-----------|---------------|----------------|----------------|
+| net_rating | 2026-03-22 | 20 non-neutral | See query below | ≥70% → let calibrate.py increase weight | <60% after 30 votes → freeze at 0.0 |
+| defense | 2026-03-22 | 20 non-neutral | See query below | ≥70% → let calibrate.py increase weight | <60% after 30 votes → freeze at 0.0 |
+
+**How to check (run on server):**
+```bash
+python3 -c "
+import json, os
+from config import HISTORY_DIR
+
+votes = {'net_rating': [0,0], 'defense': [0,0]}
+for f in sorted(os.listdir(HISTORY_DIR)):
+    if not f.endswith('_analysis.json'): continue
+    date = f.replace('_analysis.json','')
+    if date < '2026-03-22': continue   # only count post-addition games
+    with open(os.path.join(HISTORY_DIR, f)) as fp:
+        data = json.load(fp)
+    for game in data.get('games', []):
+        for factor in ['net_rating', 'defense']:
+            fv = game.get('factor_votes', {}).get(factor, {})
+            if not fv or fv.get('neutral', True): continue
+            votes[factor][1] += 1
+            if fv.get('correct'): votes[factor][0] += 1
+
+for f, (c, t) in votes.items():
+    acc = f'{c/t*100:.1f}%' if t else 'n/a'
+    print(f'{f}: {c}/{t} = {acc}')
+"
+```
 
 ## Architecture reminders
 
