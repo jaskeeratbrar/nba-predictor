@@ -1,6 +1,6 @@
 {
   "date": "2026-03-24",
-  "generated_at": "2026-03-24T18:00:08.146464",
+  "generated_at": "2026-03-24T18:16:15.495482",
   "num_games": 4,
   "predictions": [
     {
@@ -10,11 +10,11 @@
       "away_abbr": "SAC",
       "home_record": "37-34",
       "away_record": "19-53",
-      "home_win_prob": 0.6603,
-      "away_win_prob": 0.3397,
+      "home_win_prob": 0.6602,
+      "away_win_prob": 0.3398,
       "predicted_winner": "CHA",
       "predicted_winner_name": "Charlotte Hornets",
-      "confidence": 0.6603,
+      "confidence": 0.6602,
       "recommendation": "LEAN",
       "venue": "Spectrum Center",
       "game_time": "2026-03-24T23:00Z",
@@ -32,8 +32,8 @@
           "away": 0.0811
         },
         "injuries": {
-          "home": 0.5957,
-          "away": 0.4043
+          "home": 0.5874,
+          "away": 0.4126
         },
         "streak": {
           "home": 0.5345,
@@ -44,8 +44,8 @@
           "away": 0.463
         },
         "player_form": {
-          "home": 0.5946,
-          "away": 0.4054
+          "home": 0.6037,
+          "away": 0.3963
         },
         "net_rating": {
           "home": 0.7467,
@@ -56,12 +56,12 @@
           "away": 0.4552
         }
       },
-      "home_injuries": 3,
+      "home_injuries": 2,
       "away_injuries": 10,
       "home_injury_detail": [
         {
           "name": "Pat Connaughton",
-          "status": "Day-To-Day",
+          "status": "Out",
           "impact": "bench",
           "mins_avg": 8.8,
           "pts_avg": 3.4
@@ -72,13 +72,6 @@
           "impact": "bench",
           "mins_avg": 0,
           "pts_avg": 0
-        },
-        {
-          "name": "Kon Knueppel",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 29.9,
-          "pts_avg": 18.2
         }
       ],
       "away_injury_detail": [
@@ -153,13 +146,13 @@
           "pts_avg": 0
         }
       ],
-      "_h_load": 1.0,
+      "_h_load": 1.620452,
       "_a_load": 9.652464,
       "play_type": "LOCK",
-      "risk_score": 0.1772,
+      "risk_score": 0.1773,
       "edge_score": 0.4614,
       "risk_components": {
-        "factor_disagreement": 0.2953,
+        "factor_disagreement": 0.2954,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
