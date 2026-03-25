@@ -1,6 +1,6 @@
 {
   "date": "2026-03-25",
-  "generated_at": "2026-03-25T18:00:16.633556",
+  "generated_at": "2026-03-25T18:13:33.651398",
   "num_games": 12,
   "predictions": [
     {
@@ -135,11 +135,11 @@
       "away_abbr": "LAL",
       "home_record": "16-56",
       "away_record": "46-26",
-      "home_win_prob": 0.2499,
-      "away_win_prob": 0.7501,
+      "home_win_prob": 0.2505,
+      "away_win_prob": 0.7495,
       "predicted_winner": "LAL",
       "predicted_winner_name": "Los Angeles Lakers",
-      "confidence": 0.7123,
+      "confidence": 0.7117,
       "recommendation": "STRONG PICK",
       "venue": "Gainbridge Fieldhouse",
       "game_time": "2026-03-25T23:00Z",
@@ -157,8 +157,8 @@
           "away": 0.7801
         },
         "injuries": {
-          "home": 0.5235,
-          "away": 0.4765
+          "home": 0.5271,
+          "away": 0.4729
         },
         "streak": {
           "home": 0.54,
@@ -181,16 +181,9 @@
           "away": 0.5403
         }
       },
-      "home_injuries": 4,
+      "home_injuries": 3,
       "away_injuries": 5,
       "home_injury_detail": [
-        {
-          "name": "Andrew Nembhard",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 28.5,
-          "pts_avg": 16.7
-        },
         {
           "name": "Ivica Zubac",
           "status": "Out",
@@ -253,10 +246,10 @@
       "_h_load": 4.2,
       "_a_load": 4.320028,
       "play_type": "LOCK",
-      "risk_score": 0.4375,
+      "risk_score": 0.4396,
       "edge_score": 0.1315,
       "risk_components": {
-        "factor_disagreement": 0.7291,
+        "factor_disagreement": 0.7327,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
@@ -1571,7 +1564,7 @@
         }
       },
       "home_injuries": 4,
-      "away_injuries": 6,
+      "away_injuries": 5,
       "home_injury_detail": [
         {
           "name": "Kelly Oubre Jr.",
@@ -1609,13 +1602,6 @@
           "impact": "bench",
           "mins_avg": 0,
           "pts_avg": 0
-        },
-        {
-          "name": "Guerschon Yabusele",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 24.0,
-          "pts_avg": 9.9
         },
         {
           "name": "Yuki Kawamura",
