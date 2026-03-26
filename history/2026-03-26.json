@@ -1,6 +1,6 @@
 {
   "date": "2026-03-26",
-  "generated_at": "2026-03-26T18:00:07.577102",
+  "generated_at": "2026-03-26T18:46:59.311522",
   "num_games": 3,
   "predictions": [
     {
@@ -10,11 +10,11 @@
       "away_abbr": "NOP",
       "home_record": "52-20",
       "away_record": "25-48",
-      "home_win_prob": 0.5767,
-      "away_win_prob": 0.4233,
+      "home_win_prob": 0.5946,
+      "away_win_prob": 0.4054,
       "predicted_winner": "DET",
       "predicted_winner_name": "Detroit Pistons",
-      "confidence": 0.57,
+      "confidence": 0.5946,
       "recommendation": "SLIGHT LEAN",
       "venue": "Little Caesars Arena",
       "game_time": "2026-03-26T23:00Z",
@@ -32,8 +32,8 @@
           "away": 0.2742
         },
         "injuries": {
-          "home": 0.3987,
-          "away": 0.6013
+          "home": 0.4642,
+          "away": 0.5358
         },
         "streak": {
           "home": 0.4792,
@@ -44,8 +44,8 @@
           "away": 0.5882
         },
         "player_form": {
-          "home": 0.5091,
-          "away": 0.4909
+          "home": 0.522,
+          "away": 0.478
         },
         "net_rating": {
           "home": 0.5537,
@@ -56,50 +56,15 @@
           "away": 0.4946
         }
       },
-      "home_injuries": 9,
+      "home_injuries": 4,
       "away_injuries": 2,
       "home_injury_detail": [
-        {
-          "name": "Javonte Green",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 15.3,
-          "pts_avg": 6.8
-        },
-        {
-          "name": "Marcus Sasser",
-          "status": "Out",
-          "impact": "role",
-          "mins_avg": 19.4,
-          "pts_avg": 7.4
-        },
-        {
-          "name": "Tobias Harris",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 26.9,
-          "pts_avg": 12.8
-        },
         {
           "name": "Duncan Robinson",
           "status": "Day-To-Day",
           "impact": "starter",
           "mins_avg": 25.5,
           "pts_avg": 11.4
-        },
-        {
-          "name": "Jalen Duren",
-          "status": "Day-To-Day",
-          "impact": "star",
-          "mins_avg": 28.1,
-          "pts_avg": 24.3
-        },
-        {
-          "name": "Ausar Thompson",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 28.8,
-          "pts_avg": 8.7
         },
         {
           "name": "Caris LeVert",
@@ -125,27 +90,27 @@
       ],
       "away_injury_detail": [
         {
+          "name": "Trey Murphy III",
+          "status": "Out",
+          "impact": "star",
+          "mins_avg": 35.8,
+          "pts_avg": 20.2
+        },
+        {
           "name": "Bryce McGowens",
           "status": "Out",
           "impact": "role",
           "mins_avg": 21.0,
           "pts_avg": 6.7
-        },
-        {
-          "name": "Trey Murphy III",
-          "status": "Day-To-Day",
-          "impact": "star",
-          "mins_avg": 35.8,
-          "pts_avg": 20.2
         }
       ],
-      "_h_load": 4.581464,
-      "_a_load": 1.0,
+      "_h_load": 3.704332,
+      "_a_load": 2.523332,
       "play_type": "VALUE PLAY",
-      "risk_score": 0.1855,
+      "risk_score": 0.1629,
       "edge_score": 0.0063,
       "risk_components": {
-        "factor_disagreement": 0.3091,
+        "factor_disagreement": 0.2715,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
@@ -153,7 +118,7 @@
         "momentum_edge": 0.018,
         "rest_edge": 0.0
       },
-      "play_explanation": "Factors mostly aligned (4 of 9 agree). Reliable at this confidence level.",
+      "play_explanation": "Factors mostly aligned (5 of 9 agree). Reliable at this confidence level.",
       "efficiency_edge": 0.26
     },
     {
@@ -163,11 +128,11 @@
       "away_abbr": "NYK",
       "home_record": "38-34",
       "away_record": "48-25",
-      "home_win_prob": 0.4972,
-      "away_win_prob": 0.5028,
+      "home_win_prob": 0.4951,
+      "away_win_prob": 0.5049,
       "predicted_winner": "NYK",
       "predicted_winner_name": "New York Knicks",
-      "confidence": 0.5028,
+      "confidence": 0.5049,
       "recommendation": "SKIP",
       "venue": "Spectrum Center",
       "game_time": "2026-03-26T23:00Z",
@@ -185,8 +150,8 @@
           "away": 0.4355
         },
         "injuries": {
-          "home": 0.528,
-          "away": 0.472
+          "home": 0.5087,
+          "away": 0.4913
         },
         "streak": {
           "home": 0.569,
@@ -197,8 +162,8 @@
           "away": 0.5
         },
         "player_form": {
-          "home": 0.4141,
-          "away": 0.5859
+          "home": 0.4169,
+          "away": 0.5831
         },
         "net_rating": {
           "home": 0.5134,
@@ -209,12 +174,12 @@
           "away": 0.4913
         }
       },
-      "home_injuries": 3,
+      "home_injuries": 2,
       "away_injuries": 3,
       "home_injury_detail": [
         {
           "name": "Liam McNeeley",
-          "status": "Day-To-Day",
+          "status": "Out",
           "impact": "starter",
           "mins_avg": 10.0,
           "pts_avg": 7.0
@@ -225,13 +190,6 @@
           "impact": "bench",
           "mins_avg": 0,
           "pts_avg": 0
-        },
-        {
-          "name": "Pat Connaughton",
-          "status": "Day-To-Day",
-          "impact": "bench",
-          "mins_avg": 8.5,
-          "pts_avg": 2.2
         }
       ],
       "away_injury_detail": [
@@ -257,13 +215,13 @@
           "pts_avg": 0
         }
       ],
-      "_h_load": 1.0,
+      "_h_load": 2.0234360000000002,
       "_a_load": 2.6,
       "play_type": "SKIP",
-      "risk_score": 0.0263,
+      "risk_score": 0.0248,
       "edge_score": 0.0,
       "risk_components": {
-        "factor_disagreement": 0.0439,
+        "factor_disagreement": 0.0414,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
