@@ -1,6 +1,6 @@
 {
   "date": "2026-03-27",
-  "generated_at": "2026-03-27T18:00:14.175900",
+  "generated_at": "2026-03-27T19:59:21.633259",
   "num_games": 10,
   "predictions": [
     {
@@ -10,11 +10,11 @@
       "away_abbr": "BKN",
       "home_record": "47-26",
       "away_record": "17-56",
-      "home_win_prob": 0.8039,
-      "away_win_prob": 0.1961,
+      "home_win_prob": 0.8051,
+      "away_win_prob": 0.1949,
       "predicted_winner": "LAL",
       "predicted_winner_name": "Los Angeles Lakers",
-      "confidence": 0.8039,
+      "confidence": 0.8051,
       "recommendation": "STRONG PICK",
       "venue": "crypto.com Arena",
       "game_time": "2026-03-28T02:30Z",
@@ -44,8 +44,8 @@
           "away": 0.4118
         },
         "player_form": {
-          "home": 0.8108,
-          "away": 0.1892
+          "home": 0.8193,
+          "away": 0.1807
         },
         "net_rating": {
           "home": 0.9729,
@@ -57,7 +57,7 @@
         }
       },
       "home_injuries": 2,
-      "away_injuries": 5,
+      "away_injuries": 4,
       "home_injury_detail": [
         {
           "name": "Adou Thiero",
@@ -83,13 +83,6 @@
           "pts_avg": 10.1
         },
         {
-          "name": "Noah Clowney",
-          "status": "Out",
-          "impact": "role",
-          "mins_avg": 17.0,
-          "pts_avg": 7.4
-        },
-        {
           "name": "Michael Porter Jr.",
           "status": "Out",
           "impact": "role",
@@ -112,12 +105,12 @@
         }
       ],
       "_h_load": 2.020348,
-      "_a_load": 6.026835999999999,
+      "_a_load": 5.390656,
       "play_type": "LOCK",
-      "risk_score": 0.3543,
+      "risk_score": 0.3552,
       "edge_score": 0.8761,
       "risk_components": {
-        "factor_disagreement": 0.5905,
+        "factor_disagreement": 0.5919,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
@@ -252,11 +245,11 @@
       "away_abbr": "LAC",
       "home_record": "16-57",
       "away_record": "37-36",
-      "home_win_prob": 0.2728,
-      "away_win_prob": 0.7272,
+      "home_win_prob": 0.2734,
+      "away_win_prob": 0.7266,
       "predicted_winner": "LAC",
       "predicted_winner_name": "LA Clippers",
-      "confidence": 0.7032,
+      "confidence": 0.7026,
       "recommendation": "STRONG PICK",
       "venue": "Gainbridge Fieldhouse",
       "game_time": "2026-03-27T23:00Z",
@@ -274,8 +267,8 @@
           "away": 0.6377
         },
         "injuries": {
-          "home": 0.4709,
-          "away": 0.5291
+          "home": 0.4744,
+          "away": 0.5256
         },
         "streak": {
           "home": 0.4259,
@@ -298,22 +291,15 @@
           "away": 0.538
         }
       },
-      "home_injuries": 5,
+      "home_injuries": 4,
       "away_injuries": 2,
       "home_injury_detail": [
         {
-          "name": "Obi Toppin",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 16.5,
-          "pts_avg": 11.2
-        },
-        {
-          "name": "Aaron Nesmith",
+          "name": "Jarace Walker",
           "status": "Day-To-Day",
           "impact": "starter",
-          "mins_avg": 29.4,
-          "pts_avg": 16.6
+          "mins_avg": 32.7,
+          "pts_avg": 14.8
         },
         {
           "name": "Ivica Zubac",
@@ -356,10 +342,10 @@
       "_h_load": 4.2,
       "_a_load": 3.4000000000000004,
       "play_type": "LOCK",
-      "risk_score": 0.3507,
+      "risk_score": 0.3521,
       "edge_score": 0.2525,
       "risk_components": {
-        "factor_disagreement": 0.5846,
+        "factor_disagreement": 0.5869,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
@@ -662,11 +648,11 @@
       "away_abbr": "CHI",
       "home_record": "57-16",
       "away_record": "29-43",
-      "home_win_prob": 0.664,
-      "away_win_prob": 0.336,
+      "home_win_prob": 0.6619,
+      "away_win_prob": 0.3381,
       "predicted_winner": "OKC",
       "predicted_winner_name": "Oklahoma City Thunder",
-      "confidence": 0.5986,
+      "confidence": 0.5819,
       "recommendation": "SLIGHT LEAN",
       "venue": "Paycom Center",
       "game_time": "2026-03-28T00:00Z",
@@ -696,8 +682,8 @@
           "away": 0.5
         },
         "player_form": {
-          "home": 0.5466,
-          "away": 0.4534
+          "home": 0.5318,
+          "away": 0.4682
         },
         "net_rating": {
           "home": 0.7674,
@@ -709,7 +695,7 @@
         }
       },
       "home_injuries": 3,
-      "away_injuries": 10,
+      "away_injuries": 7,
       "home_injury_detail": [
         {
           "name": "Chet Holmgren",
@@ -735,39 +721,25 @@
       ],
       "away_injury_detail": [
         {
-          "name": "Anfernee Simons",
-          "status": "Out",
-          "impact": "bench",
-          "mins_avg": 0,
-          "pts_avg": 0
-        },
-        {
           "name": "Nick Richards",
-          "status": "Day-To-Day",
+          "status": "Out",
           "impact": "role",
           "mins_avg": 22.8,
           "pts_avg": 9.2
         },
         {
-          "name": "Guerschon Yabusele",
-          "status": "Day-To-Day",
+          "name": "Yuki Kawamura",
+          "status": "Out",
           "impact": "role",
-          "mins_avg": 23.1,
-          "pts_avg": 9.0
+          "mins_avg": 10.0,
+          "pts_avg": 3.2
         },
         {
-          "name": "Rob Dillingham",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 22.3,
-          "pts_avg": 11.1
-        },
-        {
-          "name": "Isaac Okoro",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 27.7,
-          "pts_avg": 9.3
+          "name": "Anfernee Simons",
+          "status": "Out",
+          "impact": "bench",
+          "mins_avg": 0,
+          "pts_avg": 0
         },
         {
           "name": "Jaden Ivey",
@@ -782,13 +754,6 @@
           "impact": "role",
           "mins_avg": 22.9,
           "pts_avg": 9.7
-        },
-        {
-          "name": "Yuki Kawamura",
-          "status": "Day-To-Day",
-          "impact": "role",
-          "mins_avg": 10.0,
-          "pts_avg": 3.2
         },
         {
           "name": "Zach Collins",
@@ -806,16 +771,16 @@
         }
       ],
       "_h_load": 4.159704,
-      "_a_load": 6.2,
+      "_a_load": 7.92454,
       "play_type": "VALUE PLAY",
-      "risk_score": 0.2227,
-      "edge_score": 0.3594,
+      "risk_score": 0.2267,
+      "edge_score": 0.5034,
       "risk_components": {
-        "factor_disagreement": 0.3712,
+        "factor_disagreement": 0.3778,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
-        "health_edge": 0.6801,
+        "health_edge": 1.0,
         "momentum_edge": 0.1524,
         "rest_edge": 0.0
       },
@@ -829,12 +794,12 @@
       "away_abbr": "NOP",
       "home_record": "40-32",
       "away_record": "25-49",
-      "home_win_prob": 0.5639,
-      "away_win_prob": 0.4361,
+      "home_win_prob": 0.5618,
+      "away_win_prob": 0.4382,
       "predicted_winner": "TOR",
       "predicted_winner_name": "Toronto Raptors",
-      "confidence": 0.5639,
-      "recommendation": "SLIGHT LEAN",
+      "confidence": 0.55,
+      "recommendation": "SKIP",
       "venue": "Scotiabank Arena",
       "game_time": "2026-03-28T00:30Z",
       "factors": {
@@ -851,8 +816,8 @@
           "away": 0.4108
         },
         "injuries": {
-          "home": 0.5321,
-          "away": 0.4679
+          "home": 0.5183,
+          "away": 0.4817
         },
         "streak": {
           "home": 0.4792,
@@ -875,9 +840,16 @@
           "away": 0.5039
         }
       },
-      "home_injuries": 2,
+      "home_injuries": 3,
       "away_injuries": 3,
       "home_injury_detail": [
+        {
+          "name": "Trayce Jackson-Davis",
+          "status": "Out",
+          "impact": "bench",
+          "mins_avg": 6.0,
+          "pts_avg": 1.0
+        },
         {
           "name": "Immanuel Quickley",
           "status": "Out",
@@ -916,22 +888,126 @@
           "pts_avg": 18.0
         }
       ],
-      "_h_load": 2.614888,
+      "_h_load": 3.156268,
       "_a_load": 3.631112,
       "play_type": "VALUE PLAY",
-      "risk_score": 0.0523,
-      "edge_score": 0.1524,
+      "risk_score": 0.0527,
+      "edge_score": 0.0712,
       "risk_components": {
-        "factor_disagreement": 0.0871,
+        "factor_disagreement": 0.0879,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
-        "health_edge": 0.3387,
+        "health_edge": 0.1583,
         "momentum_edge": 0.0,
         "rest_edge": 0.0
       },
-      "play_explanation": "Factors mostly aligned (5 of 9 agree). Reliable at this confidence level.",
+      "play_explanation": "Factors mostly aligned (4 of 9 agree). Reliable at this confidence level.",
       "efficiency_edge": -0.1267
+    },
+    {
+      "home_team": "Cleveland Cavaliers",
+      "home_abbr": "CLE",
+      "away_team": "Miami Heat",
+      "away_abbr": "MIA",
+      "home_record": "45-28",
+      "away_record": "39-34",
+      "home_win_prob": 0.5456,
+      "away_win_prob": 0.4544,
+      "predicted_winner": "CLE",
+      "predicted_winner_name": "Cleveland Cavaliers",
+      "confidence": 0.5456,
+      "recommendation": "SKIP",
+      "venue": "Rocket Arena",
+      "game_time": "2026-03-27T23:30Z",
+      "factors": {
+        "win_pct": {
+          "home": 0.5708,
+          "away": 0.4292
+        },
+        "recent_form": {
+          "home": 0.5828,
+          "away": 0.4172
+        },
+        "home_away": {
+          "home": 0.7029,
+          "away": 0.2971
+        },
+        "injuries": {
+          "home": 0.4646,
+          "away": 0.5354
+        },
+        "streak": {
+          "home": 0.46,
+          "away": 0.54
+        },
+        "rest_days": {
+          "home": 0.5,
+          "away": 0.5
+        },
+        "player_form": {
+          "home": 0.5685,
+          "away": 0.4315
+        },
+        "net_rating": {
+          "home": 0.5586,
+          "away": 0.4414
+        },
+        "defense": {
+          "home": 0.5193,
+          "away": 0.4807
+        }
+      },
+      "home_injuries": 3,
+      "away_injuries": 1,
+      "home_injury_detail": [
+        {
+          "name": "Dean Wade",
+          "status": "Out",
+          "impact": "role",
+          "mins_avg": 21.4,
+          "pts_avg": 5.9
+        },
+        {
+          "name": "Jaylon Tyson",
+          "status": "Out",
+          "impact": "role",
+          "mins_avg": 20.0,
+          "pts_avg": 8.5
+        },
+        {
+          "name": "Craig Porter Jr.",
+          "status": "Out",
+          "impact": "role",
+          "mins_avg": 15.0,
+          "pts_avg": 2.5
+        }
+      ],
+      "away_injury_detail": [
+        {
+          "name": "Terry Rozier",
+          "status": "Out",
+          "impact": "bench",
+          "mins_avg": 0,
+          "pts_avg": 0
+        }
+      ],
+      "_h_load": 2.868,
+      "_a_load": 1.6,
+      "play_type": "SKIP",
+      "risk_score": 0.0588,
+      "edge_score": 0.0128,
+      "risk_components": {
+        "factor_disagreement": 0.098,
+        "injury_uncertainty": 0.0
+      },
+      "edge_components": {
+        "health_edge": 0.0,
+        "momentum_edge": 0.0364,
+        "rest_edge": 0.0
+      },
+      "play_explanation": "Too close to call. No play.",
+      "efficiency_edge": 0.1933
     },
     {
       "home_team": "Golden State Warriors",
@@ -940,11 +1016,11 @@
       "away_abbr": "WAS",
       "home_record": "35-38",
       "away_record": "17-55",
-      "home_win_prob": 0.619,
-      "away_win_prob": 0.381,
+      "home_win_prob": 0.6188,
+      "away_win_prob": 0.3812,
       "predicted_winner": "GSW",
       "predicted_winner_name": "Golden State Warriors",
-      "confidence": 0.539,
+      "confidence": 0.5388,
       "recommendation": "SKIP",
       "venue": "Chase Center",
       "game_time": "2026-03-28T02:00Z",
@@ -974,8 +1050,8 @@
           "away": 0.5
         },
         "player_form": {
-          "home": 0.519,
-          "away": 0.481
+          "home": 0.5176,
+          "away": 0.4824
         },
         "net_rating": {
           "home": 0.882,
@@ -990,8 +1066,15 @@
       "away_injuries": 5,
       "home_injury_detail": [
         {
+          "name": "Stephen Curry",
+          "status": "Out",
+          "impact": "bench",
+          "mins_avg": 0,
+          "pts_avg": 0
+        },
+        {
           "name": "De'Anthony Melton",
-          "status": "Day-To-Day",
+          "status": "Out",
           "impact": "starter",
           "mins_avg": 24.1,
           "pts_avg": 14.2
@@ -1016,13 +1099,6 @@
           "impact": "role",
           "mins_avg": 19.5,
           "pts_avg": 8.0
-        },
-        {
-          "name": "Stephen Curry",
-          "status": "Out",
-          "impact": "bench",
-          "mins_avg": 0,
-          "pts_avg": 0
         },
         {
           "name": "Moses Moody",
@@ -1076,13 +1152,13 @@
           "pts_avg": 0
         }
       ],
-      "_h_load": 6.709044,
+      "_h_load": 7.709044,
       "_a_load": 5.7395320000000005,
       "play_type": "SKIP",
-      "risk_score": 0.2181,
+      "risk_score": 0.2184,
       "edge_score": 0.0524,
       "risk_components": {
-        "factor_disagreement": 0.3635,
+        "factor_disagreement": 0.364,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
@@ -1100,11 +1176,11 @@
       "away_abbr": "ATL",
       "home_record": "48-24",
       "away_record": "41-32",
-      "home_win_prob": 0.4643,
-      "away_win_prob": 0.5357,
+      "home_win_prob": 0.464,
+      "away_win_prob": 0.536,
       "predicted_winner": "ATL",
       "predicted_winner_name": "Atlanta Hawks",
-      "confidence": 0.5357,
+      "confidence": 0.536,
       "recommendation": "SKIP",
       "venue": "TD Garden",
       "game_time": "2026-03-27T23:30Z",
@@ -1122,8 +1198,8 @@
           "away": 0.3524
         },
         "injuries": {
-          "home": 0.4239,
-          "away": 0.5761
+          "home": 0.4379,
+          "away": 0.5621
         },
         "streak": {
           "home": 0.4655,
@@ -1134,8 +1210,8 @@
           "away": 0.5
         },
         "player_form": {
-          "home": 0.3598,
-          "away": 0.6402
+          "home": 0.3453,
+          "away": 0.6547
         },
         "net_rating": {
           "home": 0.4313,
@@ -1167,146 +1243,28 @@
       "away_injury_detail": [
         {
           "name": "Jock Landale",
-          "status": "Day-To-Day",
+          "status": "Out",
           "impact": "role",
           "mins_avg": 18.2,
           "pts_avg": 6.3
         }
       ],
       "_h_load": 3.572696,
-      "_a_load": 0.0,
+      "_a_load": 0.781684,
       "play_type": "SKIP",
-      "risk_score": 0.0696,
-      "edge_score": 0.4563,
+      "risk_score": 0.0727,
+      "edge_score": 0.425,
       "risk_components": {
-        "factor_disagreement": 0.116,
+        "factor_disagreement": 0.1212,
         "injury_uncertainty": 0.0
       },
       "edge_components": {
-        "health_edge": 1.0,
+        "health_edge": 0.9303,
         "momentum_edge": 0.0181,
         "rest_edge": 0.0
       },
       "play_explanation": "Too close to call. No play.",
       "efficiency_edge": -0.34
-    },
-    {
-      "home_team": "Cleveland Cavaliers",
-      "home_abbr": "CLE",
-      "away_team": "Miami Heat",
-      "away_abbr": "MIA",
-      "home_record": "45-28",
-      "away_record": "39-34",
-      "home_win_prob": 0.5343,
-      "away_win_prob": 0.4657,
-      "predicted_winner": "CLE",
-      "predicted_winner_name": "Cleveland Cavaliers",
-      "confidence": 0.5343,
-      "recommendation": "SKIP",
-      "venue": "Rocket Arena",
-      "game_time": "2026-03-27T23:30Z",
-      "factors": {
-        "win_pct": {
-          "home": 0.5708,
-          "away": 0.4292
-        },
-        "recent_form": {
-          "home": 0.5828,
-          "away": 0.4172
-        },
-        "home_away": {
-          "home": 0.7029,
-          "away": 0.2971
-        },
-        "injuries": {
-          "home": 0.4227,
-          "away": 0.5773
-        },
-        "streak": {
-          "home": 0.46,
-          "away": 0.54
-        },
-        "rest_days": {
-          "home": 0.5,
-          "away": 0.5
-        },
-        "player_form": {
-          "home": 0.5685,
-          "away": 0.4315
-        },
-        "net_rating": {
-          "home": 0.5586,
-          "away": 0.4414
-        },
-        "defense": {
-          "home": 0.5193,
-          "away": 0.4807
-        }
-      },
-      "home_injuries": 4,
-      "away_injuries": 2,
-      "home_injury_detail": [
-        {
-          "name": "Jarrett Allen",
-          "status": "Out",
-          "impact": "bench",
-          "mins_avg": 0,
-          "pts_avg": 0
-        },
-        {
-          "name": "Dean Wade",
-          "status": "Out",
-          "impact": "role",
-          "mins_avg": 21.4,
-          "pts_avg": 5.9
-        },
-        {
-          "name": "Jaylon Tyson",
-          "status": "Out",
-          "impact": "role",
-          "mins_avg": 20.0,
-          "pts_avg": 8.5
-        },
-        {
-          "name": "Craig Porter Jr.",
-          "status": "Out",
-          "impact": "role",
-          "mins_avg": 15.0,
-          "pts_avg": 2.5
-        }
-      ],
-      "away_injury_detail": [
-        {
-          "name": "Jaime Jaquez Jr.",
-          "status": "Day-To-Day",
-          "impact": "starter",
-          "mins_avg": 26.0,
-          "pts_avg": 12.6
-        },
-        {
-          "name": "Terry Rozier",
-          "status": "Out",
-          "impact": "bench",
-          "mins_avg": 0,
-          "pts_avg": 0
-        }
-      ],
-      "_h_load": 4.668,
-      "_a_load": 1.6,
-      "play_type": "SKIP",
-      "risk_score": 0.0701,
-      "edge_score": 0.0128,
-      "risk_components": {
-        "factor_disagreement": 0.1169,
-        "injury_uncertainty": 0.0
-      },
-      "edge_components": {
-        "health_edge": 0.0,
-        "momentum_edge": 0.0364,
-        "rest_edge": 0.0
-      },
-      "play_explanation": "Too close to call. No play.",
-      "efficiency_edge": 0.1933
     }
   ]
 }
