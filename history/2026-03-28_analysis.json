@@ -1,0 +1,598 @@
+{
+  "date": "2026-03-28",
+  "analyzed_at": "2026-03-29T09:00:01.195137",
+  "summary": {
+    "correct": 4,
+    "total": 6,
+    "accuracy": 0.6667
+  },
+  "games": [
+    {
+      "matchup": "SAS @ MIL",
+      "home_abbr": "MIL",
+      "away_abbr": "SAS",
+      "home_team": "Milwaukee Bucks",
+      "away_team": "San Antonio Spurs",
+      "predicted_winner": "SAS",
+      "actual_winner": "SAS",
+      "correct": true,
+      "home_score": 95.0,
+      "away_score": 127.0,
+      "confidence": 0.717,
+      "recommendation": "STRONG PICK",
+      "play_type": "LOCK",
+      "factor_votes": {
+        "win_pct": {
+          "voted_for": "SAS",
+          "correct": true,
+          "margin": 0.6522,
+          "home_pct": 0.1739,
+          "away_pct": 0.8261,
+          "neutral": false
+        },
+        "recent_form": {
+          "voted_for": "SAS",
+          "correct": true,
+          "margin": 0.6186,
+          "home_pct": 0.1907,
+          "away_pct": 0.8093,
+          "neutral": false
+        },
+        "player_form": {
+          "voted_for": "SAS",
+          "correct": true,
+          "margin": 0.618,
+          "home_pct": 0.191,
+          "away_pct": 0.809,
+          "neutral": false
+        },
+        "home_away": {
+          "voted_for": "SAS",
+          "correct": null,
+          "margin": 0.0064,
+          "home_pct": 0.4968,
+          "away_pct": 0.5032,
+          "neutral": true
+        },
+        "injuries": {
+          "voted_for": "SAS",
+          "correct": true,
+          "margin": 0.1604,
+          "home_pct": 0.4198,
+          "away_pct": 0.5802,
+          "neutral": false
+        },
+        "net_rating": {
+          "voted_for": "SAS",
+          "correct": true,
+          "margin": 1.0,
+          "home_pct": 0.0,
+          "away_pct": 1.0,
+          "neutral": false
+        },
+        "defense": {
+          "voted_for": "SAS",
+          "correct": true,
+          "margin": 0.085,
+          "home_pct": 0.4575,
+          "away_pct": 0.5425,
+          "neutral": false
+        },
+        "rest_days": {
+          "voted_for": null,
+          "correct": null,
+          "margin": 0.0,
+          "home_pct": 0.5,
+          "away_pct": 0.5,
+          "neutral": true
+        },
+        "streak": {
+          "voted_for": "SAS",
+          "correct": true,
+          "margin": 0.1364,
+          "home_pct": 0.4318,
+          "away_pct": 0.5682,
+          "neutral": false
+        }
+      },
+      "explanation": "Correct. The model picked San Antonio Spurs and they won (SAS 127-95 MIL). Factors supporting the pick: win pct strongly favored San Antonio Spurs; recent form strongly favored San Antonio Spurs; player form strongly favored San Antonio Spurs; injuries favored San Antonio Spurs; net rating strongly favored San Antonio Spurs; defense slightly favored San Antonio Spurs; streak slightly favored San Antonio Spurs. Neutral (no signal): home away, rest days."
+    },
+    {
+      "matchup": "SAC @ ATL",
+      "home_abbr": "ATL",
+      "away_abbr": "SAC",
+      "home_team": "Atlanta Hawks",
+      "away_team": "Sacramento Kings",
+      "predicted_winner": "ATL",
+      "actual_winner": "ATL",
+      "correct": true,
+      "home_score": 123.0,
+      "away_score": 113.0,
+      "confidence": 0.5975,
+      "recommendation": "SLIGHT LEAN",
+      "play_type": "VALUE PLAY",
+      "factor_votes": {
+        "win_pct": {
+          "voted_for": "ATL",
+          "correct": true,
+          "margin": 0.5006,
+          "home_pct": 0.7503,
+          "away_pct": 0.2497,
+          "neutral": false
+        },
+        "recent_form": {
+          "voted_for": "ATL",
+          "correct": true,
+          "margin": 0.2614,
+          "home_pct": 0.6307,
+          "away_pct": 0.3693,
+          "neutral": false
+        },
+        "player_form": {
+          "voted_for": "ATL",
+          "correct": true,
+          "margin": 0.3852,
+          "home_pct": 0.6926,
+          "away_pct": 0.3074,
+          "neutral": false
+        },
+        "home_away": {
+          "voted_for": "ATL",
+          "correct": true,
+          "margin": 0.8846,
+          "home_pct": 0.9423,
+          "away_pct": 0.0577,
+          "neutral": false
+        },
+        "injuries": {
+          "voted_for": "ATL",
+          "correct": true,
+          "margin": 0.08,
+          "home_pct": 0.54,
+          "away_pct": 0.46,
+          "neutral": false
+        },
+        "net_rating": {
+          "voted_for": "ATL",
+          "correct": true,
+          "margin": 0.61,
+          "home_pct": 0.805,
+          "away_pct": 0.195,
+          "neutral": false
+        },
+        "defense": {
+          "voted_for": "ATL",
+          "correct": true,
+          "margin": 0.0596,
+          "home_pct": 0.5298,
+          "away_pct": 0.4702,
+          "neutral": false
+        },
+        "rest_days": {
+          "voted_for": "SAC",
+          "correct": false,
+          "margin": 0.1764,
+          "home_pct": 0.4118,
+          "away_pct": 0.5882,
+          "neutral": false
+        },
+        "streak": {
+          "voted_for": "ATL",
+          "correct": true,
+          "margin": 0.0454,
+          "home_pct": 0.5227,
+          "away_pct": 0.4773,
+          "neutral": false
+        }
+      },
+      "explanation": "Correct. The model picked Atlanta Hawks and they won (SAC 113-123 ATL). Factors supporting the pick: win pct strongly favored Atlanta Hawks; recent form favored Atlanta Hawks; player form strongly favored Atlanta Hawks; home away strongly favored Atlanta Hawks; injuries slightly favored Atlanta Hawks; net rating strongly favored Atlanta Hawks; defense slightly favored Atlanta Hawks; streak marginally favored Atlanta Hawks. Factors pointing the other way: rest days favored Sacramento Kings. The model held up despite some signals pointing to Sacramento Kings."
+    },
+    {
+      "matchup": "DET @ MIN",
+      "home_abbr": "MIN",
+      "away_abbr": "DET",
+      "home_team": "Minnesota Timberwolves",
+      "away_team": "Detroit Pistons",
+      "predicted_winner": "DET",
+      "actual_winner": "DET",
+      "correct": true,
+      "home_score": 87.0,
+      "away_score": 109.0,
+      "confidence": 0.5677,
+      "recommendation": "SLIGHT LEAN",
+      "play_type": "VALUE PLAY",
+      "factor_votes": {
+        "win_pct": {
+          "voted_for": "DET",
+          "correct": true,
+          "margin": 0.2486,
+          "home_pct": 0.3757,
+          "away_pct": 0.6243,
+          "neutral": false
+        },
+        "recent_form": {
+          "voted_for": "DET",
+          "correct": true,
+          "margin": 0.1268,
+          "home_pct": 0.4366,
+          "away_pct": 0.5634,
+          "neutral": false
+        },
+        "player_form": {
+          "voted_for": "DET",
+          "correct": true,
+          "margin": 0.3356,
+          "home_pct": 0.3322,
+          "away_pct": 0.6678,
+          "neutral": false
+        },
+        "home_away": {
+          "voted_for": "MIN",
+          "correct": false,
+          "margin": 0.0362,
+          "home_pct": 0.5181,
+          "away_pct": 0.4819,
+          "neutral": false
+        },
+        "injuries": {
+          "voted_for": "DET",
+          "correct": true,
+          "margin": 0.023,
+          "home_pct": 0.4885,
+          "away_pct": 0.5115,
+          "neutral": false
+        },
+        "net_rating": {
+          "voted_for": "DET",
+          "correct": true,
+          "margin": 0.4468,
+          "home_pct": 0.2766,
+          "away_pct": 0.7234,
+          "neutral": false
+        },
+        "defense": {
+          "voted_for": "DET",
+          "correct": true,
+          "margin": 0.0328,
+          "home_pct": 0.4836,
+          "away_pct": 0.5164,
+          "neutral": false
+        },
+        "rest_days": {
+          "voted_for": null,
+          "correct": null,
+          "margin": 0.0,
+          "home_pct": 0.5,
+          "away_pct": 0.5,
+          "neutral": true
+        },
+        "streak": {
+          "voted_for": "MIN",
+          "correct": false,
+          "margin": 0.0358,
+          "home_pct": 0.5179,
+          "away_pct": 0.4821,
+          "neutral": false
+        }
+      },
+      "explanation": "Correct. The model picked Detroit Pistons and they won (DET 109-87 MIN). Factors supporting the pick: win pct favored Detroit Pistons; recent form slightly favored Detroit Pistons; player form strongly favored Detroit Pistons; injuries marginally favored Detroit Pistons; net rating strongly favored Detroit Pistons; defense marginally favored Detroit Pistons. Factors pointing the other way: home away marginally favored Minnesota Timberwolves; streak marginally favored Minnesota Timberwolves. Neutral (no signal): rest days. The model held up despite some signals pointing to Detroit Pistons."
+    },
+    {
+      "matchup": "CHI @ MEM",
+      "home_abbr": "MEM",
+      "away_abbr": "CHI",
+      "home_team": "Memphis Grizzlies",
+      "away_team": "Chicago Bulls",
+      "predicted_winner": "CHI",
+      "actual_winner": "MEM",
+      "correct": false,
+      "home_score": 125.0,
+      "away_score": 124.0,
+      "confidence": 0.546,
+      "recommendation": "SKIP",
+      "play_type": "RISKY \u2014 WORTH IT",
+      "factor_votes": {
+        "win_pct": {
+          "voted_for": "CHI",
+          "correct": false,
+          "margin": 0.355,
+          "home_pct": 0.3225,
+          "away_pct": 0.6775,
+          "neutral": false
+        },
+        "recent_form": {
+          "voted_for": "CHI",
+          "correct": false,
+          "margin": 0.5856,
+          "home_pct": 0.2072,
+          "away_pct": 0.7928,
+          "neutral": false
+        },
+        "player_form": {
+          "voted_for": "CHI",
+          "correct": false,
+          "margin": 0.2934,
+          "home_pct": 0.3533,
+          "away_pct": 0.6467,
+          "neutral": false
+        },
+        "home_away": {
+          "voted_for": "MEM",
+          "correct": true,
+          "margin": 0.237,
+          "home_pct": 0.6185,
+          "away_pct": 0.3815,
+          "neutral": false
+        },
+        "injuries": {
+          "voted_for": null,
+          "correct": null,
+          "margin": 0.0,
+          "home_pct": 0.5,
+          "away_pct": 0.5,
+          "neutral": true
+        },
+        "net_rating": {
+          "voted_for": "CHI",
+          "correct": false,
+          "margin": 1.0,
+          "home_pct": 0.0,
+          "away_pct": 1.0,
+          "neutral": false
+        },
+        "defense": {
+          "voted_for": "MEM",
+          "correct": null,
+          "margin": 0.0118,
+          "home_pct": 0.5059,
+          "away_pct": 0.4941,
+          "neutral": true
+        },
+        "rest_days": {
+          "voted_for": null,
+          "correct": null,
+          "margin": 0.0,
+          "home_pct": 0.5,
+          "away_pct": 0.5,
+          "neutral": true
+        },
+        "streak": {
+          "voted_for": "CHI",
+          "correct": false,
+          "margin": 0.1666,
+          "home_pct": 0.4167,
+          "away_pct": 0.5833,
+          "neutral": false
+        }
+      },
+      "explanation": "Incorrect. The model picked Chicago Bulls but Memphis Grizzlies won (CHI 124-125 MEM). Factors supporting the pick: win pct strongly favored Chicago Bulls; recent form strongly favored Chicago Bulls; player form favored Chicago Bulls; net rating strongly favored Chicago Bulls; streak favored Chicago Bulls. Factors pointing the other way: home away favored Memphis Grizzlies. Neutral (no signal): injuries, defense, rest days. The model overweighted the supporting factors and missed the contradicting signals \u2014 particularly home away favored Memphis Grizzlies."
+    },
+    {
+      "matchup": "UTA @ PHX",
+      "home_abbr": "PHX",
+      "away_abbr": "UTA",
+      "home_team": "Phoenix Suns",
+      "away_team": "Utah Jazz",
+      "predicted_winner": "PHX",
+      "actual_winner": "PHX",
+      "correct": true,
+      "home_score": 134.0,
+      "away_score": 109.0,
+      "confidence": 0.542,
+      "recommendation": "SKIP",
+      "play_type": "SKIP",
+      "factor_votes": {
+        "win_pct": {
+          "voted_for": "PHX",
+          "correct": true,
+          "margin": 0.4536,
+          "home_pct": 0.7268,
+          "away_pct": 0.2732,
+          "neutral": false
+        },
+        "recent_form": {
+          "voted_for": "PHX",
+          "correct": true,
+          "margin": 0.3036,
+          "home_pct": 0.6518,
+          "away_pct": 0.3482,
+          "neutral": false
+        },
+        "player_form": {
+          "voted_for": "PHX",
+          "correct": true,
+          "margin": 0.165,
+          "home_pct": 0.5825,
+          "away_pct": 0.4175,
+          "neutral": false
+        },
+        "home_away": {
+          "voted_for": "PHX",
+          "correct": true,
+          "margin": 0.2756,
+          "home_pct": 0.6378,
+          "away_pct": 0.3622,
+          "neutral": false
+        },
+        "injuries": {
+          "voted_for": "PHX",
+          "correct": true,
+          "margin": 0.0412,
+          "home_pct": 0.5206,
+          "away_pct": 0.4794,
+          "neutral": false
+        },
+        "net_rating": {
+          "voted_for": "PHX",
+          "correct": true,
+          "margin": 0.602,
+          "home_pct": 0.801,
+          "away_pct": 0.199,
+          "neutral": false
+        },
+        "defense": {
+          "voted_for": "PHX",
+          "correct": true,
+          "margin": 0.1,
+          "home_pct": 0.55,
+          "away_pct": 0.45,
+          "neutral": false
+        },
+        "rest_days": {
+          "voted_for": "PHX",
+          "correct": true,
+          "margin": 0.2474,
+          "home_pct": 0.6237,
+          "away_pct": 0.3763,
+          "neutral": false
+        },
+        "streak": {
+          "voted_for": "UTA",
+          "correct": false,
+          "margin": 0.0416,
+          "home_pct": 0.4792,
+          "away_pct": 0.5208,
+          "neutral": false
+        }
+      },
+      "explanation": "Correct. The model picked Phoenix Suns and they won (UTA 109-134 PHX). Factors supporting the pick: win pct strongly favored Phoenix Suns; recent form strongly favored Phoenix Suns; player form favored Phoenix Suns; home away favored Phoenix Suns; injuries marginally favored Phoenix Suns; net rating strongly favored Phoenix Suns; defense slightly favored Phoenix Suns; rest days favored Phoenix Suns. Factors pointing the other way: streak marginally favored Utah Jazz. The model held up despite some signals pointing to Utah Jazz."
+    },
+    {
+      "matchup": "PHI @ CHA",
+      "home_abbr": "CHA",
+      "away_abbr": "PHI",
+      "home_team": "Charlotte Hornets",
+      "away_team": "Philadelphia 76ers",
+      "predicted_winner": "CHA",
+      "actual_winner": "PHI",
+      "correct": false,
+      "home_score": 114.0,
+      "away_score": 118.0,
+      "confidence": 0.5271,
+      "recommendation": "SKIP",
+      "play_type": "SKIP",
+      "factor_votes": {
+        "win_pct": {
+          "voted_for": "CHA",
+          "correct": false,
+          "margin": 0.0488,
+          "home_pct": 0.5244,
+          "away_pct": 0.4756,
+          "neutral": false
+        },
+        "recent_form": {
+          "voted_for": "CHA",
+          "correct": false,
+          "margin": 0.0694,
+          "home_pct": 0.5347,
+          "away_pct": 0.4653,
+          "neutral": false
+        },
+        "player_form": {
+          "voted_for": "PHI",
+          "correct": true,
+          "margin": 0.1046,
+          "home_pct": 0.4477,
+          "away_pct": 0.5523,
+          "neutral": false
+        },
+        "home_away": {
+          "voted_for": "CHA",
+          "correct": false,
+          "margin": 0.0686,
+          "home_pct": 0.5343,
+          "away_pct": 0.4657,
+          "neutral": false
+        },
+        "injuries": {
+          "voted_for": null,
+          "correct": null,
+          "margin": 0.0,
+          "home_pct": 0.5,
+          "away_pct": 0.5,
+          "neutral": true
+        },
+        "net_rating": {
+          "voted_for": "CHA",
+          "correct": false,
+          "margin": 0.369,
+          "home_pct": 0.6845,
+          "away_pct": 0.3155,
+          "neutral": false
+        },
+        "defense": {
+          "voted_for": "CHA",
+          "correct": false,
+          "margin": 0.078,
+          "home_pct": 0.539,
+          "away_pct": 0.461,
+          "neutral": false
+        },
+        "rest_days": {
+          "voted_for": "PHI",
+          "correct": true,
+          "margin": 0.074,
+          "home_pct": 0.463,
+          "away_pct": 0.537,
+          "neutral": false
+        },
+        "streak": {
+          "voted_for": "CHA",
+          "correct": false,
+          "margin": 0.129,
+          "home_pct": 0.5645,
+          "away_pct": 0.4355,
+          "neutral": false
+        }
+      },
+      "explanation": "Incorrect. The model picked Charlotte Hornets but Philadelphia 76ers won (PHI 118-114 CHA). Factors supporting the pick: win pct marginally favored Charlotte Hornets; recent form slightly favored Charlotte Hornets; home away slightly favored Charlotte Hornets; net rating strongly favored Charlotte Hornets; defense slightly favored Charlotte Hornets; streak slightly favored Charlotte Hornets. Factors pointing the other way: player form slightly favored Philadelphia 76ers; rest days slightly favored Philadelphia 76ers. Neutral (no signal): injuries. The model overweighted the supporting factors and missed the contradicting signals \u2014 particularly player form slightly favored Philadelphia 76ers."
+    }
+  ],
+  "factor_accuracy_this_date": {
+    "win_pct": {
+      "correct": 4,
+      "total": 6,
+      "accuracy": 0.6667
+    },
+    "recent_form": {
+      "correct": 4,
+      "total": 6,
+      "accuracy": 0.6667
+    },
+    "player_form": {
+      "correct": 5,
+      "total": 6,
+      "accuracy": 0.8333
+    },
+    "home_away": {
+      "correct": 3,
+      "total": 5,
+      "accuracy": 0.6
+    },
+    "injuries": {
+      "correct": 4,
+      "total": 4,
+      "accuracy": 1.0
+    },
+    "net_rating": {
+      "correct": 4,
+      "total": 6,
+      "accuracy": 0.6667
+    },
+    "defense": {
+      "correct": 4,
+      "total": 5,
+      "accuracy": 0.8
+    },
+    "rest_days": {
+      "correct": 2,
+      "total": 3,
+      "accuracy": 0.6667
+    },
+    "streak": {
+      "correct": 2,
+      "total": 6,
+      "accuracy": 0.3333
+    }
+  }
+}
